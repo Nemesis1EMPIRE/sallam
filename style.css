@@ -1,93 +1,81 @@
-body {
+* {
   margin: 0;
-  font-family: 'Roboto', sans-serif;
-  background-color: #fafafa;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
 }
 
-header {
+body, html {
+  height: 100%;
+}
+
+.container {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: white;
-  padding: 10px 20px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
+  height: 100vh;
 }
 
-.logo {
-  font-size: 24px;
-  font-weight: bold;
-  color: #1c1c1c;
-}
-
-.search-bar {
+/* Panel gauche */
+.left-panel {
   flex: 1;
-  margin: 0 20px;
-  padding: 8px;
-  border-radius: 20px;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+#form-container {
+  width: 100%;
+  max-width: 400px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+form input {
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 6px;
   border: 1px solid #ccc;
 }
 
-.header-icons i {
-  font-size: 20px;
-  margin-left: 15px;
+form button {
+  padding: 12px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  margin-top: 10px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+form button:hover {
+  background-color: #0056b3;
+}
+
+.toggle {
+  margin-top: 15px;
+  font-size: 14px;
+  text-align: center;
   cursor: pointer;
 }
 
-.categories {
-  display: flex;
-  overflow-x: auto;
-  padding: 10px;
-  background-color: white;
+.toggle span {
+  color: #007bff;
+  text-decoration: underline;
 }
 
-.category {
-  text-align: center;
-  margin-right: 15px;
-}
-
-.category img {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-}
-
-.category p {
-  margin-top: 5px;
-  font-size: 14px;
-}
-
-.product-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 20px;
-  padding: 20px;
-}
-
-.product-card {
-  background-color: white;
-  border-radius: 10px;
+/* Panel droit */
+.right-panel {
+  flex: 1;
   overflow: hidden;
-  box-shadow: 0 1px 5px rgba(0,0,0,0.1);
 }
 
-.product-card img {
+.right-panel img {
   width: 100%;
-  display: block;
-}
-
-.product-card .info {
-  padding: 10px;
-}
-
-.product-card h4 {
-  margin: 0;
-  font-size: 16px;
-}
-
-.product-card p {
-  margin: 5px 0 0;
-  color: #555;
+  height: 100%;
+  object-fit: cover;
 }
