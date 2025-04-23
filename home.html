@@ -16,62 +16,60 @@
       display: flex;
     }
 
-    .sidebar {
-      width: 300px;
-      background-color: #000;
-      padding: 20px;
-      border-right: 1px solid #ccc;
+   .sidebar {
+      width: 200px;
       height: 100vh;
-      box-sizing: border-box;
+      background-color: #f5f5f5;
+      padding: 10px;
+      float: left;
     }
 
     .sidebar img {
-      width: 120px;
-      display: block;
-      margin: 0 auto 20px;
+      width: 100%;
+      margin-bottom: 20px;
     }
 
     .sidebar input {
       width: 100%;
       padding: 8px;
       margin-bottom: 20px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
+      box-sizing: border-box;
     }
 
     .sidebar ul {
-      list-style: none;
+      list-style-type: none;
       padding: 0;
     }
 
     .sidebar li {
       padding: 12px 0;
-      border-bottom: 1px solid #eee;
       text-align: center;
       font-size: 18px;
       color: #333;
       cursor: pointer;
     }
-    
+
     .sidebar li:hover {
-      background-color: #f1f1f1;
-    }
-    
-    .sidebar h4 {
-      margin-top: 30px;
-      text-align: center;
-      color: #555;
+      background-color: #ddd;
     }
 
+    .sidebar h4 {
+      text-align: center;
+      color: #666;
+      margin-top: 30px;
+    }
 
     .sidebar button {
-      padding: 10px;
-      width: 100%;
-      border: none;
-      background-color: #1877f2;
+      background-color: #007bff;
       color: white;
-      border-radius: 6px;
+      border: none;
+      padding: 8px 12px;
       cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .sidebar button i {
+      margin-right: 5px;
     }
 
     .content {
@@ -180,7 +178,7 @@
   <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Facebook_Marketplace_Logo.png/512px-Facebook_Marketplace_Logo.png" alt="Marketplace">
   <input type="text" placeholder="Rechercher...">
   <ul>
-    <li title="Tout parcourir"><i class="fas fa-store"></i></li>
+    <li><i class="fas fa-store"></i></li>
     <li title="Notifications"><i class="fas fa-bell"></i></li>
     <li title="Messagerie"><i class="fas fa-comments"></i></li>
     <li title="Mes achats"><i class="fas fa-shopping-basket"></i></li>
