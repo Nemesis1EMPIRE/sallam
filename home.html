@@ -75,6 +75,17 @@
       border-radius: 8px;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     }
+    .product button {
+      margin-top: 10px;
+      background-color: #42b72a;
+      color: white;
+      border: none;
+      padding: 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 100%;
+    }
+
 
     .product img {
       width: 100%;
@@ -184,19 +195,26 @@
     <div class="content">
       <h2>Sélection du jour</h2>
       <div class="products">
-        <!-- Produits exemple -->
-        <div class="product">
-          <img src="https://via.placeholder.com/200x140?text=Studio" alt="Studio">
-          <h4>170 000 FCFA</h4>
-          <p>Studio à Ondogo</p>
-        </div>
-        <div class="product">
-          <img src="https://via.placeholder.com/200x140?text=PS4" alt="PS4">
-          <h4>80 000 FCFA</h4>
-          <p>PS4</p>
-        </div>
-        <!-- ... -->
-      </div>
+  <!-- Exemple de produit -->
+  <div class="product">
+    <img src="https://via.placeholder.com/200x140?text=Article" alt="Article">
+    <h4>Nom de l’article</h4>
+    <p><strong>Prix :</strong> 50 000 FCFA</p>
+    <p>Description courte de l’article. Bon état, peu utilisé.</p>
+    <button onclick="window.location.href='messagerie.html'">Contacter l’annonceur</button>
+  </div>
+
+  <div class="product">
+    <img src="https://via.placeholder.com/200x140?text=Article+2" alt="Article 2">
+    <h4>Canapé 3 places</h4>
+    <p><strong>Prix :</strong> 150 000 FCFA</p>
+    <p>Canapé très confortable en bon état.</p>
+    <button onclick="window.location.href='messagerie.html'">Contacter l’annonceur</button>
+  </div>
+
+  <!-- Tu peux ajouter d'autres produits ici -->
+</div>
+
     </div>
   </div>
 
