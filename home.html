@@ -221,14 +221,46 @@
     </div>
   </div>
 
-  <script>
-    function openModal() {
-      document.getElementById("articleModal").style.display = "flex";
-    }
+<script>
+  function openModal() {
+    document.getElementById("articleModal").style.display = "flex";
+  }
 
-    function closeModal() {
-      document.getElementById("articleModal").style.display = "none";
+  function closeModal() {
+    document.getElementById("articleModal").style.display = "none";
+  }
+
+  // Publication dynamique
+  const publishBtn = document.querySelector('.modal-content button:not(.close-btn)');
+  publishBtn.addEventListener('click', function() {
+    const inputs = document.querySelectorAll('.modal-content input');
+    const textarea = document.querySelector('.modal-content textarea');
+    const select = document.querySelector('.modal-content select');
+
+    const title = inputs[0].value.trim();
+    const price = inputs[1].value.trim();
+    const description = textarea.value.trim();
+    const imageUrl = inputs[2].value.trim();
+    const category = select.value;
+
+    if (title && price && imageUrl && category) {
+      const productHTML = `
+        <div class="product">
+          <img src="${imageUrl}" alt="${title}">
+          <h4>${price}</h4>
+          <p>${title}</p>
+        </div>
+      `;
+      document.querySelector('.products').insertAdjacentHTML('beforeend', productHTML);
+
+      // Nettoyage et fermeture du modal
+      inputs.forEach(input => input.value = '');
+      textarea.value = '';
+      select.value = '';
+      closeModal();
+    } else {
+      alert("Merci de remplir tous les champs.");
     }
-  </script>
-</body>
-</html>
+  });
+</script>
+
