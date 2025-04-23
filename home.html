@@ -2,102 +2,233 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Facebook Marketplace Like</title>
-  <!-- Font Awesome CDN -->
-  <script src="https://kit.fontawesome.com/5ad1b84c6b.js" crossorigin="anonymous"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marketplace</title>
   <style>
     body {
       margin: 0;
       font-family: Arial, sans-serif;
+      background-color: #f0f2f5;
+    }
+
+    .container {
+      display: flex;
     }
 
     .sidebar {
-      width: 220px;
+      width: 300px;
+      background-color: #fff;
+      padding: 20px;
+      border-right: 1px solid #ccc;
       height: 100vh;
-      background-color: #f0f2f5;
-      padding: 20px 10px;
-      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-      float: left;
+      box-sizing: border-box;
     }
 
     .sidebar img {
-      width: 100%;
-      margin-bottom: 20px;
+      width: 120px;
+      display: block;
+      margin: 0 auto 20px;
     }
 
     .sidebar input {
       width: 100%;
       padding: 8px;
       margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .sidebar li {
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .sidebar button {
+      padding: 10px;
+      width: 100%;
+      border: none;
+      background-color: #1877f2;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .content {
+      flex: 1;
+      padding: 20px;
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 15px;
+    }
+
+    .product {
+      background-color: #fff;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .product img {
+      width: 100%;
+      border-radius: 6px;
+      height: 140px;
+      object-fit: cover;
+    }
+
+    .product h4 {
+      margin: 10px 0 5px;
+      font-size: 16px;
+    }
+
+    .product p {
+      margin: 0;
+      color: gray;
+      font-size: 14px;
+    }
+
+    /* MODAL */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      width: 400px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    .modal-content h3 {
+      margin-top: 0;
+    }
+
+    .modal-content input,
+    .modal-content textarea,
+    .modal-content select {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 8px;
       border-radius: 5px;
       border: 1px solid #ccc;
       box-sizing: border-box;
     }
 
-    .sidebar ul {
-      list-style-type: none;
-      padding: 0;
-    }
-
-    .sidebar li {
-      padding: 12px 0;
-      text-align: center;
-      font-size: 20px;
-      color: #333;
-      cursor: pointer;
-      transition: background-color 0.2s;
-    }
-
-    .sidebar li:hover {
-      background-color: #ddd;
-    }
-
-    .sidebar h4 {
-      text-align: center;
-      color: #666;
-      margin-top: 30px;
-    }
-
-    .sidebar button {
+    .modal-content button {
+      padding: 10px;
+      width: 100%;
+      border: none;
       background-color: #1877f2;
       color: white;
-      border: none;
-      padding: 10px 15px;
+      border-radius: 6px;
       cursor: pointer;
-      border-radius: 5px;
-      margin-top: 10px;
-      width: 100%;
-      font-size: 16px;
     }
 
-    .sidebar button i {
-      margin-right: 6px;
+    .close-btn {
+      background-color: #ccc;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid #ccc;
+      }
     }
   </style>
 </head>
 <body>
+  <div class="container">
+    <div class="sidebar">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Facebook_Marketplace_Logo.png/512px-Facebook_Marketplace_Logo.png" alt="Marketplace">
+      <input type="text" placeholder="Rechercher...">
+      <ul>
+        <li>Tout parcourir</li>
+        <li>Notifications</li>
+        <li>Messagerie</li>
+        <li>Mes achats</li>
+        <li>Mes ventes</li>
+        <li><button onclick="openModal()">Ajouter un article</button></li>
+      </ul>
+      <h4>Catégories</h4>
+      <ul>
+        <li>Véhicules</li>
+        <li>Immobilier</li>
+        <li>Électronique</li>
+        <li>Sport</li>
+        <li>Gratuit</li>
+      </ul>
+    </div>
 
-<div class="sidebar">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Facebook_Marketplace_Logo.png/512px-Facebook_Marketplace_Logo.png" alt="Marketplace">
-  <input type="text" placeholder="Rechercher...">
-  <ul>
-    <li title="Tout parcourir"><i class="fas fa-store"></i></li>
-    <li title="Notifications"><i class="fas fa-bell"></i></li>
-    <li title="Messagerie"><i class="fas fa-comments"></i></li>
-    <li title="Mes achats"><i class="fas fa-shopping-basket"></i></li>
-    <li title="Mes ventes"><i class="fas fa-money-bill-wave"></i></li>
-    <li><button onclick="alert('Formulaire d’ajout ici !')"><i class="fas fa-plus-circle"></i> Ajouter</button></li>
-  </ul>
+    <div class="content">
+      <h2>Sélection du jour</h2>
+      <div class="products">
+        <!-- Produits exemple -->
+        <div class="product">
+          <img src="https://via.placeholder.com/200x140?text=Studio" alt="Studio">
+          <h4>170 000 FCFA</h4>
+          <p>Studio à Ondogo</p>
+        </div>
+        <div class="product">
+          <img src="https://via.placeholder.com/200x140?text=PS4" alt="PS4">
+          <h4>80 000 FCFA</h4>
+          <p>PS4</p>
+        </div>
+        <!-- ... -->
+      </div>
+    </div>
+  </div>
 
-  <h4>Catégories</h4>
-  <ul>
-    <li title="Véhicules"><i class="fas fa-car"></i></li>
-    <li title="Immobilier"><i class="fas fa-home"></i></li>
-    <li title="Électronique"><i class="fas fa-tv"></i></li>
-    <li title="Sport"><i class="fas fa-futbol"></i></li>
-    <li title="Gratuit"><i class="fas fa-gift"></i></li>
-  </ul>
-</div>
+  <!-- MODAL FORM -->
+  <div class="modal" id="articleModal">
+    <div class="modal-content">
+      <h3>Ajouter un article</h3>
+      <input type="text" placeholder="Titre">
+      <input type="text" placeholder="Prix (ex: 200 000 FCFA)">
+      <textarea placeholder="Description de l'article..."></textarea>
+      <input type="text" placeholder="Lien de l'image (URL)">
+      <select>
+        <option value="">Catégorie</option>
+        <option>Véhicules</option>
+        <option>Immobilier</option>
+        <option>Électronique</option>
+        <option>Sport</option>
+        <option>Gratuit</option>
+      </select>
+      <button>Publier</button>
+      <button class="close-btn" onclick="closeModal()">Fermer</button>
+    </div>
+  </div>
 
+  <script>
+    function openModal() {
+      document.getElementById("articleModal").style.display = "flex";
+    }
+
+    function closeModal() {
+      document.getElementById("articleModal").style.display = "none";
+    }
+  </script>
 </body>
 </html>
