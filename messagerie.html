@@ -1,49 +1,53 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Messagerie</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
       margin: 0;
+      font-family: Arial, sans-serif;
       background-color: #f0f2f5;
-    }
-
-    .header {
-      background-color: #1877f2;
-      color: white;
-      padding: 15px;
-      text-align: center;
-      font-size: 20px;
-    }
-
-    .chat-container {
       display: flex;
       flex-direction: column;
       height: 100vh;
     }
 
-    .messages {
+    header {
+      background-color: #1877f2;
+      color: white;
+      padding: 15px;
+      font-size: 18px;
+    }
+
+    .chat {
       flex: 1;
       padding: 20px;
       overflow-y: auto;
-      background-color: #fff;
     }
 
     .message {
-      margin-bottom: 15px;
+      margin: 10px 0;
       padding: 10px;
-      background-color: #e4e6eb;
-      border-radius: 8px;
+      border-radius: 10px;
       max-width: 70%;
+    }
+
+    .sent {
+      background-color: #d1e7dd;
+      align-self: flex-end;
+    }
+
+    .received {
+      background-color: #ffffff;
+      align-self: flex-start;
     }
 
     .input-area {
       display: flex;
       padding: 10px;
-      background-color: #fff;
+      background-color: white;
       border-top: 1px solid #ccc;
     }
 
@@ -52,47 +56,58 @@
       padding: 10px;
       border: 1px solid #ccc;
       border-radius: 6px;
-      margin-right: 10px;
     }
 
     .input-area button {
-      padding: 10px 20px;
       background-color: #1877f2;
       color: white;
       border: none;
+      padding: 10px 15px;
+      margin-left: 10px;
       border-radius: 6px;
       cursor: pointer;
-    }
-
-    .input-area button:hover {
-      background-color: #145fc1;
     }
   </style>
 </head>
 <body>
-  <div class="chat-container">
-    <div class="header">Messagerie - Contacter l’annonceur</div>
-    <div class="messages" id="messages">
-      <!-- Messages apparaîtront ici -->
-    </div>
-    <div class="input-area">
-      <input type="text" id="messageInput" placeholder="Écrivez votre message...">
-      <button onclick="envoyerMessage()">Envoyer</button>
-    </div>
+  <header id="chatWith">Chat avec ...</header>
+
+  <div class="chat" id="chatBox">
+    <!-- Messages dynamiques -->
+  </div>
+
+  <div class="input-area">
+    <input type="text" id="messageInput" placeholder="Écrivez un message...">
+    <button onclick="sendMessage()">Envoyer</button>
   </div>
 
   <script>
-    function envoyerMessage() {
+    const chatWith = localStorage.getItem("contact") || "Quelqu'un";
+    document.getElementById("chatWith").textContent = "Chat avec " + chatWith;
+
+    const chatBox = document.getElementById("chatBox");
+
+    function sendMessage() {
       const input = document.getElementById("messageInput");
-      const text = input.value.trim();
-      if (text !== "") {
-        const messageDiv = document.createElement("div");
-        messageDiv.className = "message";
-        messageDiv.textContent = text;
-        document.getElementById("messages").appendChild(messageDiv);
-        input.value = "";
-        input.focus();
-      }
+      const msg = input.value.trim();
+      if (msg === "") return;
+
+      const message = document.createElement("div");
+      message.className = "message sent";
+      message.textContent = msg;
+      chatBox.appendChild(message);
+
+      input.value = "";
+      chatBox.scrollTop = chatBox.scrollHeight;
+      
+      // Simule une réponse
+      setTimeout(() => {
+        const response = document.createElement("div");
+        response.className = "message received";
+        response.textContent = "Réponse de " + chatWith;
+        chatBox.appendChild(response);
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }, 1000);
     }
   </script>
 </body>
