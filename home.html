@@ -207,7 +207,8 @@
       <input type="text" placeholder="Titre">
       <input type="text" placeholder="Prix (ex: 200 000 FCFA)">
       <textarea placeholder="Description de l'article..."></textarea>
-      <input type="text" placeholder="Lien de l'image (URL)">
+     <input type="file" id="imageInput" accept="image/*">
+      <img id="previewImage" src="" style="max-width:100%; margin: 10px 0; display:none; border-radius:6px;">
       <select>
         <option value="">Catégorie</option>
         <option>Véhicules</option>
@@ -228,7 +229,23 @@
 
   function closeModal() {
     document.getElementById("articleModal").style.display = "none";
+    document.getElementById("previewImage").style.display = "none";
+    document.getElementById("imageInput").value = "";
   }
+
+  // Affichage de l'aperçu de l'image
+  document.getElementById("imageInput").addEventListener("change", function(event) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const imgPreview = document.getElementById("previewImage");
+        imgPreview.src = e.target.result;
+        imgPreview.style.display = "block";
+      }
+      reader.readAsDataURL(file);
+    }
+  });
 
   // Publication dynamique
   const publishBtn = document.querySelector('.modal-content button:not(.close-btn)');
@@ -236,31 +253,38 @@
     const inputs = document.querySelectorAll('.modal-content input');
     const textarea = document.querySelector('.modal-content textarea');
     const select = document.querySelector('.modal-content select');
+    const imageInput = document.getElementById("imageInput");
+    const file = imageInput.files[0];
 
     const title = inputs[0].value.trim();
     const price = inputs[1].value.trim();
     const description = textarea.value.trim();
-    const imageUrl = inputs[2].value.trim();
     const category = select.value;
 
-    if (title && price && imageUrl && category) {
-      const productHTML = `
-        <div class="product">
-          <img src="${imageUrl}" alt="${title}">
-          <h4>${price}</h4>
-          <p>${title}</p>
-        </div>
-      `;
-      document.querySelector('.products').insertAdjacentHTML('beforeend', productHTML);
+    if (title && price && file && category) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const productHTML = `
+          <div class="product">
+            <img src="${e.target.result}" alt="${title}">
+            <h4>${price}</h4>
+            <p>${title}</p>
+          </div>
+        `;
+        document.querySelector('.products').insertAdjacentHTML('beforeend', productHTML);
 
-      // Nettoyage et fermeture du modal
-      inputs.forEach(input => input.value = '');
-      textarea.value = '';
-      select.value = '';
-      closeModal();
+        // Reset du formulaire
+        inputs[0].value = '';
+        inputs[1].value = '';
+        textarea.value = '';
+        select.value = '';
+        imageInput.value = '';
+        document.getElementById("previewImage").style.display = "none";
+        closeModal();
+      }
+      reader.readAsDataURL(file);
     } else {
       alert("Merci de remplir tous les champs.");
     }
   });
 </script>
-
