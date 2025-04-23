@@ -44,9 +44,24 @@
     }
 
     .sidebar li {
-      padding: 10px 0;
+      padding: 12px 0;
       border-bottom: 1px solid #eee;
+      text-align: center;
+      font-size: 18px;
+      color: #333;
+      cursor: pointer;
     }
+    
+    .sidebar li:hover {
+      background-color: #f1f1f1;
+    }
+    
+    .sidebar h4 {
+      margin-top: 30px;
+      text-align: center;
+      color: #555;
+    }
+
 
     .sidebar button {
       padding: 10px;
@@ -161,25 +176,26 @@
 <body>
   <div class="container">
     <div class="sidebar">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Facebook_Marketplace_Logo.png/512px-Facebook_Marketplace_Logo.png" alt="Marketplace">
-      <input type="text" placeholder="Rechercher...">
-      <ul>
-        <li>Tout parcourir</li>
-        <li>Notifications</li>
-        <li>Messagerie</li>
-        <li>Mes achats</li>
-        <li>Mes ventes</li>
-        <li><button onclick="openModal()">Ajouter un article</button></li>
-      </ul>
-      <h4>Catégories</h4>
-      <ul>
-        <li>Véhicules</li>
-        <li>Immobilier</li>
-        <li>Électronique</li>
-        <li>Sport</li>
-        <li>Gratuit</li>
-      </ul>
-    </div>
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Facebook_Marketplace_Logo.png/512px-Facebook_Marketplace_Logo.png" alt="Marketplace">
+  <input type="text" placeholder="Rechercher...">
+  <ul>
+    <li title="Tout parcourir"><i class="fas fa-store"></i></li>
+    <li title="Notifications"><i class="fas fa-bell"></i></li>
+    <li title="Messagerie"><i class="fas fa-comments"></i></li>
+    <li title="Mes achats"><i class="fas fa-shopping-basket"></i></li>
+    <li title="Mes ventes"><i class="fas fa-money-bill-wave"></i></li>
+    <li><button onclick="openModal()"><i class="fas fa-plus-circle"></i> Ajouter</button></li>
+  </ul>
+
+  <h4>Catégories</h4>
+  <ul>
+    <li title="Véhicules"><i class="fas fa-car"></i></li>
+    <li title="Immobilier"><i class="fas fa-home"></i></li>
+    <li title="Électronique"><i class="fas fa-tv"></i></li>
+    <li title="Sport"><i class="fas fa-futbol"></i></li>
+    <li title="Gratuit"><i class="fas fa-gift"></i></li>
+  </ul>
+</div>
 
     <div class="content">
       <h2>Sélection du jour</h2>
