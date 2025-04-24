@@ -4,23 +4,21 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Marketplace</title>
-   <link rel="stylesheet" href="./sass/vender/bootstrap.css">
-    <link rel="stylesheet" href="./sass/vender/bootstrap.min.css">
-    <link rel="stylesheet" href="./owlcarousel/owl.theme.default.min.css">
-    <link rel="stylesheet" href="./owlcarousel/owl.carousel.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.2/emojionearea.min.css">
-    <link rel="stylesheet" href="./sass/main.css">
+  <link rel="stylesheet" href="./sass/vender/bootstrap.min.css">
+  <link rel="stylesheet" href="./owlcarousel/owl.theme.default.min.css">
+  <link rel="stylesheet" href="./owlcarousel/owl.carousel.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.2/emojionearea.min.css">
+  <link rel="stylesheet" href="./sass/main.css">
 
-  
   <style>
     body { margin: 0; font-family: Arial, sans-serif; background-color: #f0f2f5; }
     .container { display: flex; }
     .sidebar {
-      width: 300px; background-color: #fff; padding: 20px; height: 100vh;
-      border-right: 1px solid #ccc; box-sizing: border-box;
+      width: 300px; background-color: #fff; padding: 20px;
+      border-right: 1px solid #ccc; height: 100vh; box-sizing: border-box;
     }
-    .sidebar img { width: 120px; display: block; margin: 0 auto 20px; }
-    .sidebar input { width: 100%; padding: 8px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 6px; }
+    .sidebar img { width: 120px; margin: 0 auto 20px; display: block; }
+    .sidebar input { width: 100%; padding: 8px; margin-bottom: 20px; border-radius: 6px; border: 1px solid #ccc; }
     .sidebar ul { list-style: none; padding: 0; }
     .sidebar li { padding: 10px 0; border-bottom: 1px solid #eee; }
     .sidebar button {
@@ -29,73 +27,35 @@
     }
     .content { flex: 1; padding: 20px; }
     .products {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 15px;
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px;
     }
     .product {
-      background-color: #fff; padding: 10px; border-radius: 8px;
+      background: #fff; padding: 10px; border-radius: 8px;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     }
-    .product img {
-      width: 100%; border-radius: 6px; height: 140px; object-fit: cover;
-    }
-    .product button {
-      margin-top: 10px; background-color: #42b72a; color: white;
-      border: none; padding: 8px; border-radius: 6px; cursor: pointer; width: 100%;
-    }
+    .product img { width: 100%; height: 140px; object-fit: cover; border-radius: 6px; }
     .product h4 { margin: 10px 0 5px; font-size: 16px; }
     .product p { margin: 0; color: gray; font-size: 14px; }
-
-    /* MODAL */
-    .modal {
-      display: none; position: fixed; z-index: 999; left: 0; top: 0;
-      width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5);
-      justify-content: center; align-items: center;
-    }
-    .modal-content {
-      background: #fff; padding: 20px; border-radius: 10px; width: 400px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    }
-    .modal-content input,
-    .modal-content textarea,
-    .modal-content select {
-      width: 100%; margin-bottom: 10px; padding: 8px;
-      border-radius: 5px; border: 1px solid #ccc;
-    }
-    .modal-content button {
-      padding: 10px; width: 100%; border: none; background-color: #1877f2;
-      color: white; border-radius: 6px; cursor: pointer;
-    }
-    .close-btn { background-color: #ccc; margin-top: 10px; }
-    #articleModal {
-      display: none;
-      flex-direction: column;
-      gap: 10px;
-      width: 300px;
-      margin: 50px auto;
-      border: 1px solid #ccc;
-      padding: 20px;
-      background: #f9f9f9;
-    }
-
-    input, textarea, select {
-      width: 100%;
-      padding: 5px;
-    }
-
-    button {
-      padding: 8px;
-      margin-top: 10px;
+    .product button {
+      margin-top: 10px; background-color: #42b72a; color: white;
+      border: none; padding: 8px; border-radius: 6px; width: 100%; cursor: pointer;
     }
 
     #overlay {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.5);
-      justify-content: center;
-      align-items: center;
+      display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.5); justify-content: center; align-items: center;
     }
+    #articleModal {
+      background: #fff; padding: 20px; border-radius: 10px; width: 300px; display: flex; flex-direction: column;
+    }
+    #articleModal input, #articleModal textarea, #articleModal select {
+      width: 100%; margin-bottom: 10px; padding: 8px; border: 1px solid #ccc; border-radius: 5px;
+    }
+    #articleModal button {
+      padding: 10px; border: none; border-radius: 6px; cursor: pointer;
+    }
+    .close-btn { background-color: #ccc; }
+
     @media (max-width: 768px) {
       .container { flex-direction: column; }
       .sidebar { width: 100%; height: auto; border-right: none; border-bottom: 1px solid #ccc; }
@@ -103,149 +63,126 @@
   </style>
 </head>
 <body>
-     <div class="post_page">
-        <!--***** nav menu start ****** -->
-        <div class="nav_menu">
-            <div class="fix_top">
-                <!-- nav for big->medium screen -->
-                <div class="nav">
-                    
-                  <input type="text" placeholder="Rechercher...">
-                    <div class="menu">
-                      
-      
-     <ul>
-        <li>
-          <a class="active" href="home.html">
-             <img src="./images/accueil.png">
-             <span class="d-none d-lg-block ">Home</span>
-          </a>
-        </li>
-        <li>
-          <a href="./messages.html">
-            <img src="./images/send.png">
-           <span class="d-none d-lg-block ">Messages</span>
-         </a>
-       </li>
-       <li>
-         <a href="./profile.html">
-           <img class="circle story" src="./images/profile_img.jpg">
-           <span class="d-none d-lg-block ">Profile</span>
-        </a>
-       </li>
-        <li><button onclick="openModal()">Ajouter un article</button></li>
-      </ul>
-      <h4>Catégories</h4>
-      <ul>
-        <li>Véhicules</li><li>Immobilier</li><li>Électronique</li><li>Sport</li><li>Gratuit</li>
-      </ul>
-    </div>
-                   </div>
-    </div>
-  </div>
-    <div class="content">
-      <!--<h2>Sélection du jour</h2>-->
-      <div class="logo">
-                        <a href="./home.html">
-                            <img class="d-block d-lg-none small-logo" src="./images/logo.png" alt="logo">
-                            <img class="d-none d-lg-block" src="./images/logo_menu.png" alt="logo">
-                        </a>
-                    </div>
-      <div class="products" id="productList">
-        <!-- Les articles s'afficheront ici -->
-      </div>
-    </div>
-  </div>
-   
 
-  <!-- MODAL -->
-  <div id="overlay">
-    <div id="articleModal">
-      <input type="text" id="titre" placeholder="Titre de l'article">
-      <input type="number" id="prix" placeholder="Prix">
-      <textarea id="description" placeholder="Description"></textarea>
-      <input type="file" id="image" accept="image/*">
-      <select id="categorie">
-        <option value="">Choisissez une catégorie</option>
-        <option value="Electronique">Électronique</option>
-        <option value="Mode">Mode</option>
-        <option value="Maison">Maison</option>
-      </select>
-      <button onclick="ajouterArticle()">Ajouter l'article</button>
-      <button onclick="closeModal()">Annuler</button>
-    </div>
+<div class="container">
+  <div class="sidebar">
+    <img src="./images/logo.png" alt="Logo">
+    <input type="text" placeholder="Rechercher...">
+    <ul>
+      <li><a href="home.html">🏠 Accueil</a></li>
+      <li><a href="./messages.html">💬 Messages</a></li>
+      <li><a href="./profile.html">👤 Profil</a></li>
+      <li><button onclick="openModal()">Ajouter un article</button></li>
+    </ul>
+    <h4>Catégories</h4>
+    <ul>
+      <li>Véhicules</li>
+      <li>Immobilier</li>
+      <li>Électronique</li>
+      <li>Sport</li>
+      <li>Gratuit</li>
+    </ul>
   </div>
 
- <script type="module">
-    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+  <div class="content">
+    <div class="products" id="productList">
+      <!-- Articles ici -->
+    </div>
+  </div>
+</div>
 
-    const supabase = createClient(
-      'https://kwxumvmklwbfepimgnas.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...' // Mets ici ta vraie clé publique
-    )
+<!-- MODAL -->
+<div id="overlay">
+  <div id="articleModal">
+    <input type="text" id="titre" placeholder="Titre de l'article">
+    <input type="number" id="prix" placeholder="Prix">
+    <textarea id="description" placeholder="Description"></textarea>
+    <input type="file" id="image" accept="image/*">
+    <select id="categorie">
+      <option value="">Choisissez une catégorie</option>
+      <option value="Électronique">Électronique</option>
+      <option value="Mode">Mode</option>
+      <option value="Maison">Maison</option>
+    </select>
+    <button onclick="ajouterArticle()">Ajouter l'article</button>
+    <button class="close-btn" onclick="closeModal()">Annuler</button>
+  </div>
+</div>
 
-    window.openModal = () => {
-      document.getElementById('overlay').style.display = 'flex'
+<script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+  
+  const supabase = createClient(
+    'https://kwxumvmklwbfepimgnas.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...' // Remplace par ta vraie clé publique
+  )
+
+  window.openModal = () => document.getElementById('overlay').style.display = 'flex'
+  window.closeModal = () => document.getElementById('overlay').style.display = 'none'
+
+  window.ajouterArticle = async () => {
+    const titre = document.getElementById('titre').value.trim()
+    const prix = parseFloat(document.getElementById('prix').value)
+    const description = document.getElementById('description').value.trim()
+    const imageFile = document.getElementById('image').files[0]
+    const categorie = document.getElementById('categorie').value
+
+    if (!titre || isNaN(prix) || !description || !imageFile || !categorie) {
+      alert('Veuillez remplir tous les champs.')
+      return
     }
 
-    window.closeModal = () => {
-      document.getElementById('overlay').style.display = 'none'
-    }
+    const filePath = `${Date.now()}-${imageFile.name}`
+    const { error: uploadError } = await supabase.storage
+      .from('article-images')
+      .upload(filePath, imageFile, {
+        cacheControl: '3600',
+        upsert: true,
+        contentType: imageFile.type
+      })
 
-    window.ajouterArticle = async () => {
-      const titre = document.getElementById('titre').value.trim()
-      const prix = parseFloat(document.getElementById('prix').value)
-      const description = document.getElementById('description').value.trim()
-      const imageFile = document.getElementById('image').files[0]
-      const categorie = document.getElementById('categorie').value
+    if (uploadError) return alert("Erreur upload image : " + uploadError.message)
 
-      if (!titre || isNaN(prix) || !description || !imageFile || !categorie) {
-        alert('Veuillez remplir tous les champs.')
-        return
-      }
+    const { data: urlData, error: urlError } = supabase.storage
+      .from('article-images')
+      .getPublicUrl(filePath)
 
-      const filePath = `${Date.now()}-${imageFile.name}`
-      const { error: uploadError } = await supabase.storage
-        .from('article-images')
-        .upload(filePath, imageFile, {
-          cacheControl: '3600',
-          upsert: true,
-          contentType: imageFile.type
-        })
+    if (urlError) return alert("Erreur URL image : " + urlError.message)
 
-      if (uploadError) {
-        alert("Erreur lors de l'upload de l'image : " + uploadError.message)
-        console.error(uploadError)
-        return
-      }
+    const imageUrl = urlData.publicUrl
 
-      const { data: urlData, error: urlError } = supabase
-        .storage
-        .from('article-images')
-        .getPublicUrl(filePath)
+    const { error: insertError } = await supabase
+      .from('articles')
+      .insert([{ titre, prix, description, image_url: imageUrl, categorie }])
 
-      if (urlError) {
-        alert("Erreur lors de la récupération de l'URL de l'image : " + urlError.message)
-        console.error(urlError)
-        return
-      }
+    if (insertError) return alert("Erreur enregistrement : " + insertError.message)
 
-      const imageUrl = urlData.publicUrl
+    afficherArticle({ titre, prix, description, image_url: imageUrl })
+    closeModal()
+  }
 
-      const { error: insertError } = await supabase
-        .from('articles')
-        .insert([{ titre, prix, description, image_url: imageUrl, categorie }])
+  async function chargerArticles() {
+    const { data, error } = await supabase.from('articles').select('*')
+    if (error) return console.error("Erreur de chargement des articles :", error)
+    data.forEach(article => afficherArticle(article))
+  }
 
-      if (insertError) {
-        alert("Erreur lors de l'ajout de l'article : " + insertError.message)
-        console.error(insertError)
-        return
-      }
+  function afficherArticle(article) {
+    const container = document.getElementById('productList')
+    const div = document.createElement('div')
+    div.className = 'product'
+    div.innerHTML = `
+      <img src="${article.image_url}" alt="${article.titre}">
+      <h4>${article.titre}</h4>
+      <p>${article.description}</p>
+      <p><strong>${article.prix} FCFA</strong></p>
+      <button>Contacter</button>
+    `
+    container.prepend(div)
+  }
 
-      alert("Article ajouté avec succès !")
-      closeModal()
-      location.reload()
-    }
-  </script>
+  chargerArticles()
+</script>
+
 </body>
 </html>
