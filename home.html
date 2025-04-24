@@ -1,171 +1,68 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Marketplace</title>
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #f0f2f5;
-    }
-
-    .container {
-      display: flex;
-    }
-
+    body { margin: 0; font-family: Arial, sans-serif; background-color: #f0f2f5; }
+    .container { display: flex; }
     .sidebar {
-      width: 300px;
-      background-color: #fff;
-      padding: 20px;
-      border-right: 1px solid #ccc;
-      height: 100vh;
-      box-sizing: border-box;
+      width: 300px; background-color: #fff; padding: 20px; height: 100vh;
+      border-right: 1px solid #ccc; box-sizing: border-box;
     }
-
-    .sidebar img {
-      width: 120px;
-      display: block;
-      margin: 0 auto 20px;
-    }
-
-    .sidebar input {
-      width: 100%;
-      padding: 8px;
-      margin-bottom: 20px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-
-    .sidebar ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    .sidebar li {
-      padding: 10px 0;
-      border-bottom: 1px solid #eee;
-    }
-
+    .sidebar img { width: 120px; display: block; margin: 0 auto 20px; }
+    .sidebar input { width: 100%; padding: 8px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 6px; }
+    .sidebar ul { list-style: none; padding: 0; }
+    .sidebar li { padding: 10px 0; border-bottom: 1px solid #eee; }
     .sidebar button {
-      padding: 10px;
-      width: 100%;
-      border: none;
-      background-color: #1877f2;
-      color: white;
-      border-radius: 6px;
-      cursor: pointer;
+      padding: 10px; width: 100%; border: none; background-color: #1877f2;
+      color: white; border-radius: 6px; cursor: pointer;
     }
-
-    .content {
-      flex: 1;
-      padding: 20px;
-    }
-
+    .content { flex: 1; padding: 20px; }
     .products {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
       gap: 15px;
     }
-
     .product {
-      background-color: #fff;
-      padding: 10px;
-      border-radius: 8px;
+      background-color: #fff; padding: 10px; border-radius: 8px;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     }
-    .product button {
-      margin-top: 10px;
-      background-color: #42b72a;
-      color: white;
-      border: none;
-      padding: 8px;
-      border-radius: 6px;
-      cursor: pointer;
-      width: 100%;
-    }
-
-
     .product img {
-      width: 100%;
-      border-radius: 6px;
-      height: 140px;
-      object-fit: cover;
+      width: 100%; border-radius: 6px; height: 140px; object-fit: cover;
     }
-
-    .product h4 {
-      margin: 10px 0 5px;
-      font-size: 16px;
+    .product button {
+      margin-top: 10px; background-color: #42b72a; color: white;
+      border: none; padding: 8px; border-radius: 6px; cursor: pointer; width: 100%;
     }
-
-    .product p {
-      margin: 0;
-      color: gray;
-      font-size: 14px;
-    }
+    .product h4 { margin: 10px 0 5px; font-size: 16px; }
+    .product p { margin: 0; color: gray; font-size: 14px; }
 
     /* MODAL */
     .modal {
-      display: none;
-      position: fixed;
-      z-index: 999;
-      left: 0; top: 0;
-      width: 100%; height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
-      justify-content: center;
-      align-items: center;
+      display: none; position: fixed; z-index: 999; left: 0; top: 0;
+      width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5);
+      justify-content: center; align-items: center;
     }
-
     .modal-content {
-      background: #fff;
-      padding: 20px;
-      border-radius: 10px;
-      width: 400px;
+      background: #fff; padding: 20px; border-radius: 10px; width: 400px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
-
-    .modal-content h3 {
-      margin-top: 0;
-    }
-
     .modal-content input,
     .modal-content textarea,
     .modal-content select {
-      width: 100%;
-      margin-bottom: 10px;
-      padding: 8px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      box-sizing: border-box;
+      width: 100%; margin-bottom: 10px; padding: 8px;
+      border-radius: 5px; border: 1px solid #ccc;
     }
-
     .modal-content button {
-      padding: 10px;
-      width: 100%;
-      border: none;
-      background-color: #1877f2;
-      color: white;
-      border-radius: 6px;
-      cursor: pointer;
+      padding: 10px; width: 100%; border: none; background-color: #1877f2;
+      color: white; border-radius: 6px; cursor: pointer;
     }
-
-    .close-btn {
-      background-color: #ccc;
-      margin-top: 10px;
-    }
+    .close-btn { background-color: #ccc; margin-top: 10px; }
 
     @media (max-width: 768px) {
-      .container {
-        flex-direction: column;
-      }
-
-      .sidebar {
-        width: 100%;
-        height: auto;
-        border-right: none;
-        border-bottom: 1px solid #ccc;
-      }
+      .container { flex-direction: column; }
+      .sidebar { width: 100%; height: auto; border-right: none; border-bottom: 1px solid #ccc; }
     }
   </style>
 </head>
@@ -176,164 +73,100 @@
       <input type="text" placeholder="Rechercher...">
       <ul>
         <li>Tout parcourir</li>
-        <li><a href="messages.html">Messagerie</a></li>
+        <li><a href="#">Messagerie</a></li>
         <li><button onclick="openModal()">Ajouter un article</button></li>
       </ul>
       <h4>Catégories</h4>
       <ul>
-        <li>Véhicules</li>
-        <li>Immobilier</li>
-        <li>Électronique</li>
-        <li>Sport</li>
-        <li>Gratuit</li>
+        <li>Véhicules</li><li>Immobilier</li><li>Électronique</li><li>Sport</li><li>Gratuit</li>
       </ul>
     </div>
-
     <div class="content">
       <h2>Sélection du jour</h2>
-      <div class="products">
-  <!-- Exemple de produit -->
-  <div class="product">
-    <img src="https://via.placeholder.com/200x140?text=Article" alt="Article">
-    <h4>Nom de l’article</h4>
-    <p><strong>Prix :</strong> 50 000 FCFA</p>
-    <p>Description courte de l’article. Bon état, peu utilisé.</p>
-    <button onclick="window.location.href='messagerie.html'">Contacter l’annonceur</button>
-  </div>
-
-  <div class="product">
-    <img src="https://via.placeholder.com/200x140?text=Article+2" alt="Article 2">
-    <h4>Canapé 3 places</h4>
-    <p><strong>Prix :</strong> 150 000 FCFA</p>
-    <p>Canapé très confortable en bon état.</p>
-    <button onclick="window.location.href='messagerie.html'">Contacter l’annonceur</button>
-  </div>
-
-  <!-- Tu peux ajouter d'autres produits ici -->
-</div>
-
+      <div class="products" id="productList">
+        <!-- Les articles s'afficheront ici -->
+      </div>
     </div>
   </div>
 
-<!-- MODAL FORM -->
-<div class="modal" id="articleModal">
-  <div class="modal-content">
-    <h3>Ajouter un article</h3>
-    <input type="text" id="titre" placeholder="Titre">
-    <input type="text" id="prix" placeholder="Prix (ex: 200 000 FCFA)">
-    <textarea id="description" placeholder="Description de l'article..."></textarea>
-    <input type="file" id="image" accept="image/*">
-    <select id="categorie">
-      <option value="">Catégorie</option>
-      <option>Véhicules</option>
-      <option>Immobilier</option>
-      <option>Électronique</option>
-      <option>Sport</option>
-      <option>Gratuit</option>
-    </select>
-    <button onclick="ajouterArticle()">Publier</button>
-    <button class="close-btn" onclick="closeModal()">Fermer</button>
+  <!-- MODAL -->
+  <div class="modal" id="articleModal">
+    <div class="modal-content">
+      <h3>Ajouter un article</h3>
+      <input type="text" id="titre" placeholder="Titre">
+      <input type="text" id="prix" placeholder="Prix (ex: 200 000 FCFA)">
+      <textarea id="description" placeholder="Description de l'article..."></textarea>
+      <input type="file" id="image" accept="image/*">
+      <select id="categorie">
+        <option value="">Catégorie</option>
+        <option>Véhicules</option>
+        <option>Immobilier</option>
+        <option>Électronique</option>
+        <option>Sport</option>
+        <option>Gratuit</option>
+      </select>
+      <button onclick="ajouterArticle()">Publier</button>
+      <button class="close-btn" onclick="closeModal()">Fermer</button>
+    </div>
   </div>
-</div>
 
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
-<script type="module">
-  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+    const supabase = createClient(
+      'https://kwxumvmklwbfepimgnas.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+    )
 
-  const supabaseUrl = 'https://kwxumvmklwbfepimgnas.supabase.co'
-  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt3eHVtdm1rbHdiZmVwaW1nbmFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU0MTIzNjgsImV4cCI6MjA2MDk4ODM2OH0.77ZPzHC02E1u2cMH5e1U6zJB2ynDxykChT7BHI7eqxA'
-  const supabase = createClient(supabaseUrl, supabaseKey)
-
-  const form = document.getElementById('signupForm')
-
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault()
-
-    const email = form.email.value
-    const password = form.password.value
-    const fullName = form.name.value
-    const username = form.username.value
-    const file = form.profilePic.files[0]
-
-    if (!file) {
-      alert("Veuillez sélectionner une photo de profil.")
-      return
+    window.openModal = () => {
+      document.getElementById('articleModal').style.display = 'flex'
     }
 
-    // 1. Créer le compte
-    const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          full_name: fullName,
-          username
-        }
+    window.closeModal = () => {
+      document.getElementById('articleModal').style.display = 'none'
+    }
+
+    window.ajouterArticle = async () => {
+      const titre = document.getElementById('titre').value
+      const prix = document.getElementById('prix').value
+      const description = document.getElementById('description').value
+      const imageFile = document.getElementById('image').files[0]
+      const categorie = document.getElementById('categorie').value
+
+      if (!titre || !prix || !description || !imageFile || !categorie) {
+        alert('Veuillez remplir tous les champs.')
+        return
       }
-    })
 
-    if (signUpError) {
-      alert("Erreur inscription : " + signUpError.message)
-      return
-    }
+      // Upload image
+      const filePath = `${Date.now()}-${imageFile.name}`
+      const { error: uploadError } = await supabase
+        .storage
+        .from('article-images')
+        .upload(filePath, imageFile, { cacheControl: '3600', upsert: true })
 
-    // 2. Attendre la session (l'utilisateur doit être automatiquement connecté après signUp)
-    let session = null
-    for (let i = 0; i < 10; i++) {
-      const result = await supabase.auth.getSession()
-      if (result.data.session) {
-        session = result.data.session
-        break
+      if (uploadError) {
+        alert("Erreur lors de l'upload de l'image.")
+        return
       }
-      await new Promise(r => setTimeout(r, 1000)) // attend 1 seconde
+
+      const { data } = supabase.storage.from('article-images').getPublicUrl(filePath)
+      const imageUrl = data.publicUrl
+
+      // Enregistrement dans la base
+      const { error: insertError } = await supabase
+        .from('articles')
+        .insert([{ titre, prix, description, image_url: imageUrl, categorie }])
+
+      if (insertError) {
+        alert("Erreur lors de l'ajout de l'article.")
+        return
+      }
+
+      alert("Article ajouté avec succès !")
+      closeModal()
+      location.reload()
     }
-
-    if (!session) {
-      alert("Impossible de récupérer la session après inscription.")
-      return
-    }
-
-    const userId = session.user.id
-
-    // 3. Upload de l'image de profil
-    const { data: uploadData, error: uploadError } = await supabase
-      .storage
-      .from('profile-pictures')
-      .upload(`avatars/${userId}/${file.name}`, file, {
-        cacheControl: '3600',
-        upsert: true
-      })
-
-    if (uploadError) {
-      alert("Erreur upload image : " + uploadError.message)
-      return
-    }
-
-    const { data: urlData } = supabase
-      .storage
-      .from('profile-pictures')
-      .getPublicUrl(`avatars/${userId}/${file.name}`)
-
-    const avatarUrl = urlData.publicUrl
-
-    // 4. Enregistrement dans la table `users`
-    const { error: insertError } = await supabase
-      .from('users')
-      .insert([{
-        id: userId,
-        full_name: fullName,
-        username,
-        email,
-        avatar_url: avatarUrl
-      }])
-
-    if (insertError) {
-      alert("Erreur enregistrement du profil : " + insertError.message)
-      return
-    }
-
-    alert("Inscription réussie !")
-    window.location.href = './home.html'
-  })
-</script>
-
+  </script>
+</body>
+</html>
