@@ -178,34 +178,32 @@
         return
       }
 
-      // Upload image
+     // Upload image
       const filePath = `${Date.now()}-${imageFile.name}`
       const { error: uploadError } = await supabase
         .storage
         .from('article-images')
         .upload(filePath, imageFile, { cacheControl: '3600', upsert: true })
-
+      
       if (uploadError) {
         alert("Erreur lors de l'upload de l'image.")
+        console.error(uploadError)
         return
       }
-
-      const { data } = supabase.storage.from('article-images').getPublicUrl(filePath)
-      const imageUrl = data.publicUrl
-
-      // Enregistrement dans la base
-      const { error: insertError } = await supabase
-        .from('articles')
-        .insert([{ titre, prix, description, image_url: imageUrl, categorie }])
-
-      if (insertError) {
-        alert("Erreur lors de l'ajout de l'article.")
+      
+      // Récupère l'URL publique
+      const { data: urlData, error: urlError } = await supabase
+        .storage
+        .from('article-images')
+        .getPublicUrl(filePath)
+      
+      if (urlError) {
+        alert("Erreur lors de la récupération de l'URL de l'image.")
+        console.error(urlError)
         return
       }
-
-      alert("Article ajouté avec succès !")
-      closeModal()
-      location.reload()
+      
+      const imageUrl = urlData.publicUrl
     }
   </script>
 </body>
