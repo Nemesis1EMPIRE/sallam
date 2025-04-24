@@ -151,60 +151,66 @@
     </div>
   </div>
 
-  <script type="module">
+ <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
     const supabase = createClient(
       'https://kwxumvmklwbfepimgnas.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt3eHVtdm1rbHdiZmVwaW1nbmFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU0MTIzNjgsImV4cCI6MjA2MDk4ODM2OH0.77ZPzHC02E1u2cMH5e1U6zJB2ynDxykChT7BHI7eqxA'
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt3eHVtdm1rbHdiZmVwaW1nbmFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU0MTIzNjgsImV4cCI6MjA2MDk4ODM2OH0.77ZPzHC02E1u2cMH5e1U6zJB2ynDxykChT7BHI7eqxA' // <-- Mets ta vraie clé publique ici
     )
 
-    window.openModal = () => {
-      document.getElementById('articleModal').style.display = 'flex'
-    }
-
-    window.closeModal = () => {
-      document.getElementById('articleModal').style.display = 'none'
-    }
-
     window.ajouterArticle = async () => {
-      const titre = document.getElementById('titre').value
-      const prix = document.getElementById('prix').value
-      const description = document.getElementById('description').value
+      const titre = document.getElementById('titre').value.trim()
+      const prix = parseFloat(document.getElementById('prix').value)
+      const description = document.getElementById('description').value.trim()
       const imageFile = document.getElementById('image').files[0]
       const categorie = document.getElementById('categorie').value
 
-      if (!titre || !prix || !description || !imageFile || !categorie) {
+      if (!titre || isNaN(prix) || !description || !imageFile || !categorie) {
         alert('Veuillez remplir tous les champs.')
         return
       }
 
-     // Upload image
       const filePath = `${Date.now()}-${imageFile.name}`
-      const { error: uploadError } = await supabase
-        .storage
+      const { error: uploadError } = await supabase.storage
         .from('article-images')
-        .upload(filePath, imageFile, { cacheControl: '3600', upsert: true })
-      
+        .upload(filePath, imageFile, {
+          cacheControl: '3600',
+          upsert: true,
+          contentType: imageFile.type
+        })
+
       if (uploadError) {
-        alert("Erreur lors de l'upload de l'image.")
+        alert("Erreur lors de l'upload de l'image : " + uploadError.message)
         console.error(uploadError)
         return
       }
-      
-      // Récupère l'URL publique
-      const { data: urlData, error: urlError } = await supabase
+
+      const { data: urlData, error: urlError } = supabase
         .storage
         .from('article-images')
         .getPublicUrl(filePath)
-      
+
       if (urlError) {
-        alert("Erreur lors de la récupération de l'URL de l'image.")
+        alert("Erreur lors de la récupération de l'URL de l'image : " + urlError.message)
         console.error(urlError)
         return
       }
-      
+
       const imageUrl = urlData.publicUrl
+
+      const { error: insertError } = await supabase
+        .from('articles')
+        .insert([{ titre, prix, description, image_url: imageUrl, categorie }])
+
+      if (insertError) {
+        alert("Erreur lors de l'ajout de l'article : " + insertError.message)
+        console.error(insertError)
+        return
+      }
+
+      alert("Article ajouté avec succès !")
+      location.reload()
     }
   </script>
 </body>
