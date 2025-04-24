@@ -67,7 +67,35 @@
       color: white; border-radius: 6px; cursor: pointer;
     }
     .close-btn { background-color: #ccc; margin-top: 10px; }
+    #articleModal {
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      width: 300px;
+      margin: 50px auto;
+      border: 1px solid #ccc;
+      padding: 20px;
+      background: #f9f9f9;
+    }
 
+    input, textarea, select {
+      width: 100%;
+      padding: 5px;
+    }
+
+    button {
+      padding: 8px;
+      margin-top: 10px;
+    }
+
+    #overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+    }
     @media (max-width: 768px) {
       .container { flex-direction: column; }
       .sidebar { width: 100%; height: auto; border-right: none; border-bottom: 1px solid #ccc; }
@@ -131,23 +159,20 @@
    
 
   <!-- MODAL -->
-  <div class="modal" id="articleModal">
-    <div class="modal-content">
-      <h3>Ajouter un article</h3>
-      <input type="text" id="titre" placeholder="Titre">
-      <input type="text" id="prix" placeholder="Prix (ex: 200 000 FCFA)">
-      <textarea id="description" placeholder="Description de l'article..."></textarea>
+  <div id="overlay">
+    <div id="articleModal">
+      <input type="text" id="titre" placeholder="Titre de l'article">
+      <input type="number" id="prix" placeholder="Prix">
+      <textarea id="description" placeholder="Description"></textarea>
       <input type="file" id="image" accept="image/*">
       <select id="categorie">
-        <option value="">Catégorie</option>
-        <option>Véhicules</option>
-        <option>Immobilier</option>
-        <option>Électronique</option>
-        <option>Sport</option>
-        <option>Gratuit</option>
+        <option value="">Choisissez une catégorie</option>
+        <option value="Electronique">Électronique</option>
+        <option value="Mode">Mode</option>
+        <option value="Maison">Maison</option>
       </select>
-      <button onclick="ajouterArticle()">Publier</button>
-      <button class="close-btn" onclick="closeModal()">Fermer</button>
+      <button onclick="ajouterArticle()">Ajouter l'article</button>
+      <button onclick="closeModal()">Annuler</button>
     </div>
   </div>
 
