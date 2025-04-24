@@ -156,8 +156,16 @@
 
     const supabase = createClient(
       'https://kwxumvmklwbfepimgnas.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt3eHVtdm1rbHdiZmVwaW1nbmFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU0MTIzNjgsImV4cCI6MjA2MDk4ODM2OH0.77ZPzHC02E1u2cMH5e1U6zJB2ynDxykChT7BHI7eqxA' // <-- Mets ta vraie clé publique ici
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...' // Mets ici ta vraie clé publique
     )
+
+    window.openModal = () => {
+      document.getElementById('overlay').style.display = 'flex'
+    }
+
+    window.closeModal = () => {
+      document.getElementById('overlay').style.display = 'none'
+    }
 
     window.ajouterArticle = async () => {
       const titre = document.getElementById('titre').value.trim()
@@ -210,6 +218,7 @@
       }
 
       alert("Article ajouté avec succès !")
+      closeModal()
       location.reload()
     }
   </script>
