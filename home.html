@@ -4,6 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Marketplace</title>
+   <link rel="stylesheet" href="./sass/vender/bootstrap.css">
+    <link rel="stylesheet" href="./sass/vender/bootstrap.min.css">
+    <link rel="stylesheet" href="./owlcarousel/owl.theme.default.min.css">
+    <link rel="stylesheet" href="./owlcarousel/owl.carousel.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.2/emojionearea.min.css">
+    <link rel="stylesheet" href="./sass/main.css">
+
+  
   <style>
     body { margin: 0; font-family: Arial, sans-serif; background-color: #f0f2f5; }
     .container { display: flex; }
@@ -72,9 +80,25 @@
       <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Facebook_Marketplace_Logo.png/512px-Facebook_Marketplace_Logo.png" alt="Marketplace">
       <input type="text" placeholder="Rechercher...">
       <ul>
-        <li>Tout parcourir</li>
-        <li><a href="#">Messagerie</a></li>
-        <li><button onclick="openModal()">Ajouter un article</button></li>
+        <li>
+          <a class="active" href="home.html">
+             <img src="./images/accueil.png">
+             <span class="d-none d-lg-block ">Home</span>
+          </a>
+        </li>
+        <li>
+          <a href="./messages.html">
+            <img src="./images/send.png">
+           <span class="d-none d-lg-block ">Messages</span>
+         </a>
+       </li>
+       <li>
+         <a href="./profile.html">
+           <img class="circle story" src="./images/profile_img.jpg">
+           <span class="d-none d-lg-block ">Profile</span>
+        </a>
+       </li>
+        <li><button onclick="openModal()"> <img src="./images/tab.png"> Ajouter un article</button></li>
       </ul>
       <h4>Catégories</h4>
       <ul>
