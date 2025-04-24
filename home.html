@@ -75,11 +75,22 @@
   </style>-->
 </head>
 <body>
-  <div class="container">
-    <div class="sidebar">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Facebook_Marketplace_Logo.png/512px-Facebook_Marketplace_Logo.png" alt="Marketplace">
+     <div class="post_page">
+        <!--***** nav menu start ****** -->
+        <div class="nav_menu">
+            <div class="fix_top">
+                <!-- nav for big->medium screen -->
+                <div class="nav">
+                    <div class="logo">
+                        <a href="./home.html">
+                            <img class="d-block d-lg-none small-logo" src="./images/logo.png" alt="logo">
+                            <img class="d-none d-lg-block" src="./images/logo_menu.png" alt="logo">
+                        </a>
+                    </div>
+                    <div class="menu">
+                      
       <input type="text" placeholder="Rechercher...">
-      <ul>
+     <ul>
         <li>
           <a class="active" href="home.html">
              <img src="./images/accueil.png">
@@ -105,6 +116,9 @@
         <li>Véhicules</li><li>Immobilier</li><li>Électronique</li><li>Sport</li><li>Gratuit</li>
       </ul>
     </div>
+                   </div>
+    </div>
+  </div>
     <div class="content">
       <h2>Sélection du jour</h2>
       <div class="products" id="productList">
@@ -112,6 +126,7 @@
       </div>
     </div>
   </div>
+   
 
   <!-- MODAL -->
   <div class="modal" id="articleModal">
