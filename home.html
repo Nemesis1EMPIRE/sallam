@@ -856,15 +856,31 @@
       const fileExt = imageFile.name.split('.').pop();
       const filePath = `articles/${user.id}-${Date.now()}.${fileExt}`;
       
-      const { error: uploadError } = await supabase.storage
+       // Upload de l'image avec le bon Content-Type
+        const { error: uploadError } = await supabase.storage
+            .from('article-images')
+            .upload(filePath, imageFile, {
+                cacheControl: '3600',
+                upsert: false,
+                contentType: imageFile.type // Important pour les PNG
+            });
+    
+        if (uploadError) {
+            console.error("Erreur upload:", uploadError);
+            throw uploadError;
+        }
+
+    // Récupération de l'URL avec transformation si nécessaire
+    const { data: { publicUrl } } = supabase.storage
         .from('article-images')
-        .upload(filePath, imageFile, {
-          cacheControl: '3600',
-          upsert: false,
-          contentType: imageFile.type
+        .getPublicUrl(filePath, {
+            transform: {
+                width: 800,
+                height: 600,
+                quality: 80,
+                format: 'origin' // Garde le format original (PNG)
+            }
         });
-      
-      if (uploadError) throw uploadError;
 
       // Récupération URL
       const { data: { publicUrl } } = supabase.storage
@@ -923,9 +939,15 @@
   const afficherArticle = (article) => {
     const container = document.getElementById('productList');
     const div = document.createElement('div');
+     div.className = 'product';
+    
+    // Ajout d'un timestamp pour éviter le cache
+    const timestamp = new Date().getTime();
+    const imageUrl = `${article.image_url}?t=${timestamp}`;
     div.className = 'product';
     div.innerHTML = `
-      <img src="${article.image_url}" alt="${article.titre}" class="product-image">
+       <img src="${imageUrl}" alt="${article.titre}" class="product-image" 
+           onerror="this.onerror=null; this.src='${article.image_url}'">
       <div class="product-info">
         <h3 class="product-title">${article.titre}</h3>
         <p class="product-description">${article.description}</p>
