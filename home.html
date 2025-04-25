@@ -994,17 +994,19 @@
       const filePath = `articles/${user.id}-${Date.now()}.${fileExt}`;
       
       const { error: uploadError } = await supabase.storage
-        .from('article-images')
-        .upload(filePath, compressedImage, {
-          cacheControl: '3600',
-          upsert: false,
-          contentType: compressedImage.type
-        });
+      .from('article-images')
+      .upload(filePath, compressedImage, {
+        cacheControl: '3600',
+        upsert: false,
+        contentType: compressedImage.type
+      });
     
-      if (uploadError) {
-        console.error("Erreur upload:", uploadError);
-        throw uploadError;
-      }
+      if (uploadError) throw uploadError;
+      
+      // Récupération de l'URL publique de base (sans transformation)
+      const { data: { publicUrl } } = supabase.storage
+        .from('article-images')
+        .getPublicUrl(filePath);
 
       // Récupération de l'URL optimisée
       const { data: { publicUrl } } = supabase.storage
@@ -1065,6 +1067,24 @@
       }
     }
   };
+   // Fonction pour obtenir l'URL correcte de l'image
+  const getCorrectImageUrl = (url) => {
+    // Si l'URL est déjà une URL complète, la retourner telle quelle
+    if (url.startsWith('http')) {
+      return url;
+    }
+    
+    // Si c'est un chemin Supabase, construire l'URL complète
+    if (url.startsWith('article-images/')) {
+      const { data: { publicUrl } } = supabase.storage
+        .from('article-images')
+        .getPublicUrl(url);
+      return publicUrl;
+    }
+    
+    // Retourner l'URL d'origine si on ne sait pas comment la traiter
+    return url;
+  };
 
   // Fonction d'affichage d'un article
   const afficherArticle = (article) => {
@@ -1078,26 +1098,28 @@
         '?width=400&height=300&quality=80'
       : article.image_url;
     
+    const imageUrl = getCorrectImageUrl(article.image_url);
+    
     div.innerHTML = `
-        <div class="product-image-container">
-          <div class="image-placeholder">
-            <i class="fas fa-image" style="font-size: 24px;"></i>
-          </div>
-          <img data-src="${imageUrl}" alt="${article.titre}" class="product-image" 
-               loading="lazy" decoding="async"
-               onload="this.classList.add('loaded'); this.previousElementSibling.style.display='none'"
-               onerror="this.onerror=null; this.previousElementSibling.style.display='flex'">
+      <div class="product-image-container">
+        <div class="image-placeholder">
+          <i class="fas fa-image"></i>
         </div>
-        <div class="product-info">
-          <h3 class="product-title">${article.titre}</h3>
-          <p class="product-description">${article.description}</p>
-          <span class="product-category">${article.categorie}</span>
-          <p class="product-price">${article.prix.toLocaleString()} FCFA</p>
-          <button class="contact-btn">
-            <i class="fas fa-envelope"></i> Contacter
-          </button>
-        </div>
-      `;
+        <img src="${imageUrl}" alt="${article.titre}" class="product-image" 
+             loading="lazy" decoding="async"
+             onload="this.classList.add('loaded'); this.previousElementSibling.style.display='none'"
+             onerror="this.onerror=null; this.previousElementSibling.style.display='flex'; console.error('Erreur de chargement de l\'image:', this.src)">
+      </div>
+      <div class="product-info">
+        <h3 class="product-title">${article.titre}</h3>
+        <p class="product-description">${article.description}</p>
+        <span class="product-category">${article.categorie}</span>
+        <p class="product-price">${article.prix.toLocaleString()} FCFA</p>
+        <button class="contact-btn">
+          <i class="fas fa-envelope"></i> Contacter
+        </button>
+      </div>
+    `;
     container.prepend(div);
      // Observer l'image si elle utilise le lazy loading
     const img = div.querySelector('.product-image');
