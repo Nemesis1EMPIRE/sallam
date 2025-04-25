@@ -3,18 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Marketplace</title>
+  <title>Marketplace Premium</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="./sass/vender/bootstrap.min.css">
   <link rel="stylesheet" href="./owlcarousel/owl.theme.default.min.css">
   <link rel="stylesheet" href="./owlcarousel/owl.carousel.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.2/emojionearea.min.css">
-  
   <style>
     :root {
       --primary-color: #4361ee;
       --secondary-color: #3a0ca3;
       --accent-color: #f72585;
+      --premium-color: #ffaa00;
       --light-color: #f8f9fa;
       --dark-color: #212529;
       --gray-color: #6c757d;
@@ -218,11 +217,25 @@
       overflow: hidden;
       box-shadow: var(--box-shadow);
       transition: var(--transition);
+      position: relative;
     }
     
     .product:hover {
       transform: translateY(-5px);
       box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .premium-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: linear-gradient(45deg, var(--premium-color), #ff9500);
+      color: white;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: bold;
+      z-index: 1;
     }
     
     .product-image {
@@ -427,6 +440,77 @@
       background-color: #d0d0d0;
     }
     
+    /* Premium Modal */
+    #premiumOverlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      justify-content: center;
+      align-items: center;
+      z-index: 1001;
+    }
+    
+    .premium-modal {
+      background: white;
+      padding: 30px;
+      border-radius: var(--border-radius);
+      max-width: 500px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+    
+    .premium-icon {
+      font-size: 50px;
+      color: var(--premium-color);
+      margin-bottom: 20px;
+    }
+    
+    .premium-title {
+      font-size: 24px;
+      margin-bottom: 15px;
+      color: var(--dark-color);
+    }
+    
+    .premium-text {
+      margin-bottom: 25px;
+      color: var(--gray-color);
+      line-height: 1.6;
+    }
+    
+    .premium-actions {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+    }
+    
+    .premium-btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+    
+    .premium-btn.secondary {
+      background: #eee;
+      color: var(--dark-color);
+    }
+    
+    .premium-btn.primary {
+      background: var(--premium-color);
+      color: white;
+    }
+    
+    .premium-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
     /* Responsive Styles */
     @media (max-width: 992px) {
       .sidebar {
@@ -462,9 +546,14 @@
         grid-template-columns: 1fr;
       }
       
-      #articleModal {
+      #articleModal, .premium-modal {
         margin: 20px;
         padding: 20px;
+      }
+      
+      .premium-actions {
+        flex-direction: column;
+        gap: 10px;
       }
     }
     
@@ -514,7 +603,7 @@
         <li><a href="home.html"><i class="fas fa-home"></i> Accueil</a></li>
         <li><a href="./messages.html"><i class="fas fa-comments"></i> Messages</a></li>
         <li><a href="./profile.html"><i class="fas fa-user"></i> Profil</a></li>
-        <li><a href="#"><i class="fas fa-heart"></i> Favoris</a></li>
+        <li><a href="./premium.html"><i class="fas fa-crown"></i> Devenir Premium</a></li>
       </ul>
     </div>
     
@@ -536,12 +625,11 @@
       <div class="filter-options">
         <button class="filter-btn active">Tous</button>
         <button class="filter-btn">Populaires</button>
-        <button class="filter-btn">Proches</button>
+        <button class="filter-btn">Premium</button>
       </div>
     </div>
     
     <div class="products" id="productList">
-      <!-- Articles will be loaded here -->
       <div class="loading">
         <div class="spinner"></div>
       </div>
@@ -549,7 +637,7 @@
   </div>
 </div>
 
-<!-- MODAL -->
+<!-- MODAL AJOUT ARTICLE -->
 <div id="overlay">
   <div id="articleModal">
     <div class="modal-header">
@@ -605,6 +693,31 @@
   </div>
 </div>
 
+<!-- MODAL PREMIUM -->
+<div id="premiumOverlay">
+  <div class="premium-modal">
+    <i class="fas fa-crown premium-icon"></i>
+    <h2 class="premium-title">Fonctionnalité Premium</h2>
+    <p class="premium-text">
+      La publication d'articles est réservée à nos membres premium. Abonnez-vous pour :
+    </p>
+    <ul style="text-align: left; margin-bottom: 25px; color: var(--gray-color);">
+      <li>✔ Publier un nombre illimité d'articles</li>
+      <li>✔ Badge premium sur vos publications</li>
+      <li>✔ Statistiques avancées</li>
+      <li>✔ Support prioritaire</li>
+    </ul>
+    <div class="premium-actions">
+      <button class="premium-btn secondary" onclick="closePremiumModal()">
+        Plus tard
+      </button>
+      <button class="premium-btn primary" onclick="redirectToPremium()">
+        <i class="fas fa-crown"></i> Voir les offres
+      </button>
+    </div>
+  </div>
+</div>
+
 <script type="module">
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
   
@@ -615,7 +728,37 @@
   )
 
   // Modal functions
-  window.openModal = () => {
+  window.openModal = async () => {
+    // Check if user is logged in
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    
+    if (authError || !user) {
+      alert("Veuillez vous connecter pour ajouter un article")
+      window.location.href = "login.html"
+      return
+    }
+    
+    // Check premium status
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      .select('is_premium')
+      .eq('id', user.id)
+      .single()
+    
+    if (profileError) {
+      console.error("Error checking premium status:", profileError)
+      alert("Erreur de vérification du statut premium")
+      return
+    }
+    
+    if (!profile?.is_premium) {
+      // Show premium modal
+      document.getElementById('premiumOverlay').style.display = 'flex'
+      document.body.style.overflow = 'hidden'
+      return
+    }
+    
+    // Show normal modal for premium users
     document.getElementById('overlay').style.display = 'flex'
     document.body.style.overflow = 'hidden'
   }
@@ -623,6 +766,16 @@
   window.closeModal = () => {
     document.getElementById('overlay').style.display = 'none'
     document.body.style.overflow = 'auto'
+  }
+
+  // Premium modal functions
+  window.closePremiumModal = () => {
+    document.getElementById('premiumOverlay').style.display = 'none'
+    document.body.style.overflow = 'auto'
+  }
+
+  window.redirectToPremium = () => {
+    window.location.href = "./premium.html"
   }
 
   // Display selected file name
@@ -635,8 +788,23 @@
     }
   })
 
-  // Add product function
+  // Add product function with premium check
   window.ajouterArticle = async () => {
+    // Check premium status again (in case user bypassed the first check)
+    const { data: { user } } = await supabase.auth.getUser()
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('is_premium')
+      .eq('id', user.id)
+      .single()
+
+    if (!profile?.is_premium) {
+      alert("Cette fonctionnalité nécessite un abonnement premium")
+      document.getElementById('premiumOverlay').style.display = 'flex'
+      document.getElementById('overlay').style.display = 'none'
+      return
+    }
+
     const titre = document.getElementById('titre').value.trim()
     const prix = parseFloat(document.getElementById('prix').value)
     const description = document.getElementById('description').value.trim()
@@ -674,7 +842,7 @@
         .from('article-images')
         .getPublicUrl(filePath)
 
-      // 3. Insert article to database
+      // 3. Insert article to database with premium flag
       const { data, error: insertError } = await supabase
         .from('articles')
         .insert([{ 
@@ -683,7 +851,8 @@
           description, 
           image_url: urlData.publicUrl, 
           categorie,
-          created_at: new Date().toISOString()
+          created_at: new Date().toISOString(),
+          is_premium_author: true // Flag pour les articles premium
         }])
         .select()
 
@@ -698,13 +867,14 @@
       document.getElementById('fileName').textContent = ''
       
       // Show success message
-      alert('Votre article a été publié avec succès !')
+      alert('Votre article premium a été publié avec succès !')
       
     } catch (error) {
       console.error('Error:', error)
       alert(`Erreur: ${error.message}`)
     } finally {
       // Reset button state
+      const submitBtn = document.querySelector('.submit-btn')
       if (submitBtn) {
         submitBtn.innerHTML = '<i class="fas fa-plus"></i> Publier l\'article'
         submitBtn.disabled = false
@@ -712,7 +882,7 @@
     }
   }
 
-  // Load products function
+  // Load products function with premium filtering
   async function chargerArticles() {
     try {
       const { data, error } = await supabase
@@ -748,12 +918,19 @@
     }
   }
 
-  // Display product function
+  // Display product function with premium badge
   function afficherArticle(article) {
     const container = document.getElementById('productList')
     const div = document.createElement('div')
     div.className = 'product'
+    
+    let premiumBadge = ''
+    if (article.is_premium_author) {
+      premiumBadge = '<div class="premium-badge"><i class="fas fa-crown"></i> PREMIUM</div>'
+    }
+    
     div.innerHTML = `
+      ${premiumBadge}
       <img src="${article.image_url}" alt="${article.titre}" class="product-image">
       <div class="product-info">
         <h3 class="product-title">${article.titre}</h3>
@@ -768,6 +945,35 @@
     container.prepend(div)
   }
 
+  // Filter products by premium status
+  async function filterPremium() {
+    const { data, error } = await supabase
+      .from('articles')
+      .select('*')
+      .eq('is_premium_author', true)
+      .order('created_at', { ascending: false })
+    
+    if (error) {
+      console.error("Error filtering premium:", error)
+      return
+    }
+    
+    const productList = document.getElementById('productList')
+    productList.innerHTML = ''
+    
+    if (data.length === 0) {
+      productList.innerHTML = `
+        <div style="grid-column: 1/-1; text-align: center; padding: 40px;">
+          <i class="fas fa-crown" style="font-size: 50px; color: var(--premium-color); margin-bottom: 20px;"></i>
+          <p>Aucun article premium disponible.</p>
+        </div>
+      `
+      return
+    }
+    
+    data.forEach(article => afficherArticle(article))
+  }
+
   // Initialize
   document.addEventListener('DOMContentLoaded', () => {
     chargerArticles()
@@ -777,8 +983,32 @@
       btn.addEventListener('click', function() {
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'))
         this.classList.add('active')
-        // Here you would typically filter the products
+        
+        if (this.textContent === 'Premium') {
+          filterPremium()
+        } else if (this.textContent === 'Tous') {
+          chargerArticles()
+        } else {
+          // Ajouter d'autres filtres si nécessaire
+          chargerArticles()
+        }
       })
+    })
+    
+    // Check if user is premium and update UI
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (user) {
+        supabase.from('profiles').select('is_premium').eq('id', user.id).single()
+          .then(({ data: profile }) => {
+            if (profile?.is_premium) {
+              // Mettre à jour l'UI pour les utilisateurs premium
+              const addButton = document.querySelector('.add-product-btn')
+              if (addButton) {
+                addButton.innerHTML = '<i class="fas fa-crown"></i> Ajouter un article (Premium)'
+              }
+            }
+          })
+      }
     })
   })
 </script>
