@@ -188,7 +188,19 @@
             height: 40px;
             margin: 0 5px;
         }
-
+        .error-message {
+            color: var(--accent-color);
+            margin-top: 10px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .log_btn:disabled {
+            background-color: var(--gray-color);
+            cursor: not-allowed;
+            transform: none !important;
+        }
         /* Loading spinner */
         .spinner {
             width: 20px;
@@ -298,15 +310,12 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
    <script>
-  const SUPABASE_URL = "https://ufpmrteapbfukhftrpcv.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVmcG1ydGVhcGJmdWtoZnRycGN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU1Njc2OTcsImV4cCI6MjA2MTE0MzY5N30.GdoHerSP1ij8_m9L9562n5FXvHR7V6J-dxHc-70oPUs";
-  const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+ const SUPABASE_URL = "https://ufpmrteapbfukhftrpcv.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVmcG1ydGVhcGJmdWtoZnRycGN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU1Njc2OTcsImV4cCI6MjA2MTE0MzY5N30.GdoHerSP1ij8_m9L9562n5FXvHR7V6J-dxHc-70oPUs";
+const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  // Debug: Vérifie que Supabase est initialisé
-  console.log("Supabase initialisé:", supabase);
-
-  document.getElementById("loginForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
+document.getElementById("loginForm").addEventListener("submit", async (e) => {
+    e.preventDefault(); // Empêche le rechargement de la page
     
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
@@ -314,72 +323,85 @@
     const btnText = document.getElementById("btnText");
     const spinner = document.getElementById("spinner");
 
-    // Debug: Affiche les valeurs du formulaire
-    console.log("Tentative de connexion avec:", {email, password});
-
+    // Validation basique
     if (!email || !password) {
-      alert("Veuillez remplir tous les champs !");
-      return;
+        showError("Veuillez remplir tous les champs");
+        return;
     }
 
-    // Afficher le spinner
+    // UI loading state
     btnText.textContent = "Connexion en cours...";
     spinner.style.display = "inline-block";
     loginBtn.disabled = true;
 
     try {
-      // Étape 1: Tentative de connexion
-      const { data, error } = await supabase.auth.signInWithPassword({ 
-        email, 
-        password 
-      });
+        // Tentative de connexion
+        const { data, error } = await supabase.auth.signInWithPassword({ 
+            email, 
+            password 
+        });
 
-      // Debug: Affiche la réponse complète
-      console.log("Réponse de connexion:", {data, error});
+        if (error) {
+            throw error;
+        }
 
-      if (error) throw error;
-      
-      // Étape 2: Vérification de l'utilisateur
-      const { data: { user }, error: userError } = await supabase.auth.getUser();
-      
-      // Debug: Affiche les infos utilisateur
-      console.log("Utilisateur récupéré:", user);
+        // Vérification de l'utilisateur
+        const { data: { user }, error: userError } = await supabase.auth.getUser();
+        
+        if (userError) throw userError;
+        if (!user) throw new Error("Aucun utilisateur trouvé après connexion");
 
-      if (userError) throw userError;
-      
-      if (!user) throw new Error("Aucun utilisateur trouvé après connexion");
-      
-      // Étape 3: Vérification email confirmé (optionnel)
-      if (!user.email_confirmed_at) {
-        console.warn("Email non confirmé - redirection quand même");
-        // throw new Error("Veuillez confirmer votre email");
-      }
-
-      // Étape 4: Redirection
-      console.log("Redirection vers home.html");
-      window.location.href = "./home.html";
-      
-    } catch (error) {
-      console.error("Erreur complète:", error);
-      alert(`Erreur: ${error.message}\n\nVérifiez la console pour plus de détails (F12)`);
-    } finally {
-      btnText.textContent = "Se connecter";
-      spinner.style.display = "none";
-      loginBtn.disabled = false;
-    }
-  });
-
-  // Vérification de session au chargement
-  supabase.auth.getSession()
-    .then(({ data: { session } }) => {
-      console.log("Session au chargement:", session);
-      if (session?.user) {
-        console.log("Utilisateur déjà connecté, redirection...");
+        // Redirection si succès
         window.location.href = "./home.html";
-      }
+        
+    } catch (error) {
+        console.error("Erreur de connexion:", error);
+        
+        // Messages d'erreur plus précis
+        let errorMessage = "Erreur de connexion";
+        if (error.message.includes("Invalid login credentials")) {
+            errorMessage = "Email ou mot de passe incorrect";
+        } else if (error.message.includes("Email not confirmed")) {
+            errorMessage = "Veuillez confirmer votre email avant de vous connecter";
+        }
+        
+        showError(errorMessage);
+    } finally {
+        // Réinitialisation de l'UI
+        btnText.textContent = "Se connecter";
+        spinner.style.display = "none";
+        loginBtn.disabled = false;
+    }
+});
+
+// Fonction pour afficher les erreurs
+function showError(message) {
+    // Supprime les anciens messages d'erreur
+    const existingError = document.querySelector(".error-message");
+    if (existingError) existingError.remove();
+    
+    // Crée un nouvel élément d'erreur
+    const errorElement = document.createElement("div");
+    errorElement.className = "error-message";
+    errorElement.style.color = "var(--accent-color)";
+    errorElement.style.marginTop = "10px";
+    errorElement.style.textAlign = "center";
+    errorElement.textContent = message;
+    
+    // Ajoute le message après le formulaire
+    const form = document.getElementById("loginForm");
+    form.appendChild(errorElement);
+}
+
+// Vérification de session au chargement
+supabase.auth.getSession()
+    .then(({ data: { session } }) => {
+        if (session?.user) {
+            window.location.href = "./home.html";
+        }
     })
     .catch(error => {
-      console.error("Erreur vérification session:", error);
+        console.error("Erreur vérification session:", error);
     });
 </script>
 </body>
