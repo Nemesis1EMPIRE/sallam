@@ -789,98 +789,141 @@
   })
 
   // Add product function with premium check
-  window.ajouterArticle = async () => {
-    // Check premium status again (in case user bypassed the first check)
-    const { data: { user } } = await supabase.auth.getUser()
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('is_premium')
-      .eq('id', user.id)
-      .single()
-
-    if (!profile?.is_premium) {
-      alert("Cette fonctionnalité nécessite un abonnement premium")
-      document.getElementById('premiumOverlay').style.display = 'flex'
-      document.getElementById('overlay').style.display = 'none'
-      return
-    }
-
+window.ajouterArticle = async () => {
+    // Vérification des champs obligatoires
     const titre = document.getElementById('titre').value.trim()
     const prix = parseFloat(document.getElementById('prix').value)
     const description = document.getElementById('description').value.trim()
     const imageFile = document.getElementById('image').files[0]
     const categorie = document.getElementById('categorie').value
 
-    // Validation
-    if (!titre || isNaN(prix) || !description || !imageFile || !categorie) {
-      alert('Veuillez remplir tous les champs correctement.')
-      return
+    // Validation des champs
+    if (!titre) {
+        alert('Veuillez saisir un titre pour votre article.')
+        return
+    }
+    if (isNaN(prix) || prix <= 0) {
+        alert('Veuillez saisir un prix valide.')
+        return
+    }
+    if (!description || description.length < 10) {
+        alert('Veuillez saisir une description détaillée (au moins 10 caractères).')
+        return
+    }
+    if (!imageFile) {
+        alert('Veuillez sélectionner une image pour votre article.')
+        return
+    }
+    if (!categorie) {
+        alert('Veuillez sélectionner une catégorie.')
+        return
     }
 
+    // Vérification du statut premium (sécurité supplémentaire)
     try {
-      // Show loading state
-      const submitBtn = document.querySelector('.submit-btn')
-      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Publication en cours...'
-      submitBtn.disabled = true
+        const { data: { user }, error: authError } = await supabase.auth.getUser()
+        if (authError || !user) {
+            alert("Session expirée. Veuillez vous reconnecter.")
+            window.location.href = "login.html"
+            return
+        }
 
-      // 1. Upload image to storage
-      const fileExt = imageFile.name.split('.').pop()
-      const filePath = `articles/${Date.now()}.${fileExt}`
-      
-      const { error: uploadError } = await supabase.storage
-        .from('article-images')
-        .upload(filePath, imageFile, {
-          cacheControl: '3600',
-          upsert: false,
-          contentType: imageFile.type
-        })
+        const { data: profile, error: profileError } = await supabase
+            .from('profiles')
+            .select('is_premium, full_name')
+            .eq('id', user.id)
+            .single()
 
-      if (uploadError) throw uploadError
+        if (profileError) throw profileError
+        if (!profile?.is_premium) {
+            document.getElementById('premiumOverlay').style.display = 'flex'
+            document.getElementById('overlay').style.display = 'none'
+            return
+        }
 
-      // 2. Get public URL
-      const { data: urlData } = supabase.storage
-        .from('article-images')
-        .getPublicUrl(filePath)
+        // Mise à jour de l'UI pendant le traitement
+        const submitBtn = document.querySelector('.submit-btn')
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Publication en cours...'
+        submitBtn.disabled = true
 
-      // 3. Insert article to database with premium flag
-      const { data, error: insertError } = await supabase
-        .from('articles')
-        .insert([{ 
-          titre, 
-          prix, 
-          description, 
-          image_url: urlData.publicUrl, 
-          categorie,
-          created_at: new Date().toISOString(),
-          is_premium_author: true // Flag pour les articles premium
-        }])
-        .select()
+        // 1. Upload de l'image
+        const fileExt = imageFile.name.split('.').pop()
+        const uniqueFileName = `${user.id}-${Date.now()}.${fileExt}`
+        const filePath = `articles/${uniqueFileName}`
 
-      if (insertError) throw insertError
+        const { error: uploadError } = await supabase.storage
+            .from('article-images')
+            .upload(filePath, imageFile, {
+                cacheControl: '3600',
+                upsert: false,
+                contentType: imageFile.type
+            })
 
-      // 4. Add to UI
-      afficherArticle(data[0])
-      
-      // 5. Close modal and reset form
-      closeModal()
-      document.getElementById('articleModal').reset()
-      document.getElementById('fileName').textContent = ''
-      
-      // Show success message
-      alert('Votre article premium a été publié avec succès !')
-      
+        if (uploadError) throw uploadError
+
+        // 2. Récupération de l'URL publique
+        const { data: { publicUrl } } = supabase.storage
+            .from('article-images')
+            .getPublicUrl(filePath)
+
+        // 3. Insertion de l'article dans la base de données
+        const { data: article, error: insertError } = await supabase
+            .from('articles')
+            .insert([{
+                titre,
+                prix,
+                description,
+                image_url: publicUrl,
+                categorie,
+                created_at: new Date().toISOString(),
+                is_premium_author: true,
+                user_id: user.id,
+                auteur: profile.full_name || 'Anonyme'
+            }])
+            .select()
+
+        if (insertError) throw insertError
+
+        // 4. Ajout à l'interface utilisateur
+        afficherArticle(article[0])
+
+        // 5. Réinitialisation du formulaire
+        document.getElementById('articleModal').reset()
+        document.getElementById('fileName').textContent = ''
+        closeModal()
+
+        // Notification de succès plus élégante
+        const successMsg = document.createElement('div')
+        successMsg.innerHTML = `
+            <div style="position: fixed; bottom: 20px; right: 20px; background: var(--success-color); 
+                         color: white; padding: 15px; border-radius: var(--border-radius); 
+                         box-shadow: var(--box-shadow); z-index: 1000;">
+                <i class="fas fa-check-circle"></i> Article publié avec succès !
+            </div>
+        `
+        document.body.appendChild(successMsg)
+        setTimeout(() => successMsg.remove(), 3000)
+
     } catch (error) {
-      console.error('Error:', error)
-      alert(`Erreur: ${error.message}`)
+        console.error("Erreur lors de l'ajout de l'article:", error)
+        
+        // Gestion des erreurs spécifiques
+        if (error.message.includes('duplicate key value')) {
+            alert("Un article similaire existe déjà.")
+        } else if (error.message.includes('storage')) {
+            alert("Erreur lors du téléchargement de l'image. Veuillez réessayer.")
+        } else {
+            alert(`Erreur: ${error.message}`)
+        }
     } finally {
-      // Reset button state
-      const submitBtn = document.querySelector('.submit-btn')
-      if (submitBtn) {
-        submitBtn.innerHTML = '<i class="fas fa-plus"></i> Publier l\'article'
-        submitBtn.disabled = false
-      }
+        // Réinitialisation du bouton
+        const submitBtn = document.querySelector('.submit-btn')
+        if (submitBtn) {
+            submitBtn.innerHTML = '<i class="fas fa-plus"></i> Publier l\'article'
+            submitBtn.disabled = false
+        }
     }
-  }
+}
 
   // Load products function with premium filtering
   async function chargerArticles() {
