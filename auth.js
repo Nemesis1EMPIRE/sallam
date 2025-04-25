@@ -1,10 +1,18 @@
 // auth.js
+// Attendre que le DOM soit chargé
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialisation Supabase
     const SUPABASE_URL = "https://ufpmrteapbfukhftrpcv.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVmcG1ydGVhcGJmdWtoZnRycGN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU1Njc2OTcsImV4cCI6MjA2MTE0MzY5N30.GdoHerSP1ij8_m9L9562n5FXvHR7V6J-dxHc-70oPUs";
+    
+    // Créer le client Supabase
     const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    document.getElementById("loginForm").addEventListener("submit", async (e) => {
-    e.preventDefault(); // Empêche le rechargement de la page
+    
+    // Gestion du formulaire
+    const loginForm = document.getElementById("loginForm");
+    if (loginForm) {
+        loginForm.addEventListener("submit", async function(e) {
+            e.preventDefault();
     
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
