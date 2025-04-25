@@ -42,20 +42,15 @@
                     <div class="logo">
                         <img src="./images/logo.png" alt="Instagram logo">
                     </div>
-                    <form>
-                        <div>
-                            <input type="email" name="email" id="emai" placeholder="e-mail">
-                        </div>
-                        <div>
-                            <input type="password" name="password" id="password" placeholder="password">
-                        </div>
-                        
+                    <form id="loginForm">
+                      <div>
+                        <input type="email" name="email" id="email" placeholder="e-mail" required>
+                      </div>
+                      <div>
+                        <input type="password" name="password" id="password" placeholder="password" required>
+                      </div>
+                      <button type="submit" class="log_btn">Se connecter</button>
                     </form>
-                    <a href="./home.html">
-                        <button class="log_btn">
-                            Se connecter
-                        </button>
-                    </a>
                     <div class="other-ways">
                         <div class="seperator">
                             <span class="ligne"></span>
@@ -88,25 +83,29 @@
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt3eHVtdm1rbHdiZmVwaW1nbmFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU0MTIzNjgsImV4cCI6MjA2MDk4ODM2OH0.77ZPzHC02E1u2cMH5e1U6zJB2ynDxykChT7BHI7eqxA";
   const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  document.querySelector(".log_btn").addEventListener("click", async (e) => {
-    e.preventDefault(); // Empêche le rechargement
+document.getElementById("loginForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
 
-    const email = document.getElementById("emai").value;
-    const password = document.getElementById("password").value;
+  if (!email || !password) {
+    alert("Veuillez remplir tous les champs !");
+    return;
+  }
 
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password
-    });
-
-    if (error) {
-      alert("Erreur : " + error.message);
-    } else {
-      // Connexion réussie
-      alert("Connexion réussie !");
-      window.location.href = "./home.html"; // Redirection
-    }
-  });
+  try {
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    
+    if (error) throw error;
+    
+    alert("Connexion réussie !");
+    window.location.href = "./home.html";
+  } catch (error) {
+    alert("Erreur de connexion : " + error.message);
+    console.error(error);
+  }
+});
 </script>
 
    
