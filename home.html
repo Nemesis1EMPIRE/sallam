@@ -1100,15 +1100,15 @@
     
     const imageUrl = getCorrectImageUrl(article.image_url);
     
-    div.innerHTML = `
+   div.innerHTML = `
       <div class="product-image-container">
         <div class="image-placeholder">
-          <i class="fas fa-image"></i>
+          <i class="fas fa-image" style="font-size: 24px;"></i>
         </div>
-        <img src="${imageUrl}" alt="${article.titre}" class="product-image" 
+        <img data-src="${imageUrl}" alt="${article.titre}" class="product-image" 
              loading="lazy" decoding="async"
              onload="this.classList.add('loaded'); this.previousElementSibling.style.display='none'"
-             onerror="this.onerror=null; this.previousElementSibling.style.display='flex'; console.error('Erreur de chargement de l\'image:', this.src)">
+             onerror="this.onerror=null; this.previousElementSibling.style.display='flex'">
       </div>
       <div class="product-info">
         <h3 class="product-title">${article.titre}</h3>
