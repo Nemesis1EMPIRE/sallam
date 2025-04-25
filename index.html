@@ -4,8 +4,219 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Inscription - SALLAM</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="./sass/vender/bootstrap.min.css">
   <link rel="stylesheet" href="./sass/main.css">
+  <style>
+    :root {
+      --primary-color: #4361ee;
+      --secondary-color: #3a0ca3;
+      --accent-color: #f72585;
+      --light-color: #f8f9fa;
+      --dark-color: #212529;
+      --gray-color: #6c757d;
+      --border-radius: 8px;
+      --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f7fa;
+      color: var(--dark-color);
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .sign_up {
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .content {
+      background-color: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      overflow: hidden;
+    }
+
+    .log-on {
+      padding: 30px;
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .logo img {
+      width: 180px;
+      height: auto;
+      margin-bottom: 15px;
+    }
+
+    .logo p {
+      color: var(--gray-color);
+      font-size: 16px;
+      margin: 0;
+    }
+
+    #signupForm div {
+      margin-bottom: 20px;
+    }
+
+    #signupForm label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--dark-color);
+    }
+
+    #signupForm input {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #e0e0e0;
+      border-radius: var(--border-radius);
+      font-size: 16px;
+      transition: var(--transition);
+    }
+
+    #signupForm input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.2);
+    }
+
+    .file-upload {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      border: 2px dashed #e0e0e0;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .file-upload:hover {
+      border-color: var(--primary-color);
+    }
+
+    .file-upload i {
+      font-size: 40px;
+      color: var(--gray-color);
+      margin-bottom: 10px;
+    }
+
+    .file-upload span {
+      color: var(--gray-color);
+      text-align: center;
+    }
+
+    #profilePic {
+      display: none;
+    }
+
+    .info {
+      font-size: 14px;
+      color: var(--gray-color);
+      text-align: center;
+      margin: 25px 0;
+    }
+
+    .info a {
+      color: var(--primary-color);
+      text-decoration: none;
+    }
+
+    .info a:hover {
+      text-decoration: underline;
+    }
+
+    .log_btn {
+      width: 100%;
+      padding: 14px;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .log_btn:hover {
+      background-color: var(--secondary-color);
+      transform: translateY(-2px);
+    }
+
+    .log_btn.secondary {
+      background-color: white;
+      color: var(--primary-color);
+      border: 1px solid var(--primary-color);
+      margin-top: 15px;
+    }
+
+    .log_btn.secondary:hover {
+      background-color: #f0f2f5;
+    }
+
+    .login-redirect {
+      text-align: center;
+      margin-top: 25px;
+      color: var(--gray-color);
+    }
+
+    .login-redirect a {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .login-redirect a:hover {
+      text-decoration: underline;
+    }
+
+    /* Loading spinner */
+    .spinner {
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+      display: inline-block;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Responsive */
+    @media (max-width: 576px) {
+      .log-on {
+        padding: 20px;
+      }
+      
+      .logo img {
+        width: 150px;
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="container">
@@ -13,7 +224,7 @@
       <div class="content">
         <div class="log-on border_insc">
           <div class="logo">
-            <img src="./images/logo.png" alt="Logo">
+            <img src="./images/logo.png" alt="Logo SALLAM">
             <p>Achètes, Vends et Loues à ta guise.</p>
           </div>
 
@@ -33,7 +244,12 @@
             </div>
             <div>
               <label for="profilePic">Photo de profil</label>
-              <input type="file" name="profilePic" id="profilePic" accept="image/*" required>
+              <div class="file-upload" onclick="document.getElementById('profilePic').click()">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <span>Cliquez pour télécharger une photo</span>
+                <input type="file" name="profilePic" id="profilePic" accept="image/*" required>
+              </div>
+              <div id="profilePicName" style="font-size: 14px; color: var(--gray-color); margin-top: 8px;"></div>
             </div>
             <div class="info">
               <p>
@@ -41,25 +257,36 @@
                 <a href="#">Conditions générales, politique de confidentialité et politique relative aux cookies.</a>
               </p>
             </div>
-            <button class="log_btn" type="submit">S'inscrire</button>
-            <!-- BOUTON DE CONNEXION -->
-              <div style="text-align: center; margin-top: 20px;">
-                <p>Déjà un compte ?</p>
-                <a href="login.html" class="log_btn" style="text-decoration: none;">Se connecter</a>
-              </div>
+            <button class="log_btn" type="submit" id="submitBtn">
+              <span id="btnText">S'inscrire</span>
+              <div id="spinner" class="spinner" style="display: none;"></div>
+            </button>
+            
+            <div class="login-redirect">
+              <p>Déjà un compte ? <a href="login.html">Se connecter</a></p>
+            </div>
           </form>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- SCRIPT SUPABASE -->
- <script type="module">
+  <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
     const supabaseUrl = 'https://ufpmrteapbfukhftrpcv.supabase.co'
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVmcG1ydGVhcGJmdWtoZnRycGN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU1Njc2OTcsImV4cCI6MjA2MTE0MzY5N30.GdoHerSP1ij8_m9L9562n5FXvHR7V6J-dxHc-70oPUs'
     const supabase = createClient(supabaseUrl, supabaseKey)
+
+    // Afficher le nom du fichier sélectionné
+    document.getElementById('profilePic').addEventListener('change', function(e) {
+      const fileNameDisplay = document.getElementById('profilePicName')
+      if (this.files.length > 0) {
+        fileNameDisplay.textContent = 'Fichier sélectionné : ' + this.files[0].name
+      } else {
+        fileNameDisplay.textContent = ''
+      }
+    })
 
     document.getElementById('signupForm').addEventListener('submit', async (e) => {
       e.preventDefault()
@@ -77,6 +304,15 @@
         alert('Veuillez remplir tous les champs')
         return
       }
+
+      // Afficher le spinner de chargement
+      const submitBtn = document.getElementById('submitBtn')
+      const btnText = document.getElementById('btnText')
+      const spinner = document.getElementById('spinner')
+      
+      btnText.textContent = 'Inscription en cours...'
+      spinner.style.display = 'inline-block'
+      submitBtn.disabled = true
 
       try {
         // 1. Création du compte d'authentification
@@ -100,7 +336,11 @@
 
         const { error: uploadError } = await supabase.storage
           .from('profile-pictures')
-          .upload(filePath, file)
+          .upload(filePath, file, {
+            cacheControl: '3600',
+            upsert: false,
+            contentType: file.type
+          })
 
         if (uploadError) throw uploadError
 
@@ -117,7 +357,8 @@
             full_name: fullName,
             username,
             email,
-            avatar_url: urlData.publicUrl
+            avatar_url: urlData.publicUrl,
+            created_at: new Date().toISOString()
           }])
 
         if (profileError) throw profileError
@@ -129,9 +370,13 @@
       } catch (error) {
         console.error('Erreur inscription:', error)
         alert(`Erreur lors de l'inscription: ${error.message}`)
+      } finally {
+        // Réinitialiser le bouton
+        btnText.textContent = 'S\'inscrire'
+        spinner.style.display = 'none'
+        submitBtn.disabled = false
       }
     })
-</script>
-
+  </script>
 </body>
 </html>
