@@ -768,85 +768,70 @@
 
   // Fonction pour ajouter un article (simplifiée)
   const ajouterArticle = async (e) => {
-    if (e) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-
-    // Récupération des valeurs du formulaire
-    const titre = document.getElementById('titre').value.trim()
-    const prix = parseFloat(document.getElementById('prix').value)
-    const description = document.getElementById('description').value.trim()
-    const imageFile = document.getElementById('image').files[0]
-    const categorie = document.getElementById('categorie').value
-
-    // Validation des champs
-    if (!titre) {
-      alert('Veuillez saisir un titre')
-      return false
-    }
-    if (isNaN(prix) || prix <= 0) {
-      alert('Veuillez saisir un prix valide')
-      return false
-    }
-    if (!description || description.length < 10) {
-      alert('Description trop courte (min 10 caractères)')
-      return false
-    }
-    if (!imageFile) {
-      alert('Veuillez sélectionner une image')
-      return false
-    }
-    if (!categorie) {
-      alert('Veuillez sélectionner une catégorie')
-      return false
-    }
-
+    if (e) e.preventDefault();
+    
     try {
-      // Vérification connexion
-      const { data: { user }, error: authError } = await supabase.auth.getUser()
-      if (authError || !user) {
-        alert("Session expirée. Veuillez vous reconnecter.")
-        window.location.href = "login.html"
-        return false
-      }
+        // Vérification de l'utilisateur
+        const { data: { user }, error: authError } = await supabase.auth.getUser();
+        if (authError || !user) {
+            alert("Session expirée. Veuillez vous reconnecter.");
+            window.location.href = "login.html";
+            return;
+        }
 
-      // Mise à jour UI
-      const submitBtn = document.getElementById('submitArticleBtn')
-      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Publication...'
-      submitBtn.disabled = true
+        // Validation des champs
+        const titre = document.getElementById('titre').value.trim();
+        const prix = parseFloat(document.getElementById('prix').value);
+        const description = document.getElementById('description').value.trim();
+        const imageFile = document.getElementById('image').files[0];
+        const categorie = document.getElementById('categorie').value;
 
-      // Upload image
-      const fileExt = imageFile.name.split('.').pop()
-      const filePath = `articles/${user.id}-${Date.now()}.${fileExt}`
-      
-      const { error: uploadError } = await supabase.storage
-        .from('article-images')
-        .upload(filePath, imageFile)
+        if (!titre || isNaN(prix) || !description || !imageFile || !categorie) {
+            alert("Veuillez remplir tous les champs correctement.");
+            return;
+        }
 
-      if (uploadError) throw uploadError
+        // Upload de l'image
+        const fileExt = imageFile.name.split('.').pop();
+        const filePath = `articles/${user.id}-${Date.now()}.${fileExt}`;
+        
+        const { error: uploadError } = await supabase.storage
+            .from('article-images')
+            .upload(filePath, imageFile);
+        
+        if (uploadError) throw uploadError;
 
-      // Récupération URL
-      const { data: { publicUrl } } = supabase.storage
-        .from('article-images')
-        .getPublicUrl(filePath)
+        // Récupération URL
+        const { data: { publicUrl } } = supabase.storage
+            .from('article-images')
+            .getPublicUrl(filePath);
 
-      // Insertion article
-      const { data: article, error: insertError } = await supabase
-        .from('articles')
-        .insert([{
-          titre,
-          prix,
-          description,
-          image_url: publicUrl,
-          categorie,
-          user_id: user.id,
-          created_at: new Date().toISOString()
-        }])
-        .select()
+        // Insertion avec user_id
+        const { data: article, error: insertError } = await supabase
+            .from('articles')
+            .insert([{
+                titre,
+                prix,
+                description,
+                image_url: publicUrl,
+                categorie,
+                user_id: user.id,  // Champ crucial pour RLS
+                created_at: new Date().toISOString()
+            }])
+            .select();
 
-      if (insertError) throw insertError
+        if (insertError) throw insertError;
 
+        // Succès
+        afficherArticle(article[0]);
+        closeModal();
+        alert("Article publié avec succès !");
+
+    } catch (error) {
+        console.error("Erreur:", error);
+        alert(`Erreur: ${error.message}`);
+    }
+};
       // Affichage et reset
       afficherArticle(article[0])
       closeModal()
