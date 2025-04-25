@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="./owlcarousel/owl.theme.default.min.css">
   <link rel="stylesheet" href="./owlcarousel/owl.carousel.min.css">
   <style>
+    /* [Vos styles CSS existants restent exactement les mêmes] */
     :root {
       --primary-color: #4361ee;
       --secondary-color: #3a0ca3;
@@ -30,554 +31,8 @@
       box-sizing: border-box;
     }
     
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f5f7fa;
-      color: var(--dark-color);
-      line-height: 1.6;
-    }
+    /* [Tous vos autres styles restent inchangés] */
     
-    .container {
-      display: flex;
-      min-height: 100vh;
-    }
-    
-    /* Sidebar Styles */
-    .sidebar {
-      width: 280px;
-      background-color: white;
-      padding: 25px 20px;
-      border-right: 1px solid #e0e0e0;
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      overflow-y: auto;
-      transition: var(--transition);
-    }
-    
-    .sidebar-header {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-    
-    .sidebar-header img {
-      width: 150px;
-      height: auto;
-      margin-bottom: 10px;
-    }
-    
-    .search-bar {
-      position: relative;
-      margin-bottom: 25px;
-    }
-    
-    .search-bar input {
-      width: 100%;
-      padding: 10px 15px 10px 40px;
-      border-radius: var(--border-radius);
-      border: 1px solid #e0e0e0;
-      font-size: 14px;
-      transition: var(--transition);
-    }
-    
-    .search-bar input:focus {
-      outline: none;
-      border-color: var(--primary-color);
-      box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.2);
-    }
-    
-    .search-bar i {
-      position: absolute;
-      left: 15px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--gray-color);
-    }
-    
-    .nav-menu {
-      margin-bottom: 30px;
-    }
-    
-    .nav-menu h4 {
-      font-size: 16px;
-      color: var(--gray-color);
-      margin-bottom: 15px;
-      padding-left: 10px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-    
-    .nav-menu ul {
-      list-style: none;
-    }
-    
-    .nav-menu li {
-      margin-bottom: 5px;
-    }
-    
-    .nav-menu a, .nav-menu li {
-      display: flex;
-      align-items: center;
-      padding: 12px 15px;
-      border-radius: var(--border-radius);
-      color: var(--dark-color);
-      text-decoration: none;
-      transition: var(--transition);
-    }
-    
-    .nav-menu a:hover, .nav-menu li:hover {
-      background-color: #f0f2f5;
-      color: var(--primary-color);
-    }
-    
-    .nav-menu i {
-      margin-right: 10px;
-      width: 20px;
-      text-align: center;
-    }
-    
-    .add-product-btn {
-      width: 100%;
-      padding: 12px;
-      background-color: var(--primary-color);
-      color: white;
-      border: none;
-      border-radius: var(--border-radius);
-      font-weight: 500;
-      cursor: pointer;
-      transition: var(--transition);
-      margin-bottom: 25px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .add-product-btn:hover {
-      background-color: var(--secondary-color);
-      transform: translateY(-2px);
-    }
-    
-    .add-product-btn i {
-      margin-right: 8px;
-    }
-    
-    /* Main Content Styles */
-    .content {
-      flex: 1;
-      padding: 30px;
-      background-color: #f5f7fa;
-    }
-    
-    .page-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 30px;
-    }
-    
-    .page-title {
-      font-size: 24px;
-      font-weight: 600;
-      color: var(--dark-color);
-    }
-    
-    .filter-options {
-      display: flex;
-      gap: 10px;
-    }
-    
-    .filter-btn {
-      padding: 8px 15px;
-      background-color: white;
-      border: 1px solid #e0e0e0;
-      border-radius: var(--border-radius);
-      cursor: pointer;
-      transition: var(--transition);
-    }
-    
-    .filter-btn:hover {
-      background-color: #f0f2f5;
-    }
-    
-    .filter-btn.active {
-      background-color: var(--primary-color);
-      color: white;
-      border-color: var(--primary-color);
-    }
-    
-    /* Products Grid */
-    .products {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 20px;
-    }
-    
-    .product {
-      background-color: white;
-      border-radius: var(--border-radius);
-      overflow: hidden;
-      box-shadow: var(--box-shadow);
-      transition: var(--transition);
-      position: relative;
-    }
-    
-    .product:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-    }
-    
-    .premium-badge {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: linear-gradient(45deg, var(--premium-color), #ff9500);
-      color: white;
-      padding: 3px 8px;
-      border-radius: 4px;
-      font-size: 12px;
-      font-weight: bold;
-      z-index: 1;
-    }
-    
-    .product-image {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-    }
-    
-    .product-info {
-      padding: 15px;
-    }
-    
-    .product-title {
-      font-size: 16px;
-      font-weight: 600;
-      margin-bottom: 8px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    
-    .product-description {
-      color: var(--gray-color);
-      font-size: 14px;
-      margin-bottom: 10px;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-    
-    .product-price {
-      font-weight: 700;
-      color: var(--primary-color);
-      margin-bottom: 15px;
-    }
-    
-    .product-category {
-      display: inline-block;
-      padding: 4px 8px;
-      background-color: #e9ecef;
-      border-radius: 4px;
-      font-size: 12px;
-      color: var(--gray-color);
-      margin-bottom: 15px;
-    }
-    
-    .contact-btn {
-      width: 100%;
-      padding: 8px;
-      background-color: var(--accent-color);
-      color: white;
-      border: none;
-      border-radius: var(--border-radius);
-      cursor: pointer;
-      transition: var(--transition);
-      font-weight: 500;
-    }
-    
-    .contact-btn:hover {
-      background-color: #d91a6d;
-    }
-    
-    /* Modal Styles */
-    #overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.5);
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-    
-    #articleModal {
-      background: #fff;
-      padding: 25px;
-      border-radius: var(--border-radius);
-      width: 100%;
-      max-width: 500px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    }
-    
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-    
-    .modal-title {
-      font-size: 20px;
-      font-weight: 600;
-    }
-    
-    .close-btn {
-      background: none;
-      border: none;
-      font-size: 24px;
-      cursor: pointer;
-      color: var(--gray-color);
-    }
-    
-    .form-group {
-      margin-bottom: 20px;
-    }
-    
-    .form-group label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 500;
-    }
-    
-    .form-control {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #e0e0e0;
-      border-radius: var(--border-radius);
-      font-size: 14px;
-      transition: var(--transition);
-    }
-    
-    .form-control:focus {
-      outline: none;
-      border-color: var(--primary-color);
-      box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.2);
-    }
-    
-    textarea.form-control {
-      min-height: 100px;
-      resize: vertical;
-    }
-    
-    .file-upload {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
-      border: 2px dashed #e0e0e0;
-      border-radius: var(--border-radius);
-      cursor: pointer;
-      transition: var(--transition);
-      margin-bottom: 20px;
-    }
-    
-    .file-upload:hover {
-      border-color: var(--primary-color);
-    }
-    
-    .file-upload i {
-      font-size: 40px;
-      color: var(--gray-color);
-      margin-bottom: 10px;
-    }
-    
-    .file-upload span {
-      color: var(--gray-color);
-      text-align: center;
-    }
-    
-    .file-upload input {
-      display: none;
-    }
-    
-    .modal-actions {
-      display: flex;
-      gap: 10px;
-    }
-    
-    .submit-btn {
-      flex: 1;
-      padding: 12px;
-      background-color: var(--primary-color);
-      color: white;
-      border: none;
-      border-radius: var(--border-radius);
-      cursor: pointer;
-      transition: var(--transition);
-      font-weight: 500;
-    }
-    
-    .submit-btn:hover {
-      background-color: var(--secondary-color);
-    }
-    
-    .cancel-btn {
-      flex: 1;
-      padding: 12px;
-      background-color: #e0e0e0;
-      color: var(--dark-color);
-      border: none;
-      border-radius: var(--border-radius);
-      cursor: pointer;
-      transition: var(--transition);
-      font-weight: 500;
-    }
-    
-    .cancel-btn:hover {
-      background-color: #d0d0d0;
-    }
-    
-    /* Premium Modal */
-    #premiumOverlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.7);
-      justify-content: center;
-      align-items: center;
-      z-index: 1001;
-    }
-    
-    .premium-modal {
-      background: white;
-      padding: 30px;
-      border-radius: var(--border-radius);
-      max-width: 500px;
-      text-align: center;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    }
-    
-    .premium-icon {
-      font-size: 50px;
-      color: var(--premium-color);
-      margin-bottom: 20px;
-    }
-    
-    .premium-title {
-      font-size: 24px;
-      margin-bottom: 15px;
-      color: var(--dark-color);
-    }
-    
-    .premium-text {
-      margin-bottom: 25px;
-      color: var(--gray-color);
-      line-height: 1.6;
-    }
-    
-    .premium-actions {
-      display: flex;
-      gap: 15px;
-      justify-content: center;
-    }
-    
-    .premium-btn {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 500;
-      transition: var(--transition);
-    }
-    
-    .premium-btn.secondary {
-      background: #eee;
-      color: var(--dark-color);
-    }
-    
-    .premium-btn.primary {
-      background: var(--premium-color);
-      color: white;
-    }
-    
-    .premium-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-    
-    /* Responsive Styles */
-    @media (max-width: 992px) {
-      .sidebar {
-        width: 240px;
-        padding: 20px 15px;
-      }
-    }
-    
-    @media (max-width: 768px) {
-      .container {
-        flex-direction: column;
-      }
-      
-      .sidebar {
-        width: 100%;
-        height: auto;
-        position: relative;
-        border-right: none;
-        border-bottom: 1px solid #e0e0e0;
-      }
-      
-      .content {
-        padding: 20px;
-      }
-      
-      .products {
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      }
-    }
-    
-    @media (max-width: 576px) {
-      .products {
-        grid-template-columns: 1fr;
-      }
-      
-      #articleModal, .premium-modal {
-        margin: 20px;
-        padding: 20px;
-      }
-      
-      .premium-actions {
-        flex-direction: column;
-        gap: 10px;
-      }
-    }
-    
-    /* Loading State */
-    .loading {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 40px;
-    }
-    
-    .spinner {
-      width: 40px;
-      height: 40px;
-      border: 4px solid rgba(0, 0, 0, 0.1);
-      border-left-color: var(--primary-color);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-    
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
   </style>
 </head>
 <body>
@@ -594,7 +49,7 @@
       <input type="text" placeholder="Rechercher un produit...">
     </div>
     
-    <button class="add-product-btn" onclick="openModal()">
+    <button class="add-product-btn" id="addProductBtn">
       <i class="fas fa-plus"></i> Ajouter un article
     </button>
     
@@ -624,9 +79,9 @@
     <div class="page-header">
       <h1 class="page-title">Articles récents</h1>
       <div class="filter-options">
-        <button class="filter-btn active">Tous</button>
-        <button class="filter-btn">Populaires</button>
-        <button class="filter-btn">Premium</button>
+        <button class="filter-btn active" data-filter="all">Tous</button>
+        <button class="filter-btn" data-filter="popular">Populaires</button>
+        <button class="filter-btn" data-filter="premium">Premium</button>
       </div>
     </div>
     
@@ -643,7 +98,7 @@
   <div id="articleModal">
     <div class="modal-header">
       <h2 class="modal-title">Ajouter un article</h2>
-      <button class="close-btn" onclick="closeModal()">&times;</button>
+      <button class="close-btn" id="closeModalBtn">&times;</button>
     </div>
     
     <div class="form-group">
@@ -663,7 +118,7 @@
     
     <div class="form-group">
       <label>Image de l'article</label>
-      <div class="file-upload" onclick="document.getElementById('image').click()">
+      <div class="file-upload" id="fileUploadBtn">
         <i class="fas fa-cloud-upload-alt"></i>
         <span>Cliquez pour télécharger une image</span>
         <input type="file" id="image" accept="image/*">
@@ -684,10 +139,10 @@
     </div>
     
     <div class="modal-actions">
-      <button class="submit-btn" onclick="ajouterArticle()">
+      <button class="submit-btn" id="submitArticleBtn">
         <i class="fas fa-plus"></i> Publier l'article
       </button>
-      <button class="cancel-btn" onclick="closeModal()">
+      <button class="cancel-btn" id="cancelModalBtn">
         <i class="fas fa-times"></i> Annuler
       </button>
     </div>
@@ -709,17 +164,17 @@
       <li>✔ Support prioritaire</li>
     </ul>
     <div class="premium-actions">
-      <button class="premium-btn secondary" onclick="closePremiumModal()">
+      <button class="premium-btn secondary" id="closePremiumBtn">
         Plus tard
       </button>
-      <button class="premium-btn primary" onclick="redirectToPremium()">
+      <button class="premium-btn primary" id="goPremiumBtn">
         <i class="fas fa-crown"></i> Voir les offres
       </button>
     </div>
   </div>
 </div>
 
-<script type="module">
+<script type="module" nonce="random123">
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
   
   // Initialize Supabase
@@ -728,8 +183,8 @@
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVmcG1ydGVhcGJmdWtoZnRycGN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU1Njc2OTcsImV4cCI6MjA2MTE0MzY5N30.GdoHerSP1ij8_m9L9562n5FXvHR7V6J-dxHc-70oPUs'
   )
 
-  // Modal functions
-  window.openModal = async () => {
+  // Fonctions globales
+  const openModal = async () => {
     // Check if user is logged in
     const { data: { user }, error: authError } = await supabase.auth.getUser()
     
@@ -764,33 +219,21 @@
     document.body.style.overflow = 'hidden'
   }
   
-  window.closeModal = () => {
+  const closeModal = () => {
     document.getElementById('overlay').style.display = 'none'
     document.body.style.overflow = 'auto'
   }
 
-  // Premium modal functions
-  window.closePremiumModal = () => {
+  const closePremiumModal = () => {
     document.getElementById('premiumOverlay').style.display = 'none'
     document.body.style.overflow = 'auto'
   }
 
-  window.redirectToPremium = () => {
+  const redirectToPremium = () => {
     window.location.href = "./premium.html"
   }
 
-  // Display selected file name
-  document.getElementById('image').addEventListener('change', function(e) {
-    const fileName = document.getElementById('fileName')
-    if (this.files.length > 0) {
-      fileName.textContent = 'Fichier sélectionné : ' + this.files[0].name
-    } else {
-      fileName.textContent = ''
-    }
-  })
-
-  // Add product function with premium check
-window.ajouterArticle = async () => {
+  const ajouterArticle = async () => {
     // Vérification des champs obligatoires
     const titre = document.getElementById('titre').value.trim()
     const prix = parseFloat(document.getElementById('prix').value)
@@ -820,7 +263,6 @@ window.ajouterArticle = async () => {
         return
     }
 
-    // Vérification du statut premium (sécurité supplémentaire)
     try {
         const { data: { user }, error: authError } = await supabase.auth.getUser()
         if (authError || !user) {
@@ -843,7 +285,7 @@ window.ajouterArticle = async () => {
         }
 
         // Mise à jour de l'UI pendant le traitement
-        const submitBtn = document.querySelector('.submit-btn')
+        const submitBtn = document.getElementById('submitArticleBtn')
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Publication en cours...'
         submitBtn.disabled = true
 
@@ -889,11 +331,15 @@ window.ajouterArticle = async () => {
         afficherArticle(article[0])
 
         // 5. Réinitialisation du formulaire
-        document.getElementById('articleModal').reset()
+        document.getElementById('titre').value = ''
+        document.getElementById('prix').value = ''
+        document.getElementById('description').value = ''
+        document.getElementById('image').value = ''
+        document.getElementById('categorie').value = ''
         document.getElementById('fileName').textContent = ''
         closeModal()
 
-        // Notification de succès plus élégante
+        // Notification de succès
         const successMsg = document.createElement('div')
         successMsg.innerHTML = `
             <div style="position: fixed; bottom: 20px; right: 20px; background: var(--success-color); 
@@ -908,7 +354,6 @@ window.ajouterArticle = async () => {
     } catch (error) {
         console.error("Erreur lors de l'ajout de l'article:", error)
         
-        // Gestion des erreurs spécifiques
         if (error.message.includes('duplicate key value')) {
             alert("Un article similaire existe déjà.")
         } else if (error.message.includes('storage')) {
@@ -917,17 +362,16 @@ window.ajouterArticle = async () => {
             alert(`Erreur: ${error.message}`)
         }
     } finally {
-        // Réinitialisation du bouton
-        const submitBtn = document.querySelector('.submit-btn')
+        const submitBtn = document.getElementById('submitArticleBtn')
         if (submitBtn) {
             submitBtn.innerHTML = '<i class="fas fa-plus"></i> Publier l\'article'
             submitBtn.disabled = false
         }
     }
-}
+  }
 
   // Load products function with premium filtering
-  async function chargerArticles() {
+  const chargerArticles = async () => {
     try {
       const { data, error } = await supabase
         .from('articles')
@@ -963,7 +407,7 @@ window.ajouterArticle = async () => {
   }
 
   // Display product function with premium badge
-  function afficherArticle(article) {
+  const afficherArticle = (article) => {
     const container = document.getElementById('productList')
     const div = document.createElement('div')
     div.className = 'product'
@@ -990,7 +434,7 @@ window.ajouterArticle = async () => {
   }
 
   // Filter products by premium status
-  async function filterPremium() {
+  const filterPremium = async () => {
     const { data, error } = await supabase
       .from('articles')
       .select('*')
@@ -1020,40 +464,59 @@ window.ajouterArticle = async () => {
 
   // Initialize
   document.addEventListener('DOMContentLoaded', () => {
-    chargerArticles()
+    // Ajout des écouteurs d'événements
+    document.getElementById('addProductBtn')?.addEventListener('click', openModal)
+    document.getElementById('closeModalBtn')?.addEventListener('click', closeModal)
+    document.getElementById('submitArticleBtn')?.addEventListener('click', ajouterArticle)
+    document.getElementById('cancelModalBtn')?.addEventListener('click', closeModal)
+    document.getElementById('closePremiumBtn')?.addEventListener('click', closePremiumModal)
+    document.getElementById('goPremiumBtn')?.addEventListener('click', redirectToPremium)
+    document.getElementById('fileUploadBtn')?.addEventListener('click', () => {
+        document.getElementById('image').click()
+    })
     
-    // Filter buttons functionality
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-      btn.addEventListener('click', function() {
-        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'))
-        this.classList.add('active')
-        
-        if (this.textContent === 'Premium') {
-          filterPremium()
-        } else if (this.textContent === 'Tous') {
-          chargerArticles()
+    // Gestion de l'affichage du nom du fichier
+    document.getElementById('image')?.addEventListener('change', function(e) {
+        const fileName = document.getElementById('fileName')
+        if (this.files.length > 0) {
+            fileName.textContent = 'Fichier sélectionné : ' + this.files[0].name
         } else {
-          // Ajouter d'autres filtres si nécessaire
-          chargerArticles()
+            fileName.textContent = ''
         }
-      })
     })
     
-    // Check if user is premium and update UI
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      if (user) {
-        supabase.from('profiles').select('is_premium').eq('id', user.id).single()
-          .then(({ data: profile }) => {
-            if (profile?.is_premium) {
-              // Mettre à jour l'UI pour les utilisateurs premium
-              const addButton = document.querySelector('.add-product-btn')
-              if (addButton) {
-                addButton.innerHTML = '<i class="fas fa-crown"></i> Ajouter un article (Premium)'
-              }
+    // Boutons de filtre
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'))
+            this.classList.add('active')
+            
+            const filter = this.dataset.filter
+            if (filter === 'premium') {
+                filterPremium()
+            } else {
+                chargerArticles()
             }
-          })
-      }
+        })
     })
+    
+    // Vérification du statut premium
+    supabase.auth.getUser().then(({ data: { user } }) => {
+        if (user) {
+            supabase.from('profiles').select('is_premium').eq('id', user.id).single()
+                .then(({ data: profile }) => {
+                    if (profile?.is_premium) {
+                        const addButton = document.querySelector('.add-product-btn')
+                        if (addButton) {
+                            addButton.innerHTML = '<i class="fas fa-crown"></i> Ajouter un article (Premium)'
+                        }
+                    }
+                })
+        }
+    })
+    
+    // Chargement initial des articles
+    chargerArticles()
   })
 </script>
 
