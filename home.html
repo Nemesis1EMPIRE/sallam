@@ -768,95 +768,98 @@
 
   // Fonction pour ajouter un article
   const ajouterArticle = async (e) => {
-    if (e) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-
-    try {
-      // Vérification de l'utilisateur
-      const { data: { user }, error: authError } = await supabase.auth.getUser();
-      if (authError || !user) {
-        alert("Session expirée. Veuillez vous reconnecter.");
-        window.location.href = "login.html";
-        return;
+      if (e) {
+          e.preventDefault();
+          e.stopPropagation();
       }
-
-      // Validation des champs
-      const titre = document.getElementById('titre').value.trim();
-      const prix = parseFloat(document.getElementById('prix').value);
-      const description = document.getElementById('description').value.trim();
-      const imageFile = document.getElementById('image').files[0];
-      const categorie = document.getElementById('categorie').value;
-
-      if (!titre || isNaN(prix) || !description || !imageFile || !categorie) {
-        alert("Veuillez remplir tous les champs correctement.");
-        return;
+  
+      try {
+          // 1. Vérifier l'authentification
+          const { data: { user }, error: authError } = await supabase.auth.getUser();
+          if (authError || !user) {
+              alert("Session expirée. Veuillez vous reconnecter.");
+              window.location.href = "login.html";
+              return;
+          }
+  
+          // 2. Valider les champs
+          const titre = document.getElementById('titre').value.trim();
+          const prix = parseFloat(document.getElementById('prix').value);
+          const description = document.getElementById('description').value.trim();
+          const imageFile = document.getElementById('image').files[0];
+          const categorie = document.getElementById('categorie').value;
+  
+          if (!titre || isNaN(prix) || !description || !imageFile || !categorie) {
+              alert("Veuillez remplir tous les champs correctement.");
+              return;
+          }
+  
+          // 3. Préparer l'upload
+          const submitBtn = document.getElementById('submitArticleBtn');
+          submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Publication...';
+          submitBtn.disabled = true;
+  
+          // 4. Upload de l'image
+          const fileExt = imageFile.name.split('.').pop();
+          const filePath = `articles/${user.id}-${Date.now()}.${fileExt}`;
+          
+          const { error: uploadError } = await supabase.storage
+              .from('article-images')
+              .upload(filePath, imageFile, {
+                  cacheControl: '3600',
+                  upsert: false
+              });
+          
+          if (uploadError) throw uploadError;
+  
+          // 5. Récupérer l'URL publique
+          const { data: { publicUrl } } = supabase.storage
+              .from('article-images')
+              .getPublicUrl(filePath);
+  
+          // 6. Insérer dans la table articles
+          const { data: article, error: insertError } = await supabase
+              .from('articles')
+              .insert([{
+                  titre,
+                  prix,
+                  description,
+                  image_url: publicUrl,
+                  categorie,
+                  user_id: user.id, // Champ CRUCIAL pour RLS
+                  created_at: new Date().toISOString()
+              }])
+              .select();
+  
+          if (insertError) throw insertError;
+  
+          // 7. Afficher le résultat
+          afficherArticle(article[0]);
+          closeModal();
+          
+          // Message de succès
+          const successMsg = document.createElement('div');
+          successMsg.innerHTML = `
+              <div style="position: fixed; bottom: 20px; right: 20px; 
+                       background: var(--success-color); color: white; 
+                       padding: 15px; border-radius: var(--border-radius); 
+                       box-shadow: var(--box-shadow); z-index: 1000;">
+                  <i class="fas fa-check-circle"></i> Article publié avec succès !
+              </div>
+          `;
+          document.body.appendChild(successMsg);
+          setTimeout(() => successMsg.remove(), 3000);
+  
+      } catch (error) {
+          console.error("Erreur:", error);
+          alert(`Erreur lors de la publication: ${error.message}`);
+      } finally {
+          const submitBtn = document.getElementById('submitArticleBtn');
+          if (submitBtn) {
+              submitBtn.innerHTML = '<i class="fas fa-plus"></i> Publier';
+              submitBtn.disabled = false;
+          }
       }
-
-      // Mise à jour UI
-      const submitBtn = document.getElementById('submitArticleBtn');
-      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Publication...';
-      submitBtn.disabled = true;
-
-      // Upload de l'image
-      const fileExt = imageFile.name.split('.').pop();
-      const filePath = `articles/${user.id}-${Date.now()}.${fileExt}`;
-      
-      const { error: uploadError } = await supabase.storage
-        .from('article-images')
-        .upload(filePath, imageFile);
-      
-      if (uploadError) throw uploadError;
-
-      // Récupération URL
-      const { data: { publicUrl } } = supabase.storage
-        .from('article-images')
-        .getPublicUrl(filePath);
-
-      // Insertion avec user_id
-      const { data: article, error: insertError } = await supabase
-        .from('articles')
-        .insert([{
-          titre,
-          prix,
-          description,
-          image_url: publicUrl,
-          categorie,
-          user_id: user.id,
-          created_at: new Date().toISOString()
-        }])
-        .select();
-
-      if (insertError) throw insertError;
-
-      // Affichage et reset
-      afficherArticle(article[0]);
-      closeModal();
-      
-      // Message succès
-      const successMsg = document.createElement('div');
-      successMsg.innerHTML = `
-        <div style="position: fixed; bottom: 20px; right: 20px; 
-                   background: var(--success-color); color: white; 
-                   padding: 15px; border-radius: var(--border-radius); 
-                   box-shadow: var(--box-shadow); z-index: 1000;">
-          <i class="fas fa-check-circle"></i> Article publié !
-        </div>
-      `;
-      document.body.appendChild(successMsg);
-      setTimeout(() => successMsg.remove(), 3000);
-
-    } catch (error) {
-      console.error("Erreur:", error);
-      alert(`Erreur: ${error.message}`);
-    } finally {
-      const submitBtn = document.getElementById('submitArticleBtn');
-      if (submitBtn) {
-        submitBtn.innerHTML = '<i class="fas fa-plus"></i> Publier';
-        submitBtn.disabled = false;
-      }
-    }
   };
 
   // Fonctions d'affichage
