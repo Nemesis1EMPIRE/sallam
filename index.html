@@ -54,104 +54,83 @@
   </div>
 
   <!-- SCRIPT SUPABASE -->
-<script type="module">
-  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+ <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
-  const supabaseUrl = 'https://ufpmrteapbfukhftrpcv.supabase.co'
-  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVmcG1ydGVhcGJmdWtoZnRycGN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU1Njc2OTcsImV4cCI6MjA2MTE0MzY5N30.GdoHerSP1ij8_m9L9562n5FXvHR7V6J-dxHc-70oPUs'
-  const supabase = createClient(supabaseUrl, supabaseKey)
+    const supabaseUrl = 'https://ufpmrteapbfukhftrpcv.supabase.co'
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVmcG1ydGVhcGJmdWtoZnRycGN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU1Njc2OTcsImV4cCI6MjA2MTE0MzY5N30.GdoHerSP1ij8_m9L9562n5FXvHR7V6J-dxHc-70oPUs'
+    const supabase = createClient(supabaseUrl, supabaseKey)
 
-  const form = document.getElementById('signupForm')
+    document.getElementById('signupForm').addEventListener('submit', async (e) => {
+      e.preventDefault()
+      
+      // Récupération des valeurs du formulaire
+      const form = e.target
+      const email = form.email.value
+      const password = form.password.value
+      const fullName = form.name.value
+      const username = form.username.value
+      const file = form.profilePic.files[0]
 
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault()
+      // Validation simple côté client
+      if (!email || !password || !fullName || !username || !file) {
+        alert('Veuillez remplir tous les champs')
+        return
+      }
 
-    const email = form.email.value
-    const password = form.password.value
-    const fullName = form.name.value
-    const username = form.username.value
-    const file = form.profilePic.files[0]
+      try {
+        // 1. Création du compte d'authentification
+        const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            data: {
+              full_name: fullName,
+              username
+            }
+          }
+        })
 
-    if (!file) {
-      alert("Veuillez sélectionner une photo de profil.")
-      return
-    }
+        if (signUpError) throw signUpError
 
-    // 1. Créer le compte
-    const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          full_name: fullName,
-          username
-        }
+        // 2. Upload de l'image de profil
+        const fileExt = file.name.split('.').pop()
+        const fileName = `${signUpData.user.id}.${fileExt}`
+        const filePath = `avatars/${fileName}`
+
+        const { error: uploadError } = await supabase.storage
+          .from('profile-pictures')
+          .upload(filePath, file)
+
+        if (uploadError) throw uploadError
+
+        // 3. Récupération de l'URL publique
+        const { data: urlData } = supabase.storage
+          .from('profile-pictures')
+          .getPublicUrl(filePath)
+
+        // 4. Création du profil utilisateur dans la table 'users'
+        const { error: profileError } = await supabase
+          .from('users')
+          .insert([{
+            id: signUpData.user.id,
+            full_name: fullName,
+            username,
+            email,
+            avatar_url: urlData.publicUrl
+          }])
+
+        if (profileError) throw profileError
+
+        // Succès - redirection
+        alert('Inscription réussie ! Un email de confirmation a été envoyé.')
+        window.location.href = './home.html'
+        
+      } catch (error) {
+        console.error('Erreur inscription:', error)
+        alert(`Erreur lors de l'inscription: ${error.message}`)
       }
     })
-
-    if (signUpError) {
-      alert("Erreur inscription : " + signUpError.message)
-      return
-    }
-
-    // 2. Attendre la session (l'utilisateur doit être automatiquement connecté après signUp)
-    let session = null
-    for (let i = 0; i < 10; i++) {
-      const result = await supabase.auth.getSession()
-      if (result.data.session) {
-        session = result.data.session
-        break
-      }
-      await new Promise(r => setTimeout(r, 1000)) // attend 1 seconde
-    }
-
-    if (!session) {
-      alert("Impossible de récupérer la session après inscription.")
-      return
-    }
-
-    const userId = session.user.id
-
-    // 3. Upload de l'image de profil
-    const { data: uploadData, error: uploadError } = await supabase
-      .storage
-      .from('profile-pictures')
-      .upload(`avatars/${userId}/${file.name}`, file, {
-        cacheControl: '3600',
-        upsert: true
-      })
-
-    if (uploadError) {
-      alert("Erreur upload image : " + uploadError.message)
-      return
-    }
-
-    const { data: urlData } = supabase
-      .storage
-      .from('profile-pictures')
-      .getPublicUrl(`avatars/${userId}/${file.name}`)
-
-    const avatarUrl = urlData.publicUrl
-
-    // 4. Enregistrement dans la table `users`
-    const { error: insertError } = await supabase
-      .from('users')
-      .insert([{
-        id: userId,
-        full_name: fullName,
-        username,
-        email,
-        avatar_url: avatarUrl
-      }])
-
-    if (insertError) {
-      alert("Erreur enregistrement du profil : " + insertError.message)
-      return
-    }
-
-    alert("Inscription réussie !")
-    window.location.href = './home.html'
-  })
 </script>
 
 </body>
