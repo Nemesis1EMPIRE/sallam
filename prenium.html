@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Devenir Premium - SALLAM</title>
+    <style>
+        .pricing-plans {
+            display: flex;
+            gap: 20px;
+            margin: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .plan {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            width: 300px;
+            text-align: center;
+        }
+        .plan.premium {
+            border: 2px solid gold;
+            transform: scale(1.05);
+        }
+        .plan h3 {
+            color: #333;
+        }
+        .plan.premium h3 {
+            color: gold;
+        }
+        .price {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+        .plan.premium .price {
+            color: gold;
+        }
+        .plan ul {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+            margin: 20px 0;
+        }
+        .plan li {
+            margin: 10px 0;
+            position: relative;
+            padding-left: 25px;
+        }
+        .plan li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: green;
+        }
+        .subscribe-btn {
+            background: #4361ee;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 15px;
+        }
+        .plan.premium .subscribe-btn {
+            background: gold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center; margin-top: 30px;">Choisissez votre offre Premium</h1>
+    
+    <div class="pricing-plans">
+        <div class="plan">
+            <h3>Basique</h3>
+            <div class="price">Gratuit</div>
+            <ul>
+                <li>3 publications/mois</li>
+                <li>Support standard</li>
+                <li>Accès basique</li>
+            </ul>
+            <button class="subscribe-btn" onclick="window.location.href='home.html'">Actuel</button>
+        </div>
+        
+        <div class="plan premium">
+            <h3><i class="fas fa-crown"></i> Premium</h3>
+            <div class="price">5 000 FCFA/mois</div>
+            <ul>
+                <li>Publications illimitées</li>
+                <li>Badge premium visible</li>
+                <li>Support prioritaire</li>
+                <li>Statistiques avancées</li>
+            </ul>
+            <button class="subscribe-btn" onclick="handlePremiumSubscription()">S'abonner</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+        
+        const supabase = createClient(
+            'https://ufpmrteapbfukhftrpcv.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVmcG1ydGVhcGJmdWtoZnRycGN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU1Njc2OTcsImV4cCI6MjA2MTE0MzY5N30.GdoHerSP1ij8_m9L9562n5FXvHR7V6J-dxHc-70oPUs'
+        )
+
+        async function handlePremiumSubscription() {
+            // 1. Vérifier si l'utilisateur est connecté
+            const { data: { user }, error: authError } = await supabase.auth.getUser()
+            
+            if (authError || !user) {
+                alert("Veuillez vous connecter pour souscrire à l'offre premium")
+                window.location.href = "login.html"
+                return
+            }
+            
+            // 2. Intégration avec le système de paiement
+            // Exemple avec Stripe (à adapter avec votre solution)
+            const { data: paymentData, error: paymentError } = await supabase.functions.invoke('create-premium-subscription', {
+                body: JSON.stringify({ userId: user.id })
+            })
+            
+            if (paymentError) {
+                console.error("Erreur de paiement:", paymentError)
+                alert("Erreur lors du traitement du paiement")
+                return
+            }
+            
+            // 3. Si paiement réussi, mettre à jour le profil
+            const { error: updateError } = await supabase
+                .from('profiles')
+                .update({
+                    is_premium: true,
+                    premium_since: new Date().toISOString(),
+                    premium_until: new Date(Date.now() + 30*24*60*60*1000).toISOString() // 1 mois
+                })
+                .eq('id', user.id)
+            
+            if (updateError) {
+                console.error("Erreur mise à jour profil:", updateError)
+                alert("Abonnement réussi mais erreur de mise à jour du profil")
+                return
+            }
+            
+            // 4. Confirmation et redirection
+            alert("Félicitations ! Vous êtes maintenant un utilisateur premium.")
+            window.location.href = "home.html"
+        }
+        
+        // Vérifier si l'utilisateur est déjà premium
+        supabase.auth.getUser().then(async ({ data: { user } }) => {
+            if (user) {
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('is_premium')
+                    .eq('id', user.id)
+                    .single()
+                
+                if (profile?.is_premium) {
+                    document.querySelector('.subscribe-btn').textContent = "Déjà premium"
+                    document.querySelector('.subscribe-btn').disabled = true
+                }
+            }
+        })
+    </script>
+</body>
+</html>
