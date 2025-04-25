@@ -737,7 +737,7 @@
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVmcG1ydGVhcGJmdWtoZnRycGN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU1Njc2OTcsImV4cCI6MjA2MTE0MzY5N30.GdoHerSP1ij8_m9L9562n5FXvHR7V6J-dxHc-70oPUs'
   )
 
-  // Fonction pour ouvrir le modal (simplifiée)
+  // Fonction pour ouvrir le modal
   const openModal = async (e) => {
     if (e) e.preventDefault();
     
@@ -766,78 +766,76 @@
     document.body.style.overflow = 'auto'
   }
 
-  // Fonction pour ajouter un article (simplifiée)
+  // Fonction pour ajouter un article
   const ajouterArticle = async (e) => {
-    if (e) e.preventDefault();
-    
-    try {
-        // Vérification de l'utilisateur
-        const { data: { user }, error: authError } = await supabase.auth.getUser();
-        if (authError || !user) {
-            alert("Session expirée. Veuillez vous reconnecter.");
-            window.location.href = "login.html";
-            return;
-        }
-
-        // Validation des champs
-        const titre = document.getElementById('titre').value.trim();
-        const prix = parseFloat(document.getElementById('prix').value);
-        const description = document.getElementById('description').value.trim();
-        const imageFile = document.getElementById('image').files[0];
-        const categorie = document.getElementById('categorie').value;
-
-        if (!titre || isNaN(prix) || !description || !imageFile || !categorie) {
-            alert("Veuillez remplir tous les champs correctement.");
-            return;
-        }
-
-        // Upload de l'image
-        const fileExt = imageFile.name.split('.').pop();
-        const filePath = `articles/${user.id}-${Date.now()}.${fileExt}`;
-        
-        const { error: uploadError } = await supabase.storage
-            .from('article-images')
-            .upload(filePath, imageFile);
-        
-        if (uploadError) throw uploadError;
-
-        // Récupération URL
-        const { data: { publicUrl } } = supabase.storage
-            .from('article-images')
-            .getPublicUrl(filePath);
-
-        // Insertion avec user_id
-        const { data: article, error: insertError } = await supabase
-            .from('articles')
-            .insert([{
-                titre,
-                prix,
-                description,
-                image_url: publicUrl,
-                categorie,
-                user_id: user.id,  // Champ crucial pour RLS
-                created_at: new Date().toISOString()
-            }])
-            .select();
-
-        if (insertError) throw insertError;
-
-        // Succès
-        afficherArticle(article[0]);
-        closeModal();
-        alert("Article publié avec succès !");
-
-    } catch (error) {
-        console.error("Erreur:", error);
-        alert(`Erreur: ${error.message}`);
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
     }
-};
+
+    try {
+      // Vérification de l'utilisateur
+      const { data: { user }, error: authError } = await supabase.auth.getUser();
+      if (authError || !user) {
+        alert("Session expirée. Veuillez vous reconnecter.");
+        window.location.href = "login.html";
+        return;
+      }
+
+      // Validation des champs
+      const titre = document.getElementById('titre').value.trim();
+      const prix = parseFloat(document.getElementById('prix').value);
+      const description = document.getElementById('description').value.trim();
+      const imageFile = document.getElementById('image').files[0];
+      const categorie = document.getElementById('categorie').value;
+
+      if (!titre || isNaN(prix) || !description || !imageFile || !categorie) {
+        alert("Veuillez remplir tous les champs correctement.");
+        return;
+      }
+
+      // Mise à jour UI
+      const submitBtn = document.getElementById('submitArticleBtn');
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Publication...';
+      submitBtn.disabled = true;
+
+      // Upload de l'image
+      const fileExt = imageFile.name.split('.').pop();
+      const filePath = `articles/${user.id}-${Date.now()}.${fileExt}`;
+      
+      const { error: uploadError } = await supabase.storage
+        .from('article-images')
+        .upload(filePath, imageFile);
+      
+      if (uploadError) throw uploadError;
+
+      // Récupération URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('article-images')
+        .getPublicUrl(filePath);
+
+      // Insertion avec user_id
+      const { data: article, error: insertError } = await supabase
+        .from('articles')
+        .insert([{
+          titre,
+          prix,
+          description,
+          image_url: publicUrl,
+          categorie,
+          user_id: user.id,
+          created_at: new Date().toISOString()
+        }])
+        .select();
+
+      if (insertError) throw insertError;
+
       // Affichage et reset
-      afficherArticle(article[0])
-      closeModal()
+      afficherArticle(article[0]);
+      closeModal();
       
       // Message succès
-      const successMsg = document.createElement('div')
+      const successMsg = document.createElement('div');
       successMsg.innerHTML = `
         <div style="position: fixed; bottom: 20px; right: 20px; 
                    background: var(--success-color); color: white; 
@@ -845,51 +843,48 @@
                    box-shadow: var(--box-shadow); z-index: 1000;">
           <i class="fas fa-check-circle"></i> Article publié !
         </div>
-      `
-      document.body.appendChild(successMsg)
-      setTimeout(() => successMsg.remove(), 3000)
-      
-      return true
+      `;
+      document.body.appendChild(successMsg);
+      setTimeout(() => successMsg.remove(), 3000);
 
     } catch (error) {
-      console.error("Erreur:", error)
-      alert(`Erreur: ${error.message}`)
-      return false
+      console.error("Erreur:", error);
+      alert(`Erreur: ${error.message}`);
     } finally {
-      const submitBtn = document.getElementById('submitArticleBtn')
+      const submitBtn = document.getElementById('submitArticleBtn');
       if (submitBtn) {
-        submitBtn.innerHTML = '<i class="fas fa-plus"></i> Publier'
-        submitBtn.disabled = false
+        submitBtn.innerHTML = '<i class="fas fa-plus"></i> Publier';
+        submitBtn.disabled = false;
       }
     }
-  }
+  };
 
-  // Fonctions d'affichage (inchangées)
+  // Fonctions d'affichage
   const chargerArticles = async () => {
     try {
       const { data, error } = await supabase
         .from('articles')
         .select('*')
-        .order('created_at', { ascending: false })
+        .order('created_at', { ascending: false });
       
-      const productList = document.getElementById('productList')
+      const productList = document.getElementById('productList');
       productList.innerHTML = data?.length ? '' : `
         <div style="grid-column: 1/-1; text-align: center; padding: 40px;">
           <i class="fas fa-box-open" style="font-size: 50px; color: #ddd;"></i>
           <p>Aucun article disponible</p>
         </div>
-      `
+      `;
       
-      data?.forEach(afficherArticle)
+      data?.forEach(afficherArticle);
     } catch (error) {
-      console.error('Error loading articles:', error)
+      console.error('Error loading articles:', error);
     }
-  }
+  };
 
   const afficherArticle = (article) => {
-    const container = document.getElementById('productList')
-    const div = document.createElement('div')
-    div.className = 'product'
+    const container = document.getElementById('productList');
+    const div = document.createElement('div');
+    div.className = 'product';
     div.innerHTML = `
       <img src="${article.image_url}" alt="${article.titre}" class="product-image">
       <div class="product-info">
@@ -901,36 +896,36 @@
           <i class="fas fa-envelope"></i> Contacter
         </button>
       </div>
-    `
-    container.prepend(div)
-  }
+    `;
+    container.prepend(div);
+  };
 
   // Initialisation
   document.addEventListener('DOMContentLoaded', () => {
     // Écouteurs d'événements
     document.getElementById('addProductBtn')?.addEventListener('click', (e) => {
-      openModal(e).catch(console.error)
-    })
+      openModal(e).catch(console.error);
+    });
     
     document.getElementById('submitArticleBtn')?.addEventListener('click', (e) => {
-      ajouterArticle(e).catch(console.error)
-    })
+      ajouterArticle(e).catch(console.error);
+    });
     
-    document.getElementById('closeModalBtn')?.addEventListener('click', closeModal)
-    document.getElementById('cancelModalBtn')?.addEventListener('click', closeModal)
+    document.getElementById('closeModalBtn')?.addEventListener('click', closeModal);
+    document.getElementById('cancelModalBtn')?.addEventListener('click', closeModal);
     
     document.getElementById('fileUploadBtn')?.addEventListener('click', () => {
-      document.getElementById('image').click()
-    })
+      document.getElementById('image').click();
+    });
     
     document.getElementById('image')?.addEventListener('change', function(e) {
-      const fileName = document.getElementById('fileName')
-      fileName.textContent = this.files[0]?.name || ''
-    })
+      const fileName = document.getElementById('fileName');
+      fileName.textContent = this.files[0]?.name || '';
+    });
     
     // Chargement initial
-    chargerArticles().catch(console.error)
-  })
+    chargerArticles().catch(console.error);
+  });
 </script>
 </body>
 </html>
