@@ -1103,11 +1103,9 @@
       lazyImageObserver.observe(img);
     }
   };
-    // Gestion du clic sur le bouton Contacter
+  // Gestion du clic sur le bouton Contacter
     const contactBtn = div.querySelector('.contact-btn');
     contactBtn.addEventListener('click', () => ouvrirMessagerie(article.user_id, article.id));
-    
-    container.prepend(div);
   };
 
   // Nouvelle fonction pour ouvrir la messagerie (version pour invités)
