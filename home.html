@@ -687,11 +687,11 @@
   <div class="content">
     <div class="page-header">
       <h1 class="page-title">Articles récents</h1>
-      <div class="filter-options">
+      <!--<div class="filter-options">
         <button class="filter-btn active" data-filter="all">Tous</button>
         <button class="filter-btn" data-filter="popular">Populaires</button>
         <button class="filter-btn" data-filter="premium">Premium</button>
-      </div>
+      </div>-->
     </div>
     
     <div class="products" id="productList">
@@ -785,7 +785,8 @@
 
 <script type="module" nonce="random123">
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
-  
+
+  supabase.rpc('set_guest_id', { guest_id: getClientId() });  
   // Initialize Supabase
   const supabase = createClient(
     'https://ufpmrteapbfukhftrpcv.supabase.co',
@@ -1102,7 +1103,64 @@
       lazyImageObserver.observe(img);
     }
   };
+    // Gestion du clic sur le bouton Contacter
+    const contactBtn = div.querySelector('.contact-btn');
+    contactBtn.addEventListener('click', () => ouvrirMessagerie(article.user_id, article.id));
+    
+    container.prepend(div);
+  };
 
+  // Nouvelle fonction pour ouvrir la messagerie (version pour invités)
+  const ouvrirMessagerie = async (vendeurId, articleId) => {
+    try {
+      const isLoggedIn = (await supabase.auth.getUser()).data.user;
+      let conversationId;
+
+      if (isLoggedIn) {
+        // Utilisateur connecté - logique existante
+        const { data: existingConversation } = await supabase
+          .from('conversations')
+          .select('id')
+          .or(`and(user1.eq.${isLoggedIn.id},user2.eq.${vendeurId}),and(user1.eq.${vendeurId},user2.eq.${isLoggedIn.id})`)
+          .single();
+
+        if (existingConversation) {
+          conversationId = existingConversation.id;
+        } else {
+          const { data: newConversation } = await supabase
+            .from('conversations')
+            .insert([{
+              user1: isLoggedIn.id,
+              user2: vendeurId,
+              article_id: articleId
+            }])
+            .select()
+            .single();
+          conversationId = newConversation.id;
+        }
+      } else {
+        // Utilisateur non connecté
+        const guestId = getClientId();
+        const { data: newConversation } = await supabase
+          .from('conversations')
+          .insert([{
+            guest_id: guestId,
+            user2: vendeurId, // user2 est toujours le vendeur
+            article_id: articleId,
+            is_guest_conversation: true
+          }])
+          .select()
+          .single();
+        conversationId = newConversation.id;
+      }
+
+      window.location.href = `messages.html?conversation=${conversationId}`;
+
+    } catch (error) {
+      console.error("Erreur:", error);
+      alert("Une erreur est survenue. Veuillez réessayer.");
+    }
+  };
   // Initialisation
   document.addEventListener('DOMContentLoaded', () => {
     // Initialiser le lazy loading
