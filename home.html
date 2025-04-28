@@ -786,12 +786,31 @@
 <script type="module" nonce="random123">
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
-  supabase.rpc('set_guest_id', { guest_id: getClientId() });  
   // Initialize Supabase
   const supabase = createClient(
     'https://ufpmrteapbfukhftrpcv.supabase.co',
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVmcG1ydGVhcGJmdWtoZnRycGN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU1Njc2OTcsImV4cCI6MjA2MTE0MzY5N30.GdoHerSP1ij8_m9L9562n5FXvHR7V6J-dxHc-70oPUs'
   )
+
+   supabase.rpc('set_guest_id', { guest_id: getClientId() });  
+   // Fonction pour obtenir l'URL correcte de l'image
+  const getCorrectImageUrl = (url) => {
+    // Si l'URL est déjà une URL complète, la retourner telle quelle
+    if (url.startsWith('http')) {
+      return url;
+    }
+    
+    // Si c'est un chemin Supabase, construire l'URL complète
+    if (url.startsWith('article-images/')) {
+      const { data: { publicUrl } } = supabase.storage
+        .from('article-images')
+        .getPublicUrl(url);
+      return publicUrl;
+    }
+    
+    // Retourner l'URL d'origine si on ne sait pas comment la traiter
+    return url;
+  };
 
   // Variables globales
   let timeoutSearch;
@@ -1006,6 +1025,7 @@
         console.error("Erreur upload:", uploadError);
         throw uploadError;
       }
+    
 
       // Récupération de l'URL optimisée
       const { data: { publicUrl } } = supabase.storage
@@ -1091,24 +1111,36 @@
         <p class="product-description">${article.description}</p>
         <span class="product-category">${article.categorie}</span>
         <p class="product-price">${article.prix.toLocaleString()} FCFA</p>
-        <button class="contact-btn">
-          <i class="fas fa-envelope"></i> Contacter
-        </button>
+        <button class="contact-btn" data-user-id="${article.user_id}" data-article-id="${article.id}">
+        <i class="fas fa-envelope"></i> Contacter
+      </button>
       </div>
     `;
-    container.prepend(div);
-    // Observer l'image si elle utilise le lazy loading
+     // Observer l'image si elle utilise le lazy loading
     const img = div.querySelector('.product-image');
     if (img.hasAttribute('data-src') && lazyImageObserver) {
       lazyImageObserver.observe(img);
     }
-  };
   // Gestion du clic sur le bouton Contacter
     const contactBtn = div.querySelector('.contact-btn');
     contactBtn.addEventListener('click', () => ouvrirMessagerie(article.user_id, article.id));
+    container.prepend(div); 
   };
+    
+   
+  // Initialisation
+  document.addEventListener('DOMContentLoaded', () => {
+    // Initialiser le lazy loading
+    initLazyLoading();
 
-  // Nouvelle fonction pour ouvrir la messagerie (version pour invités)
+    // Écouteur recherche avec debounce
+    document.getElementById('searchInput')?.addEventListener('input', (e) => {
+      clearTimeout(timeoutSearch);
+      timeoutSearch = setTimeout(() => {
+        rechercherArticles().catch(console.error);
+      }, 300);
+    });
+      // Nouvelle fonction pour ouvrir la messagerie (version pour invités)
   const ouvrirMessagerie = async (vendeurId, articleId) => {
     try {
       const isLoggedIn = (await supabase.auth.getUser()).data.user;
@@ -1138,7 +1170,7 @@
         }
       } else {
         // Utilisateur non connecté
-        const guestId = getClientId();
+      const guestId = getClientId();
         const { data: newConversation } = await supabase
           .from('conversations')
           .insert([{
@@ -1159,19 +1191,6 @@
       alert("Une erreur est survenue. Veuillez réessayer.");
     }
   };
-  // Initialisation
-  document.addEventListener('DOMContentLoaded', () => {
-    // Initialiser le lazy loading
-    initLazyLoading();
-
-    // Écouteur recherche avec debounce
-    document.getElementById('searchInput')?.addEventListener('input', (e) => {
-      clearTimeout(timeoutSearch);
-      timeoutSearch = setTimeout(() => {
-        rechercherArticles().catch(console.error);
-      }, 300);
-    });
-
     // Autres écouteurs
     document.getElementById('addProductBtn')?.addEventListener('click', openModal);
     document.getElementById('submitArticleBtn')?.addEventListener('click', ajouterArticle);
