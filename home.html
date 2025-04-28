@@ -666,13 +666,11 @@
       <h4>Menu</h4>
       <ul>
         <li><a href="home.html"><i class="fas fa-home"></i> Accueil</a></li>
-        <li><a href="./messages.html"><i class="fas fa-comments"></i> Messages</a></li>
-        <li><a href="./profile.html"><i class="fas fa-user"></i> Profil</a></li>
-        <li><a href="./premium.html"><i class="fas fa-crown"></i> Devenir Premium</a></li>
+        <li><a href="./messagerie.html"><i class="fas fa-comments"></i> Messages</a></li>
       </ul>
     </div>
     
-    <div class="nav-menu">
+    <!--<div class="nav-menu">
       <h4>Catégories</h4>
       <ul>
         <li><i class="fas fa-car"></i> Véhicules</li>
@@ -681,17 +679,16 @@
         <li><i class="fas fa-running"></i> Sport</li>
         <li><i class="fas fa-gift"></i> Gratuit</li>
       </ul>
-    </div>
+    </div>-->
   </div>
 
   <div class="content">
     <div class="page-header">
       <h1 class="page-title">Articles récents</h1>
-      <!--<div class="filter-options">
+      <div class="filter-options">
         <button class="filter-btn active" data-filter="all">Tous</button>
         <button class="filter-btn" data-filter="popular">Populaires</button>
-        <button class="filter-btn" data-filter="premium">Premium</button>
-      </div>-->
+      </div>
     </div>
     
     <div class="products" id="productList">
@@ -758,7 +755,7 @@
   </div>
 </div>
 
-<!-- MODAL PREMIUM -->
+<!-- MODAL PREMIUM
 <div id="premiumOverlay">
   <div class="premium-modal">
     <i class="fas fa-crown premium-icon"></i>
@@ -781,9 +778,9 @@
       </button>
     </div>
   </div>
-</div>
+</div>-->
 
-<script type="module" nonce="random123">
+<!--<script type="module" nonce="random123">
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
   // Initialize Supabase
@@ -1209,6 +1206,13 @@
     // Chargement initial
     rechercherArticles().catch(console.error);
   });
-</script>
+</script>-->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"></script>
+<script src="./home.js"></script>
 </body>
 </html>
