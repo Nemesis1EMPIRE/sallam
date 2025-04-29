@@ -64,13 +64,6 @@
     const searchTerm = document.getElementById('searchInput').value.trim();
     const productList = document.getElementById('productList');
     
-    // Afficher le loader pendant la recherche
-    productList.innerHTML = `
-      <div class="loading">
-        <div class="spinner"></div>
-      </div>
-    `;
-    
     try {
       let query = supabase
         .from('articles')
