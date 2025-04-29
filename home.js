@@ -7,6 +7,16 @@
   )
 
    supabase.rpc('set_guest_id', { guest_id: getClientId() });  
+
+  function getClientId() {
+  let clientId = localStorage.getItem('guest_client_id');
+  if (!clientId) {
+    clientId = crypto.randomUUID ? crypto.randomUUID() : Date.now().toString();
+    localStorage.setItem('guest_client_id', clientId);
+  }
+  return clientId;
+  }
+
    // Fonction pour obtenir l'URL correcte de l'image
   const getCorrectImageUrl = (url) => {
     // Si l'URL est déjà une URL complète, la retourner telle quelle
@@ -301,24 +311,65 @@
     }
   };
 
-  // Fonction d'affichage d'un article
+  // Fonction d'affichage d'un article (version optimisée)
   const afficherArticle = (article) => {
     const container = document.getElementById('productList');
     const div = document.createElement('div');
     div.className = 'product';
     
-    // Utilisation de l'URL originale pour la compatibilité
-    const imageUrl = article.image_url;
-    
-     div.innerHTML = `
+    // 1. URL optimisée avec transformations Supabase
+    const imageUrl = article.image_url.startsWith('article-images/') 
+      ? supabase.storage
+          .from('article-images')
+          .getPublicUrl(article.image_url, {
+            transform: {
+              width: 800,      // Taille adaptée à l'affichage
+              height: 600,     // Conserve le ratio
+              quality: 70,     // Bon compromis qualité/poids
+              format: 'webp'   // Format moderne (30% plus léger que JPEG)
+            }
+          }).data.publicUrl
+      : article.image_url;
+  
+    // 2. Structure HTML avec placeholder amélioré
+    div.innerHTML = `
       <div class="product-image-container">
-        <div class="image-placeholder">
-          <i class="fas fa-image" style="font-size: 24px;"></i>
+        <!-- Placeholder moderne avec ratio 16/9 -->
+        <div class="image-placeholder" style="
+          aspect-ratio: 16/9;
+          background: linear-gradient(90deg, #f5f5f5 25%, #e9e9e9 50%, #f5f5f5 75%);
+          background-size: 200% 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 8px;
+          overflow: hidden;">
+          <i class="fas fa-image" style="font-size: 24px; color: #ccc;"></i>
         </div>
-        <img data-src="${imageUrl}" alt="${article.titre}" class="product-image" 
-             loading="lazy" decoding="async"
-             onload="this.classList.add('loaded'); this.previousElementSibling.style.display='none'"
-             onerror="this.onerror=null; this.previousElementSibling.style.display='flex'">
+        
+        <!-- Image avec gestion optimisée du chargement -->
+        <img 
+          data-src="${imageUrl}" 
+          alt="${article.titre}" 
+          class="product-image" 
+          loading="lazy"
+          decoding="async"
+          style="
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 0.3s ease;"
+          onload="
+            this.style.opacity = '1';
+            this.previousElementSibling.style.display = 'none';"
+          onerror="
+            this.onerror = null;
+            this.previousElementSibling.innerHTML = '<i class=\"fas fa-exclamation-circle\"></i> Image non disponible';
+            this.previousElementSibling.style.color = '#ff6b6b';">
       </div>
       <div class="product-info">
         <h3 class="product-title">${article.titre}</h3>
@@ -326,21 +377,31 @@
         <span class="product-category">${article.categorie}</span>
         <p class="product-price">${article.prix.toLocaleString()} FCFA</p>
         <button class="contact-btn" data-user-id="${article.user_id}" data-article-id="${article.id}">
-        <i class="fas fa-envelope"></i> Contacter
-      </button>
+          <i class="fas fa-envelope"></i> Contacter
+        </button>
       </div>
     `;
-     // Observer l'image si elle utilise le lazy loading
+  
+    // 3. Chargement intelligent des images
     const img = div.querySelector('.product-image');
-    if (img.hasAttribute('data-src') && lazyImageObserver) {
+    
+    // Si l'image est dans la viewport, chargez-la immédiatement
+    const rect = div.getBoundingClientRect();
+    if (rect.top < window.innerHeight + 100) {
+      img.src = img.dataset.src;
+    } 
+    // Sinon, utilisez l'IntersectionObserver
+    else if (lazyImageObserver) {
       lazyImageObserver.observe(img);
     }
-  // Gestion du clic sur le bouton Contacter
-    const contactBtn = div.querySelector('.contact-btn');
-    contactBtn.addEventListener('click', () => ouvrirMessagerie(article.user_id, article.id));
-    container.prepend(div); 
+  
+    // Gestion du bouton Contact
+    div.querySelector('.contact-btn').addEventListener('click', () => 
+      ouvrirMessagerie(article.user_id, article.id)
+    );
+  
+    container.prepend(div);
   };
-    
    
   // Initialisation
   document.addEventListener('DOMContentLoaded', () => {
