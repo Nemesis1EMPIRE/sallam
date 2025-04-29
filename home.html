@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="./owlcarousel/owl.theme.default.min.css">
   <link rel="stylesheet" href="./owlcarousel/owl.carousel.min.css">
   <style>
-    :root {
+   :root {
       --primary-color: #4361ee;
       --secondary-color: #3a0ca3;
       --accent-color: #f72585;
@@ -582,6 +582,7 @@
 </head>
 <body>
 
+
 <div class="container">
   <div class="sidebar">
     <div class="sidebar-header">
@@ -594,7 +595,7 @@
       <input type="text" placeholder="Rechercher un produit...">
     </div>
     
-    <button class="add-product-btn" onclick="openModal()">
+    <button class="add-product-btn" id="addProductBtn">
       <i class="fas fa-plus"></i> Ajouter un article
     </button>
     
@@ -624,9 +625,9 @@
     <div class="page-header">
       <h1 class="page-title">Articles récents</h1>
       <div class="filter-options">
-        <button class="filter-btn active">Tous</button>
-        <button class="filter-btn">Populaires</button>
-        <button class="filter-btn">Premium</button>
+        <button class="filter-btn active" data-filter="all">Tous</button>
+        <button class="filter-btn" data-filter="popular">Populaires</button>
+        <button class="filter-btn" data-filter="premium">Premium</button>
       </div>
     </div>
     
@@ -643,7 +644,7 @@
   <div id="articleModal">
     <div class="modal-header">
       <h2 class="modal-title">Ajouter un article</h2>
-      <button class="close-btn" onclick="closeModal()">&times;</button>
+      <button class="close-btn" id="closeModalBtn">&times;</button>
     </div>
     
     <div class="form-group">
@@ -663,7 +664,7 @@
     
     <div class="form-group">
       <label>Image de l'article</label>
-      <div class="file-upload" onclick="document.getElementById('image').click()">
+      <div class="file-upload" id="fileUploadBtn">
         <i class="fas fa-cloud-upload-alt"></i>
         <span>Cliquez pour télécharger une image</span>
         <input type="file" id="image" accept="image/*">
@@ -684,10 +685,10 @@
     </div>
     
     <div class="modal-actions">
-      <button class="submit-btn" onclick="ajouterArticle()">
+      <button class="submit-btn" id="submitArticleBtn">
         <i class="fas fa-plus"></i> Publier l'article
       </button>
-      <button class="cancel-btn" onclick="closeModal()">
+      <button class="cancel-btn" id="cancelModalBtn">
         <i class="fas fa-times"></i> Annuler
       </button>
     </div>
@@ -709,17 +710,17 @@
       <li>✔ Support prioritaire</li>
     </ul>
     <div class="premium-actions">
-      <button class="premium-btn secondary" onclick="closePremiumModal()">
+      <button class="premium-btn secondary" id="closePremiumBtn">
         Plus tard
       </button>
-      <button class="premium-btn primary" onclick="redirectToPremium()">
+      <button class="premium-btn primary" id="goPremiumBtn">
         <i class="fas fa-crown"></i> Voir les offres
       </button>
     </div>
   </div>
 </div>
 
-<script type="module">
+<script type="module" nonce="random123">
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
   
   // Initialize Supabase
@@ -728,8 +729,8 @@
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVmcG1ydGVhcGJmdWtoZnRycGN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU1Njc2OTcsImV4cCI6MjA2MTE0MzY5N30.GdoHerSP1ij8_m9L9562n5FXvHR7V6J-dxHc-70oPUs'
   )
 
-  // Modal functions
-  window.openModal = async () => {
+  // Fonctions globales
+  const openModal = async () => {
     // Check if user is logged in
     const { data: { user }, error: authError } = await supabase.auth.getUser()
     
@@ -764,33 +765,21 @@
     document.body.style.overflow = 'hidden'
   }
   
-  window.closeModal = () => {
+  const closeModal = () => {
     document.getElementById('overlay').style.display = 'none'
     document.body.style.overflow = 'auto'
   }
 
-  // Premium modal functions
-  window.closePremiumModal = () => {
+  const closePremiumModal = () => {
     document.getElementById('premiumOverlay').style.display = 'none'
     document.body.style.overflow = 'auto'
   }
 
-  window.redirectToPremium = () => {
+  const redirectToPremium = () => {
     window.location.href = "./premium.html"
   }
 
-  // Display selected file name
-  document.getElementById('image').addEventListener('change', function(e) {
-    const fileName = document.getElementById('fileName')
-    if (this.files.length > 0) {
-      fileName.textContent = 'Fichier sélectionné : ' + this.files[0].name
-    } else {
-      fileName.textContent = ''
-    }
-  })
-
-  // Add product function with premium check
-window.ajouterArticle = async () => {
+  const ajouterArticle = async () => {
     // Vérification des champs obligatoires
     const titre = document.getElementById('titre').value.trim()
     const prix = parseFloat(document.getElementById('prix').value)
@@ -820,7 +809,6 @@ window.ajouterArticle = async () => {
         return
     }
 
-    // Vérification du statut premium (sécurité supplémentaire)
     try {
         const { data: { user }, error: authError } = await supabase.auth.getUser()
         if (authError || !user) {
@@ -843,7 +831,7 @@ window.ajouterArticle = async () => {
         }
 
         // Mise à jour de l'UI pendant le traitement
-        const submitBtn = document.querySelector('.submit-btn')
+        const submitBtn = document.getElementById('submitArticleBtn')
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Publication en cours...'
         submitBtn.disabled = true
 
@@ -889,11 +877,15 @@ window.ajouterArticle = async () => {
         afficherArticle(article[0])
 
         // 5. Réinitialisation du formulaire
-        document.getElementById('articleModal').reset()
+        document.getElementById('titre').value = ''
+        document.getElementById('prix').value = ''
+        document.getElementById('description').value = ''
+        document.getElementById('image').value = ''
+        document.getElementById('categorie').value = ''
         document.getElementById('fileName').textContent = ''
         closeModal()
 
-        // Notification de succès plus élégante
+        // Notification de succès
         const successMsg = document.createElement('div')
         successMsg.innerHTML = `
             <div style="position: fixed; bottom: 20px; right: 20px; background: var(--success-color); 
@@ -908,7 +900,6 @@ window.ajouterArticle = async () => {
     } catch (error) {
         console.error("Erreur lors de l'ajout de l'article:", error)
         
-        // Gestion des erreurs spécifiques
         if (error.message.includes('duplicate key value')) {
             alert("Un article similaire existe déjà.")
         } else if (error.message.includes('storage')) {
@@ -917,17 +908,16 @@ window.ajouterArticle = async () => {
             alert(`Erreur: ${error.message}`)
         }
     } finally {
-        // Réinitialisation du bouton
-        const submitBtn = document.querySelector('.submit-btn')
+        const submitBtn = document.getElementById('submitArticleBtn')
         if (submitBtn) {
             submitBtn.innerHTML = '<i class="fas fa-plus"></i> Publier l\'article'
             submitBtn.disabled = false
         }
     }
-}
+  }
 
   // Load products function with premium filtering
-  async function chargerArticles() {
+  const chargerArticles = async () => {
     try {
       const { data, error } = await supabase
         .from('articles')
@@ -963,7 +953,7 @@ window.ajouterArticle = async () => {
   }
 
   // Display product function with premium badge
-  function afficherArticle(article) {
+  const afficherArticle = (article) => {
     const container = document.getElementById('productList')
     const div = document.createElement('div')
     div.className = 'product'
@@ -990,7 +980,7 @@ window.ajouterArticle = async () => {
   }
 
   // Filter products by premium status
-  async function filterPremium() {
+  const filterPremium = async () => {
     const { data, error } = await supabase
       .from('articles')
       .select('*')
@@ -1020,40 +1010,59 @@ window.ajouterArticle = async () => {
 
   // Initialize
   document.addEventListener('DOMContentLoaded', () => {
-    chargerArticles()
+    // Ajout des écouteurs d'événements
+    document.getElementById('addProductBtn')?.addEventListener('click', openModal)
+    document.getElementById('closeModalBtn')?.addEventListener('click', closeModal)
+    document.getElementById('submitArticleBtn')?.addEventListener('click', ajouterArticle)
+    document.getElementById('cancelModalBtn')?.addEventListener('click', closeModal)
+    document.getElementById('closePremiumBtn')?.addEventListener('click', closePremiumModal)
+    document.getElementById('goPremiumBtn')?.addEventListener('click', redirectToPremium)
+    document.getElementById('fileUploadBtn')?.addEventListener('click', () => {
+        document.getElementById('image').click()
+    })
     
-    // Filter buttons functionality
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-      btn.addEventListener('click', function() {
-        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'))
-        this.classList.add('active')
-        
-        if (this.textContent === 'Premium') {
-          filterPremium()
-        } else if (this.textContent === 'Tous') {
-          chargerArticles()
+    // Gestion de l'affichage du nom du fichier
+    document.getElementById('image')?.addEventListener('change', function(e) {
+        const fileName = document.getElementById('fileName')
+        if (this.files.length > 0) {
+            fileName.textContent = 'Fichier sélectionné : ' + this.files[0].name
         } else {
-          // Ajouter d'autres filtres si nécessaire
-          chargerArticles()
+            fileName.textContent = ''
         }
-      })
     })
     
-    // Check if user is premium and update UI
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      if (user) {
-        supabase.from('profiles').select('is_premium').eq('id', user.id).single()
-          .then(({ data: profile }) => {
-            if (profile?.is_premium) {
-              // Mettre à jour l'UI pour les utilisateurs premium
-              const addButton = document.querySelector('.add-product-btn')
-              if (addButton) {
-                addButton.innerHTML = '<i class="fas fa-crown"></i> Ajouter un article (Premium)'
-              }
+    // Boutons de filtre
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'))
+            this.classList.add('active')
+            
+            const filter = this.dataset.filter
+            if (filter === 'premium') {
+                filterPremium()
+            } else {
+                chargerArticles()
             }
-          })
-      }
+        })
     })
+    
+    // Vérification du statut premium
+    supabase.auth.getUser().then(({ data: { user } }) => {
+        if (user) {
+            supabase.from('profiles').select('is_premium').eq('id', user.id).single()
+                .then(({ data: profile }) => {
+                    if (profile?.is_premium) {
+                        const addButton = document.querySelector('.add-product-btn')
+                        if (addButton) {
+                            addButton.innerHTML = '<i class="fas fa-crown"></i> Ajouter un article (Premium)'
+                        }
+                    }
+                })
+        }
+    })
+    
+    // Chargement initial des articles
+    chargerArticles()
   })
 </script>
 
