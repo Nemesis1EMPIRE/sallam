@@ -1,4 +1,4 @@
-  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
   
   // Initialize Supabase
   const supabase = createClient(
@@ -8,6 +8,26 @@
 
   // Variables globales
   let timeoutSearch;
+  let lazyImageObserver;
+
+  // Fonction pour initialiser l'Intersection Observer
+  const initLazyLoading = () => {
+    if ('IntersectionObserver' in window) {
+      lazyImageObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const img = entry.target;
+            img.src = img.dataset.src;
+            img.removeAttribute('data-src');
+            img.loading = 'eager';
+            lazyImageObserver.unobserve(img);
+          }
+        });
+      }, {
+        rootMargin: '200px 0px' // Charge les images 200px avant qu'elles entrent dans le viewport
+      });
+    }
+  };
 
   // Fonction de recherche optimisée avec debounce
   const rechercherArticles = async () => {
@@ -51,6 +71,16 @@
 
       data.forEach(afficherArticle);
 
+      // Observer les nouvelles images
+      document.querySelectorAll('.product-image[data-src]').forEach(img => {
+        if (lazyImageObserver) {
+          lazyImageObserver.observe(img);
+        } else {
+          // Fallback si IntersectionObserver n'est pas supporté
+          img.src = img.dataset.src;
+        }
+      });
+
     } catch (error) {
       console.error("Erreur de recherche:", error);
       productList.innerHTML = `
@@ -89,6 +119,55 @@
     document.body.style.overflow = 'auto';
   };
 
+  // Fonction pour compresser une image avant upload
+  const compressImage = async (file) => {
+    return new Promise((resolve) => {
+      if (file.size < 500000) { // Ne pas compresser si < 500KB
+        resolve(file);
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (event) => {
+        const img = new Image();
+        img.src = event.target.result;
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const MAX_WIDTH = 1200;
+          const MAX_HEIGHT = 1200;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > MAX_WIDTH) {
+              height *= MAX_WIDTH / width;
+              width = MAX_WIDTH;
+            }
+          } else {
+            if (height > MAX_HEIGHT) {
+              width *= MAX_HEIGHT / height;
+              height = MAX_HEIGHT;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+
+          canvas.toBlob((blob) => {
+            const compressedFile = new File([blob], file.name, {
+              type: 'image/jpeg',
+              lastModified: Date.now()
+            });
+            resolve(compressedFile);
+          }, 'image/jpeg', 0.7); // Qualité à 70%
+        };
+      };
+    });
+  };
+
   // Fonction pour ajouter un article
   const ajouterArticle = async (e) => {
     if (e) {
@@ -121,24 +200,37 @@
       submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Publication...';
       submitBtn.disabled = true;
 
+      // Compression de l'image
+      const compressedImage = await compressImage(imageFile);
+
       // Upload de l'image
-      const fileExt = imageFile.name.split('.').pop();
+      const fileExt = compressedImage.name.split('.').pop();
       const filePath = `articles/${user.id}-${Date.now()}.${fileExt}`;
       
       const { error: uploadError } = await supabase.storage
         .from('article-images')
-        .upload(filePath, imageFile, {
+        .upload(filePath, compressedImage, {
           cacheControl: '3600',
           upsert: false,
-          contentType: imageFile.type
+          contentType: compressedImage.type
         });
-      
-      if (uploadError) throw uploadError;
+    
+      if (uploadError) {
+        console.error("Erreur upload:", uploadError);
+        throw uploadError;
+      }
 
-      // Récupération URL
+      // Récupération de l'URL optimisée
       const { data: { publicUrl } } = supabase.storage
         .from('article-images')
-        .getPublicUrl(filePath);
+        .getPublicUrl(filePath, {
+          transform: {
+            width: 800,
+            height: 600,
+            quality: 80,
+            format: 'auto'
+          }
+        });
 
       // Insertion avec user_id
       const { data: article, error: insertError } = await supabase
@@ -193,8 +285,20 @@
     const container = document.getElementById('productList');
     const div = document.createElement('div');
     div.className = 'product';
+    
+    // URL optimisée avec transformations Supabase
+    const imageUrl = article.image_url.includes('/storage/v1/object/public/')
+      ? article.image_url.replace('/storage/v1/object/public/', '/storage/v1/render/image/public/') + 
+        '?width=400&height=300&quality=80'
+      : article.image_url;
+    
     div.innerHTML = `
-      <img src="${article.image_url}" alt="${article.titre}" class="product-image">
+      <div class="image-placeholder">
+        <i class="fas fa-image" style="font-size: 24px;"></i>
+      </div>
+      <img data-src="${imageUrl}" alt="${article.titre}" class="product-image" 
+           loading="lazy" decoding="async"
+           onerror="this.onerror=null; this.parentNode.querySelector('.image-placeholder').style.display='flex'; this.style.display='none'">
       <div class="product-info">
         <h3 class="product-title">${article.titre}</h3>
         <p class="product-description">${article.description}</p>
@@ -210,6 +314,9 @@
 
   // Initialisation
   document.addEventListener('DOMContentLoaded', () => {
+    // Initialiser le lazy loading
+    initLazyLoading();
+
     // Écouteur recherche avec debounce
     document.getElementById('searchInput')?.addEventListener('input', (e) => {
       clearTimeout(timeoutSearch);
