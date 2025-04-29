@@ -316,7 +316,21 @@
     const container = document.getElementById('productList');
     const div = document.createElement('div');
     div.className = 'product';
+
+    // Vérification des champs obligatoires
+    if (!article || !article.id || !article.titre) {
+      console.error("Article invalide:", article);
+      return;
+    }
+  
+    const container = document.getElementById('productList');
+    if (!container) return;
+  
+    // Construction sécurisée du HTML (évite XSS)
+    const div = document.createElement('div');
+    div.className = 'product';
     
+    const escapeHtml = (text) => text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
     // 1. URL optimisée avec transformations Supabase
     const imageUrl = article.image_url.startsWith('article-images/') 
       ? supabase.storage
@@ -371,15 +385,15 @@
             this.previousElementSibling.innerHTML = '<i class=\"fas fa-exclamation-circle\"></i> Image non disponible';
             this.previousElementSibling.style.color = '#ff6b6b';">
       </div>
-      <div class="product-info">
-        <h3 class="product-title">${article.titre}</h3>
-        <p class="product-description">${article.description}</p>
-        <span class="product-category">${article.categorie}</span>
-        <p class="product-price">${article.prix.toLocaleString()} FCFA</p>
-        <button class="contact-btn" data-user-id="${article.user_id}" data-article-id="${article.id}">
-          <i class="fas fa-envelope"></i> Contacter
-        </button>
-      </div>
+       <div class="product-info">
+      <h3 class="product-title">${escapeHtml(article.titre)}</h3>
+      <p class="product-description">${escapeHtml(article.description)}</p>
+      <span class="product-category">${escapeHtml(article.categorie || 'Non catégorisé')}</span>
+      <p class="product-price">${Number(article.prix || 0).toLocaleString()} FCFA</p>
+      <button class="contact-btn" data-user-id="${article.user_id}" data-article-id="${article.id}">
+        <i class="fas fa-envelope"></i> Contacter
+      </button>
+    </div>
     `;
   
     // 3. Chargement intelligent des images
