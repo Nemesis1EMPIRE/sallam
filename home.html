@@ -872,13 +872,13 @@
 <div class="container">
   <div class="sidebar">
     <div class="sidebar-header">
-      <img src="./images/logo.png" alt="Logo Marketplace" loading="lazy">
+      <img src="./images/logo.png" alt="Logo Marketplace">
       <p>Achetez, vendez et louez en toute simplicité</p>
     </div>
     
     <div class="search-bar">
       <i class="fas fa-search"></i>
-      <input type="text" id="searchInput" placeholder="Rechercher..." onkeyup="rechercherArticles()">
+      <input type="text" placeholder="Rechercher un produit...">
     </div>
     
     <button class="add-product-btn" id="addProductBtn">
@@ -886,13 +886,16 @@
     </button>
     
     <div class="nav-menu">
+      <h4>Menu</h4>
       <ul>
         <li><a href="home.html"><i class="fas fa-home"></i> Accueil</a></li>
-        <li><a href="./messagerie.html"><i class="fas fa-comments"></i> Messages</a></li>
+        <li><a href="./messages.html"><i class="fas fa-comments"></i> Messages</a></li>
+        <li><a href="./profile.html"><i class="fas fa-user"></i> Profil</a></li>
+        <li><a href="./premium.html"><i class="fas fa-crown"></i> Devenir Premium</a></li>
       </ul>
     </div>
     
-    <!--<div class="nav-menu">
+    <div class="nav-menu">
       <h4>Catégories</h4>
       <ul>
         <li><i class="fas fa-car"></i> Véhicules</li>
@@ -901,23 +904,30 @@
         <li><i class="fas fa-running"></i> Sport</li>
         <li><i class="fas fa-gift"></i> Gratuit</li>
       </ul>
-    </div>-->
+    </div>
   </div>
 
   <div class="content">
     <div class="page-header">
       <h1 class="page-title">Articles récents</h1>
+      <div class="filter-options">
+        <button class="filter-btn active" data-filter="all">Tous</button>
+        <button class="filter-btn" data-filter="popular">Populaires</button>
+        <button class="filter-btn" data-filter="premium">Premium</button>
+      </div>
     </div>
     
     <div class="products" id="productList">
-      
+      <div class="loading">
+        <div class="spinner"></div>
+      </div>
     </div>
   </div>
 </div>
 
 <!-- MODAL AJOUT ARTICLE -->
-<div id="overlay" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
-  <div id="articleModal" style="background: white; padding: 20px; border-radius: 8px; width: 90%; max-width: 500px;">
+<div id="overlay">
+  <div id="articleModal">
     <div class="modal-header">
       <h2 class="modal-title">Ajouter un article</h2>
       <button class="close-btn" id="closeModalBtn">&times;</button>
@@ -971,7 +981,7 @@
   </div>
 </div>
 
-<!-- MODAL PREMIUM
+<!-- MODAL PREMIUM -->
 <div id="premiumOverlay">
   <div class="premium-modal">
     <i class="fas fa-crown premium-icon"></i>
@@ -994,7 +1004,7 @@
       </button>
     </div>
   </div>
-</div>-->
+</div>
 
 <!--<script type="module" nonce="random123">
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
