@@ -494,7 +494,10 @@
       const fileName = document.getElementById('fileName');
       fileName.textContent = this.files[0]?.name || '';
     });
-
+    document.getElementById('searchInput').addEventListener('input', () => {
+      clearTimeout(timeoutSearch);
+      timeoutSearch = setTimeout(rechercherArticles, 300);
+    });
     // Chargement initial
     rechercherArticles().catch(console.error);
   });
