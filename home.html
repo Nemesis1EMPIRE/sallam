@@ -312,6 +312,20 @@
       transition: var(--transition);
       font-weight: 500;
     }
+
+    .product-image-container {
+      position: relative;
+      width: 100%;
+    }
+    
+    .product-image.loaded {
+      opacity: 1 !important;
+    }
+    
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
     
     .contact-btn:hover {
       background-color: #d91a6d;
