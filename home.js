@@ -363,6 +363,40 @@
       alert("Une erreur est survenue. Veuillez réessayer.");
     }
   };
+    // Test complet depuis la console
+async function testAffichage() {
+  console.clear();
+  console.log("=== TEST D'AFFICHAGE ===");
+  
+  // 1. Test du container
+  const container = document.getElementById('productList');
+  if (!container) {
+    console.error("ERREUR: #productList n'existe pas dans le HTML");
+    return;
+  }
+  console.log("✅ Container #productList trouvé");
+
+  // 2. Test de la fonction afficherArticle
+  try {
+    const testArticle = {
+      id: 0,
+      titre: "ARTICLE TEST",
+      description: "Ceci est un test",
+      prix: 9999,
+      categorie: "Test",
+      image_url: "https://via.placeholder.com/300"
+    };
+    
+    afficherArticle(testArticle);
+    console.log("✅ Fonction afficherArticle exécutée");
+    console.log("Vérifiez qu'un article 'ARTICLE TEST' apparaît");
+    
+  } catch (err) {
+    console.error("ERREUR dans afficherArticle:", err);
+  }
+}
+
+testAffichage();
     // Autres écouteurs
     document.getElementById('addProductBtn')?.addEventListener('click', openModal);
     document.getElementById('submitArticleBtn')?.addEventListener('click', ajouterArticle);
