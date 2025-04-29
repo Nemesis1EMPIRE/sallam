@@ -1,12 +1,13 @@
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
   // Initialize Supabase
+  console.log("Initialisation de Supabase...");
   const supabase = createClient(
     'https://ufpmrteapbfukhftrpcv.supabase.co',
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVmcG1ydGVhcGJmdWtoZnRycGN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU1Njc2OTcsImV4cCI6MjA2MTE0MzY5N30.GdoHerSP1ij8_m9L9562n5FXvHR7V6J-dxHc-70oPUs'
-  )
-
-   supabase.rpc('set_guest_id', { guest_id: getClientId() });  
+  );
+ supabase.rpc('set_guest_id', { guest_id: getClientId() });  
+ console.log("Supabase initialisé:", supabase);
 
   function getClientId() {
   let clientId = localStorage.getItem('guest_client_id');
@@ -191,118 +192,7 @@
     });
   };
 
-  // Fonction pour ajouter un article
-  const ajouterArticle = async (e) => {
-    if (e) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-
-    try {
-      const { data: { user }, error: authError } = await supabase.auth.getUser();
-      if (authError || !user) {
-        alert("Session expirée. Veuillez vous reconnecter.");
-        window.location.href = "login.html";
-        return;
-      }
-
-      // Validation des champs
-      const titre = document.getElementById('titre').value.trim();
-      const prix = parseFloat(document.getElementById('prix').value);
-      const description = document.getElementById('description').value.trim();
-      const imageFile = document.getElementById('image').files[0];
-      const categorie = document.getElementById('categorie').value;
-
-      if (!titre || isNaN(prix) || !description || !imageFile || !categorie) {
-        alert("Veuillez remplir tous les champs correctement.");
-        return;
-      }
-
-      // Mise à jour UI
-      const submitBtn = document.getElementById('submitArticleBtn');
-      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Publication...';
-      submitBtn.disabled = true;
-
-      // Compression de l'image
-      const compressedImage = await compressImage(imageFile);
-
-      // Upload de l'image
-      const fileExt = compressedImage.name.split('.').pop();
-      const filePath = `articles/${user.id}-${Date.now()}.${fileExt}`;
-      
-      const { error: uploadError } = await supabase.storage
-        .from('article-images')
-        .upload(filePath, compressedImage, {
-          cacheControl: '3600',
-          upsert: false,
-          contentType: compressedImage.type
-        });
-    
-      if (uploadError) {
-        console.error("Erreur upload:", uploadError);
-        throw uploadError;
-      }
-    
-
-      // Récupération de l'URL optimisée
-      const { data: { publicUrl } } = supabase.storage
-        .from('article-images')
-        .getPublicUrl(filePath, {
-          transform: {
-            width: 800,
-            height: 600,
-            quality: 80,
-            format: 'auto'
-          }
-        });
-
-      // Insertion avec user_id
-      const { data: article, error: insertError } = await supabase
-        .from('articles')
-        .insert([{
-          titre,
-          prix,
-          description,
-          image_url: publicUrl,
-          categorie,
-          user_id: user.id,
-          created_at: new Date().toISOString()
-        }])
-        .select();
-
-      if (insertError) throw insertError;
-
-      // Succès
-      afficherArticle(article[0]);
-      closeModal();
-      
-      // Message succès
-      const successMsg = document.createElement('div');
-      successMsg.innerHTML = `
-        <div style="position: fixed; bottom: 20px; right: 20px; 
-                 background: var(--success-color); color: white; 
-                 padding: 15px; border-radius: var(--border-radius); 
-                 box-shadow: var(--box-shadow); z-index: 1000;">
-          <i class="fas fa-check-circle"></i> Article publié !
-        </div>
-      `;
-      document.body.appendChild(successMsg);
-      setTimeout(() => successMsg.remove(), 3000);
-
-      // Recharger les articles
-      await rechercherArticles();
-
-    } catch (error) {
-      console.error("Erreur:", error);
-      alert(`Erreur: ${error.message}`);
-    } finally {
-      const submitBtn = document.getElementById('submitArticleBtn');
-      if (submitBtn) {
-        submitBtn.innerHTML = '<i class="fas fa-plus"></i> Publier';
-        submitBtn.disabled = false;
-      }
-    }
-  };
+ 
 
   // Fonction d'affichage d'un article (version optimisée)
   const afficherArticle = (article) => {
