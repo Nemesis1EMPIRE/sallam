@@ -203,23 +203,8 @@ import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js
       // Compression de l'image
       const compressedImage = await compressImage(imageFile);
 
-      // Upload de l'image
-      const fileExt = compressedImage.name.split('.').pop();
-      const filePath = `articles/${user.id}-${Date.now()}.${fileExt}`;
-      
-      const { error: uploadError } = await supabase.storage
-        .from('article-images')
-        .upload(filePath, compressedImage, {
-          cacheControl: '3600',
-          upsert: false,
-          contentType: compressedImage.type
-        });
-    
-      if (uploadError) {
-        console.error("Erreur upload:", uploadError);
-        throw uploadError;
-      }
-       const { error: uploadError } = await supabase.storage
+    // 1. Upload image
+    const { error: uploadError } = await supabase.storage
       .from('article-images')
       .upload(filePath, compressedImage, {
         cacheControl: '3600',
@@ -228,6 +213,14 @@ import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js
       });
     
     if (uploadError) throw uploadError;
+    
+    // 2. Obtenir l'URL publique
+    const { data: publicUrlData } = supabase.storage
+      .from('article-images')
+      .getPublicUrl(filePath);
+    
+    const publicUrl = publicUrlData.publicUrl;
+
     
     // Récupération de l'URL publique de base (sans transformation)
     const { data: { publicUrl } } = supabase.storage
@@ -327,7 +320,7 @@ import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js
         <div class="image-placeholder">
           <i class="fas fa-image"></i>
         </div>
-        <img src="${imageUrl}" alt="${article.titre}" class="product-image" 
+       <img class="product-image" data-src="${image_url}" alt="${titre}"
              loading="lazy" decoding="async"
              onload="this.classList.add('loaded'); this.previousElementSibling.style.display='none'"
              onerror="this.onerror=null; this.previousElementSibling.style.display='flex'; console.error('Erreur de chargement de l\'image:', this.src)">
