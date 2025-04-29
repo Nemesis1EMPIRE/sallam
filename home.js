@@ -219,6 +219,20 @@ import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js
         console.error("Erreur upload:", uploadError);
         throw uploadError;
       }
+       const { error: uploadError } = await supabase.storage
+      .from('article-images')
+      .upload(filePath, compressedImage, {
+        cacheControl: '3600',
+        upsert: false,
+        contentType: compressedImage.type
+      });
+    
+    if (uploadError) throw uploadError;
+    
+    // Récupération de l'URL publique de base (sans transformation)
+    const { data: { publicUrl } } = supabase.storage
+      .from('article-images')
+      .getPublicUrl(filePath);
 
       // Récupération de l'URL optimisée
       const { data: { publicUrl } } = supabase.storage
@@ -279,26 +293,45 @@ import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js
       }
     }
   };
+  
+ // Fonction pour obtenir l'URL correcte de l'image
+  const getCorrectImageUrl = (url) => {
+    // Si l'URL est déjà une URL complète, la retourner telle quelle
+    if (url.startsWith('http')) {
+      return url;
+    }
+    
+    // Si c'est un chemin Supabase, construire l'URL complète
+    if (url.startsWith('article-images/')) {
+      const { data: { publicUrl } } = supabase.storage
+        .from('article-images')
+        .getPublicUrl(url);
+      return publicUrl;
+    }
+    
+    // Retourner l'URL d'origine si on ne sait pas comment la traiter
+    return url;
+  };
 
-  // Fonction d'affichage d'un article
+  // Fonction d'affichage d'un article corrigée
   const afficherArticle = (article) => {
     const container = document.getElementById('productList');
     const div = document.createElement('div');
     div.className = 'product';
     
-    // URL optimisée avec transformations Supabase
-    const imageUrl = article.image_url.includes('/storage/v1/object/public/')
-      ? article.image_url.replace('/storage/v1/object/public/', '/storage/v1/render/image/public/') + 
-        '?width=400&height=300&quality=80'
-      : article.image_url;
+    // Obtenir l'URL correcte de l'image
+    const imageUrl = getCorrectImageUrl(article.image_url);
     
     div.innerHTML = `
-      <div class="image-placeholder">
-        <i class="fas fa-image" style="font-size: 24px;"></i>
+      <div class="product-image-container">
+        <div class="image-placeholder">
+          <i class="fas fa-image"></i>
+        </div>
+        <img src="${imageUrl}" alt="${article.titre}" class="product-image" 
+             loading="lazy" decoding="async"
+             onload="this.classList.add('loaded'); this.previousElementSibling.style.display='none'"
+             onerror="this.onerror=null; this.previousElementSibling.style.display='flex'; console.error('Erreur de chargement de l\'image:', this.src)">
       </div>
-      <img data-src="${imageUrl}" alt="${article.titre}" class="product-image" 
-           loading="lazy" decoding="async"
-           onerror="this.onerror=null; this.parentNode.querySelector('.image-placeholder').style.display='flex'; this.style.display='none'">
       <div class="product-info">
         <h3 class="product-title">${article.titre}</h3>
         <p class="product-description">${article.description}</p>
@@ -310,6 +343,14 @@ import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js
       </div>
     `;
     container.prepend(div);
+  };
+
+    
+    // Observer l'image si elle utilise le lazy loading
+    const img = div.querySelector('.product-image');
+    if (img.hasAttribute('data-src') && lazyImageObserver) {
+      lazyImageObserver.observe(img);
+    }
   };
 
   // Initialisation
