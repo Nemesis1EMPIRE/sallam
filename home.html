@@ -656,6 +656,182 @@
       justify-content: center;
       color: #ccc;
     }
+    /* Mobile First Approach - Adaptations spécifiques */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+  
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    padding: 15px;
+    border-right: none;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  .sidebar-header img {
+    width: 120px;
+  }
+  
+  .content {
+    padding: 15px;
+  }
+  
+  .products {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  
+  .filter-options {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 5px;
+    display: flex;
+  }
+  
+  .filter-btn {
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  
+  /* Modal adaptations */
+  #articleModal, .premium-modal {
+    width: calc(100% - 30px);
+    margin: 15px;
+    padding: 15px;
+  }
+  
+  .modal-actions, .premium-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .submit-btn, .cancel-btn, .premium-btn {
+    width: 100%;
+  }
+  
+  /* Product card optimizations */
+  .product {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .product-image-container {
+    height: 150px;
+  }
+  
+  /* Navigation menu optimizations */
+  .nav-menu ul {
+    display: flex;
+    overflow-x: auto;
+    gap: 5px;
+    padding-bottom: 10px;
+  }
+  
+  .nav-menu li {
+    flex-shrink: 0;
+    padding: 8px 12px;
+  }
+  
+  /* Search bar optimization */
+  .search-bar {
+    margin-bottom: 15px;
+  }
+  
+  /* Hide some elements on mobile */
+  .sidebar-header p {
+    display: none;
+  }
+}
+
+/* Very small devices (phones, 480px and down) */
+@media (max-width: 480px) {
+  .product-image-container {
+    height: 120px;
+  }
+  
+  .product-info {
+    padding: 10px;
+  }
+  
+  .product-title {
+    font-size: 15px;
+  }
+  
+  .product-description {
+    font-size: 13px;
+    -webkit-line-clamp: 1;
+  }
+  
+  .product-price {
+    font-size: 14px;
+  }
+  
+  .add-product-btn {
+    padding: 10px;
+    font-size: 14px;
+  }
+  
+  .file-upload {
+    padding: 15px;
+  }
+  
+  .file-upload i {
+    font-size: 30px;
+  }
+  
+  .form-control {
+    padding: 10px;
+  }
+}
+
+/* Orientation-specific adjustments */
+@media (max-width: 768px) and (orientation: landscape) {
+  .sidebar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .products {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Tablet adjustments (768px - 992px) */
+@media (min-width: 769px) and (max-width: 992px) {
+  .sidebar {
+    width: 220px;
+    padding: 20px 10px;
+  }
+  
+  .products {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .product-image-container {
+    height: 160px;
+  }
+}
+
+/* Accessibility improvements for mobile */
+@media (max-width: 768px) {
+  button, .filter-btn, .contact-btn, .nav-menu a {
+    min-height: 44px; /* Tappable area minimum */
+  }
+  
+  input, textarea, select {
+    font-size: 16px; /* Prevent zoom on focus */
+  }
+}
   </style>
 </head>
 <body>
