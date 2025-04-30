@@ -1328,25 +1328,25 @@
       }, 300);
     });
     // Ajouter ce script pour gérer le menu mobile
-  document.addEventListener('DOMContentLoaded', () => {
-    const menuToggle = document.getElementById('menuToggle');
-    const sidebar = document.querySelector('.sidebar');
-
-    menuToggle.addEventListener('click', () => {
-      sidebar.classList.toggle('active');
-      menuToggle.innerHTML = sidebar.classList.contains('active') 
-        ? '<i class="fas fa-times"></i>' 
-        : '<i class="fas fa-bars"></i>';
+    document.addEventListener('DOMContentLoaded', () => {
+      const menuToggle = document.getElementById('menuToggle');
+      const sidebar = document.querySelector('.sidebar');
+  
+      menuToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('active');
+        menuToggle.innerHTML = sidebar.classList.contains('active') 
+          ? '<i class="fas fa-times"></i>' 
+          : '<i class="fas fa-bars"></i>';
+      });
+  
+      // Fermer le menu quand on clique à l'extérieur
+      document.addEventListener('click', (e) => {
+        if (!sidebar.contains(e.target) && e.target !== menuToggle) {
+          sidebar.classList.remove('active');
+          menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+        }
+      });
     });
-
-    // Fermer le menu quand on clique à l'extérieur
-    document.addEventListener('click', (e) => {
-      if (!sidebar.contains(e.target) && e.target !== menuToggle) {
-        sidebar.classList.remove('active');
-        menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
-      }
-    });
-  });
 
     // Autres écouteurs
     document.getElementById('addProductBtn')?.addEventListener('click', openModal);
