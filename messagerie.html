@@ -1,113 +1,225 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Messagerie</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
+    :root {
+      --primary-color: #4361ee;
+      --secondary-color: #3a0ca3;
+      --light-color: #f8f9fa;
+      --dark-color: #212529;
+      --gray-color: #6c757d;
+    }
+    
     body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
-      font-family: Arial, sans-serif;
+      padding: 0;
+      background-color: #f5f7fa;
+    }
+    
+    .container {
+      display: flex;
+      min-height: 100vh;
+    }
+    
+    .sidebar {
+      width: 350px;
+      background-color: white;
+      border-right: 1px solid #e0e0e0;
+      overflow-y: auto;
+    }
+    
+    .header {
+      padding: 20px;
+      border-bottom: 1px solid #e0e0e0;
+      font-size: 20px;
+      font-weight: 600;
+    }
+    
+    .conversation-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .conversation-item {
+      padding: 15px 20px;
+      border-bottom: 1px solid #f0f0f0;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    
+    .conversation-item:hover {
+      background-color: #f9f9f9;
+    }
+    
+    .conversation-item.active {
       background-color: #f0f2f5;
+    }
+    
+    .conversation-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+    
+    .conversation-name {
+      font-weight: 600;
+    }
+    
+    .conversation-time {
+      font-size: 12px;
+      color: var(--gray-color);
+    }
+    
+    .conversation-preview {
+      font-size: 14px;
+      color: var(--gray-color);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .chat-container {
+      flex: 1;
       display: flex;
       flex-direction: column;
-      height: 100vh;
     }
-
-    header {
-      background-color: #1877f2;
-      color: white;
-      padding: 15px;
-      font-size: 18px;
+    
+    .chat-header {
+      padding: 15px 20px;
+      background-color: white;
+      border-bottom: 1px solid #e0e0e0;
+      display: flex;
+      align-items: center;
     }
-
-    .chat {
+    
+    .chat-header img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+    
+    .chat-messages {
       flex: 1;
       padding: 20px;
       overflow-y: auto;
+      background-color: #e5ddd5;
     }
-
-    .message {
-      margin: 10px 0;
-      padding: 10px;
-      border-radius: 10px;
-      max-width: 70%;
-    }
-
-    .sent {
-      background-color: #d1e7dd;
-      align-self: flex-end;
-    }
-
-    .received {
-      background-color: #ffffff;
-      align-self: flex-start;
-    }
-
-    .input-area {
+    
+    .no-conversation {
       display: flex;
-      padding: 10px;
-      background-color: white;
-      border-top: 1px solid #ccc;
-    }
-
-    .input-area input {
-      flex: 1;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-
-    .input-area button {
-      background-color: #1877f2;
-      color: white;
-      border: none;
-      padding: 10px 15px;
-      margin-left: 10px;
-      border-radius: 6px;
-      cursor: pointer;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      color: var(--gray-color);
     }
   </style>
 </head>
 <body>
-  <header id="chatWith">Chat avec ...</header>
-
-  <div class="chat" id="chatBox">
-    <!-- Messages dynamiques -->
+  <div class="container">
+    <div class="sidebar">
+      <div class="header">Messages</div>
+      <ul class="conversation-list" id="conversationList">
+        <!-- Les conversations seront chargées ici -->
+      </ul>
+    </div>
+    
+    <div class="chat-container">
+      <div id="chatDisplay">
+        <div class="no-conversation">
+          <div>
+            <i class="fas fa-comments" style="font-size: 48px; margin-bottom: 20px;"></i>
+            <p>Sélectionnez une conversation</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="input-area">
-    <input type="text" id="messageInput" placeholder="Écrivez un message...">
-    <button onclick="sendMessage()">Envoyer</button>
-  </div>
-
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    const chatWith = localStorage.getItem("contact") || "Quelqu'un";
-    document.getElementById("chatWith").textContent = "Chat avec " + chatWith;
+    // Configuration Supabase
+    const supabaseUrl = 'https://ufpmrteapbfukhftrpcv.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVmcG1ydGVhcGJmdWtoZnRycGN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU1Njc2OTcsImV4cCI6MjA2MTE0MzY5N30.GdoHerSP1ij8_m9L9562n5FXvHR7V6J-dxHc-70oPUs';
+    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-    const chatBox = document.getElementById("chatBox");
+    // ID client pour les invités
+    let guestId = localStorage.getItem('guest_client_id');
+    if (!guestId) {
+      guestId = 'guest_' + Math.random().toString(36).substr(2, 9);
+      localStorage.setItem('guest_client_id', guestId);
+    }
 
-    function sendMessage() {
-      const input = document.getElementById("messageInput");
-      const msg = input.value.trim();
-      if (msg === "") return;
+    // Charger les conversations au démarrage
+    document.addEventListener('DOMContentLoaded', async () => {
+      await loadConversations();
+    });
 
-      const message = document.createElement("div");
-      message.className = "message sent";
-      message.textContent = msg;
-      chatBox.appendChild(message);
+    // Charger les conversations
+    async function loadConversations() {
+      try {
+        const { data: conversations, error } = await supabase
+          .from('conversations')
+          .select(`
+            id,
+            created_at,
+            user1:profiles!user1(username, avatar_url),
+            user2:profiles!user2(username, avatar_url),
+            articles(titre, prix),
+            messages!inner(content, created_at)
+          `)
+          .or(`user1.eq.${guestId},user2.eq.${guestId},guest_id.eq.${guestId}`)
+          .order('created_at', { ascending: false });
 
-      input.value = "";
-      chatBox.scrollTop = chatBox.scrollHeight;
-      
-      // Simule une réponse
-      setTimeout(() => {
-        const response = document.createElement("div");
-        response.className = "message received";
-        response.textContent = "Réponse de " + chatWith;
-        chatBox.appendChild(response);
-        chatBox.scrollTop = chatBox.scrollHeight;
-      }, 1000);
+        if (error) throw error;
+
+        const conversationList = document.getElementById('conversationList');
+        conversationList.innerHTML = '';
+
+        if (conversations.length === 0) {
+          conversationList.innerHTML = `
+            <div style="padding: 20px; text-align: center; color: var(--gray-color);">
+              <i class="fas fa-comment-slash" style="font-size: 24px;"></i>
+              <p>Aucune conversation</p>
+            </div>
+          `;
+          return;
+        }
+
+        conversations.forEach(conv => {
+          const lastMessage = conv.messages.length > 0 
+            ? conv.messages[conv.messages.length - 1].content 
+            : "Aucun message";
+            
+          const otherUser = conv.user1?.username === guestId ? conv.user2 : conv.user1;
+          const conversationItem = document.createElement('li');
+          conversationItem.className = 'conversation-item';
+          conversationItem.innerHTML = `
+            <div class="conversation-header">
+              <span class="conversation-name">${otherUser?.username || 'Anonyme'}</span>
+              <span class="conversation-time">${new Date(conv.created_at).toLocaleDateString()}</span>
+            </div>
+            <div class="conversation-preview">${lastMessage}</div>
+            ${conv.articles ? `<div class="conversation-preview">Article: ${conv.articles.titre}</div>` : ''}
+          `;
+          
+          conversationItem.addEventListener('click', () => {
+            window.location.href = `conversation.html?id=${conv.id}`;
+          });
+          
+          conversationList.appendChild(conversationItem);
+        });
+
+      } catch (error) {
+        console.error("Erreur de chargement:", error);
+        alert("Erreur lors du chargement des conversations");
+      }
     }
   </script>
 </body>
