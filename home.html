@@ -728,9 +728,6 @@
   <div class="sidebar">
     <div class="sidebar-header">
       <img src="./images/logo.png" alt="Logo Marketplace" loading="lazy">
-      <button class="mobile-menu-toggle" id="menuToggle">
-        <i class="fas fa-bars"></i>
-      </button>
       <p>Achetez, vendez et louez en toute simplicité</p>
     </div>
     
@@ -752,23 +749,6 @@
         <li><a href="./premium.html"><i class="fas fa-crown"></i> Devenir Premium</a></li>-->
       </ul>
     </div>
-    <div class="nav-menu" id="mainNav">
-      <h4>Menu</h4>
-      <ul>
-        <li><a href="home.html"><i class="fas fa-home"></i> Accueil</a></li>
-        <li><a href="./messagerie.html"><i class="fas fa-comments"></i> Messages</a></li>
-      </ul>
-    </div>
-    
-    <div class="search-bar">
-      <i class="fas fa-search"></i>
-      <input type="text" id="searchInput" placeholder="Rechercher...">
-    </div>
-    
-    <button class="add-product-btn" id="addProductBtn">
-      <i class="fas fa-plus"></i> Ajouter un article
-    </button>
-  </div>
     
     <div class="nav-menu">
       <!--<h4>Catégories</h4>
@@ -1261,31 +1241,7 @@
         rechercherArticles().catch(console.error);
       }, 300);
     });
-     // Gestion du menu mobile
-    document.addEventListener('DOMContentLoaded', () => {
-      const menuToggle = document.getElementById('menuToggle');
-      const mainNav = document.getElementById('mainNav');
-      const addProductBtn = document.getElementById('addProductBtn');
-      const overlay = document.getElementById('overlay');
-  
-      // Toggle menu mobile
-      if (menuToggle && mainNav) {
-        menuToggle.addEventListener('click', () => {
-          mainNav.classList.toggle('active');
-          menuToggle.innerHTML = mainNav.classList.contains('active') 
-            ? '<i class="fas fa-times"></i>' 
-            : '<i class="fas fa-bars"></i>';
-        });
-      }
-  
-      // Ouverture du modal
-      if (addProductBtn && overlay) {
-        addProductBtn.addEventListener('click', (e) => {
-          e.preventDefault();
-          overlay.style.display = 'flex';
-          document.body.style.overflow = 'hidden';
-        });
-      }
+   
 
     // Autres écouteurs
     document.getElementById('addProductBtn')?.addEventListener('click', openModal);
