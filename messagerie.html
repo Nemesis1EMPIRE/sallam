@@ -119,6 +119,188 @@
       height: 100%;
       color: var(--gray-color);
     }
+    /* Mobile First Approach */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    height: 100vh;
+  }
+  
+  .sidebar {
+    width: 100%;
+    height: auto;
+    max-height: 40vh;
+    border-right: none;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  .header {
+    padding: 15px;
+    font-size: 18px;
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 10;
+  }
+  
+  .conversation-list {
+    max-height: calc(40vh - 50px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .conversation-item {
+    padding: 12px 15px;
+  }
+  
+  .chat-container {
+    flex: 1;
+    min-height: 60vh;
+  }
+  
+  .chat-header {
+    padding: 12px 15px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  
+  .chat-header img {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .chat-messages {
+    padding: 15px;
+  }
+  
+  .no-conversation {
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .no-conversation i {
+    font-size: 36px;
+    margin-bottom: 15px;
+  }
+  
+  /* Optimisation des éléments de conversation */
+  .conversation-name {
+    font-size: 15px;
+  }
+  
+  .conversation-time {
+    font-size: 11px;
+  }
+  
+  .conversation-preview {
+    font-size: 13px;
+  }
+}
+
+/* Très petits écrans (<= 480px) */
+@media (max-width: 480px) {
+  .sidebar {
+    max-height: 45vh;
+  }
+  
+  .conversation-list {
+    max-height: calc(45vh - 50px);
+  }
+  
+  .conversation-item {
+    padding: 10px 12px;
+  }
+  
+  .chat-header {
+    padding: 10px 12px;
+  }
+  
+  .chat-messages {
+    padding: 12px;
+  }
+  
+  /* Optimisation du texte */
+  .conversation-name {
+    max-width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .conversation-preview {
+    max-width: 100%;
+  }
+}
+
+/* Mode paysage sur mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+  .container {
+    flex-direction: row;
+  }
+  
+  .sidebar {
+    width: 40%;
+    max-height: 100vh;
+    border-right: 1px solid #e0e0e0;
+    border-bottom: none;
+  }
+  
+  .conversation-list {
+    max-height: calc(100vh - 50px);
+  }
+  
+  .chat-container {
+    width: 60%;
+    min-height: 100vh;
+  }
+}
+
+/* Améliorations d'accessibilité */
+@media (max-width: 768px) {
+  .conversation-item {
+    min-height: 60px; /* Zone cliquable plus grande */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  /* Effet tactile */
+  .conversation-item:active {
+    background-color: #f0f0f0;
+  }
+  
+  /* Scrollbar visible pour iOS */
+  .conversation-list::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 4px;
+  }
+  
+  .conversation-list::-webkit-scrollbar-thumb {
+    background-color: rgba(0,0,0,.2);
+  }
+}
+
+/* Animation de chargement */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.conversation-item {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* État vide amélioré */
+.no-conversation {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.no-conversation p {
+  font-size: 16px;
+  color: var(--gray-color);
+  margin-top: 10px;
+}
   </style>
 </head>
 <body>
@@ -210,7 +392,7 @@
           `;
           
           conversationItem.addEventListener('click', () => {
-            window.location.href = `conversation.html?id=${conv.id}`;
+            window.location.href = `messages.html?id=${conv.id}`;
           });
           
           conversationList.appendChild(conversationItem);
