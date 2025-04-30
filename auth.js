@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (!user) throw new Error("Aucun utilisateur trouvé");
 
                 // Redirection
-                window.location.href = "./home.html";
+                window.location.href = "./index.html";
                 
             } catch (error) {
                 console.error("Erreur de connexion:", error);
@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function() {
     supabase.auth.getSession()
         .then(({ data: { session } }) => {
             if (session?.user) {
-                window.location.href = "./home.html";
+                window.location.href = "./index.html";
             }
         })
         .catch(console.error);
