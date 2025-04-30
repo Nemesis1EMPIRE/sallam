@@ -1067,36 +1067,89 @@
     }
   };
 
-  // Fonction d'affichage d'un article
+  // Fonction d'affichage d'un article modifiée
   const afficherArticle = (article) => {
     const container = document.getElementById('productList');
     const div = document.createElement('div');
     div.className = 'product';
     
-    // URL optimisée avec transformations Supabase
-    const imageUrl = article.image_url.includes('/storage/v1/object/public/')
-      ? article.image_url.replace('/storage/v1/object/public/', '/storage/v1/render/image/public/') + 
-        '?width=400&height=300&quality=80'
-      : article.image_url;
+    // Utilisation de l'URL originale pour la compatibilité
+    const imageUrl = article.image_url;
     
     div.innerHTML = `
-      <div class="image-placeholder">
-        <i class="fas fa-image" style="font-size: 24px;"></i>
+      <div class="product-image-container">
+        <div class="image-placeholder">
+          <i class="fas fa-image" style="font-size: 24px;"></i>
+        </div>
+        <img data-src="${imageUrl}" alt="${article.titre}" class="product-image" 
+             loading="lazy" decoding="async"
+             onload="this.classList.add('loaded'); this.previousElementSibling.style.display='none'"
+             onerror="this.onerror=null; this.previousElementSibling.style.display='flex'">
       </div>
-      <img data-src="${imageUrl}" alt="${article.titre}" class="product-image" 
-           loading="lazy" decoding="async"
-           onerror="this.onerror=null; this.parentNode.querySelector('.image-placeholder').style.display='flex'; this.style.display='none'">
       <div class="product-info">
         <h3 class="product-title">${article.titre}</h3>
         <p class="product-description">${article.description}</p>
         <span class="product-category">${article.categorie}</span>
         <p class="product-price">${article.prix.toLocaleString()} FCFA</p>
-        <button class="contact-btn">
+        <button class="contact-btn" data-user-id="${article.user_id}" data-article-id="${article.id}">
           <i class="fas fa-envelope"></i> Contacter
         </button>
       </div>
     `;
     container.prepend(div);
+    
+    // Gestion du clic sur le bouton Contacter
+    const contactBtn = div.querySelector('.contact-btn');
+    contactBtn.addEventListener('click', () => ouvrirMessagerie(article.user_id, article.id));
+  };
+
+  // Nouvelle fonction pour ouvrir la messagerie
+  const ouvrirMessagerie = async (vendeurId, articleId) => {
+    try {
+      // 1. Vérifier si l'utilisateur est connecté
+      const { data: { user }, error: authError } = await supabase.auth.getUser();
+      
+      if (authError || !user) {
+        alert("Veuillez vous connecter pour envoyer un message");
+        window.location.href = "login.html";
+        return;
+      }
+
+      // 2. Vérifier si une conversation existe déjà
+      const { data: existingConversation, error: convError } = await supabase
+        .from('conversations')
+        .select('id')
+        .or(`and(user1.eq.${user.id},user2.eq.${vendeurId}),and(user1.eq.${vendeurId},user2.eq.${user.id})`)
+        .single();
+
+      let conversationId;
+
+      if (convError || !existingConversation) {
+        // 3. Créer une nouvelle conversation si elle n'existe pas
+        const { data: newConversation, error: createError } = await supabase
+          .from('conversations')
+          .insert([{
+            user1: user.id,
+            user2: vendeurId,
+            article_id: articleId,
+            created_at: new Date().toISOString()
+          }])
+          .select()
+          .single();
+
+        if (createError) throw createError;
+        conversationId = newConversation.id;
+      } else {
+        conversationId = existingConversation.id;
+      }
+
+      // 4. Rediriger vers la page de messagerie avec l'ID de conversation
+      window.location.href = `messages.html?conversation=${conversationId}`;
+
+    } catch (error) {
+      console.error("Erreur lors de l'ouverture de la messagerie:", error);
+      alert("Une erreur est survenue lors de l'ouverture de la messagerie");
+    }
   };
 
   // Initialisation
