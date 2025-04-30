@@ -643,10 +643,173 @@
       justify-content: center;
       color: #ccc;
     }
+       /* Nouveaux styles mobiles */
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column-reverse; /* Contenu principal en premier */
+      }
+
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        top: auto;
+        z-index: 100;
+        border-right: none;
+        border-top: 1px solid #e0e0e0;
+        padding: 10px 15px;
+        display: none; /* Caché par défaut */
+      }
+
+      .sidebar.active {
+        display: block; /* Afficher quand activé */
+      }
+
+      .sidebar-header {
+        display: none;
+      }
+
+      .nav-menu {
+        display: flex;
+        margin: 0;
+      }
+
+      .nav-menu ul {
+        display: flex;
+        width: 100%;
+        justify-content: space-around;
+      }
+
+      .nav-menu li {
+        margin: 0;
+      }
+
+      .nav-menu a, .nav-menu li {
+        flex-direction: column;
+        padding: 8px 5px;
+        font-size: 12px;
+      }
+
+      .nav-menu i {
+        margin-right: 0;
+        margin-bottom: 5px;
+        font-size: 18px;
+      }
+
+      .nav-menu h4 {
+        display: none;
+      }
+
+      .search-bar, 
+      .add-product-btn,
+      .nav-menu:last-child {
+        display: none;
+      }
+
+      .content {
+        padding: 15px;
+        margin-bottom: 60px; /* Espace pour la barre de navigation */
+      }
+
+      .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        margin-bottom: 15px;
+      }
+
+      .filter-options {
+        margin-top: 10px;
+        width: 100%;
+        overflow-x: auto;
+        padding-bottom: 5px;
+      }
+
+      .filter-btn {
+        padding: 6px 12px;
+        font-size: 14px;
+      }
+
+      .products {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 15px;
+      }
+
+      .product-image {
+        height: 120px;
+      }
+
+      /* Menu mobile */
+      .mobile-menu-toggle {
+        display: block;
+        position: fixed;
+        bottom: 15px;
+        right: 15px;
+        width: 50px;
+        height: 50px;
+        background-color: var(--primary-color);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 101;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      }
+
+      /* Modal mobile */
+      #overlay #articleModal {
+        width: 95%;
+        max-width: none;
+        margin: 0 auto;
+        height: 90vh;
+        overflow-y: auto;
+      }
+
+      /* Cacher les éléments non essentiels */
+      .product-description,
+      .product-category {
+        display: none;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .products {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .product-title {
+        font-size: 14px;
+      }
+
+      .product-price {
+        font-size: 14px;
+      }
+
+      .contact-btn {
+        padding: 5px;
+        font-size: 12px;
+      }
+    }
+
+    /* Menu toggle */
+    .mobile-menu-toggle {
+      display: none; /* Caché par défaut */
+    }
+
+    @media (max-width: 768px) {
+      .mobile-menu-toggle {
+        display: flex;
+      }
+    }
   </style>
 </head>
 <body>
-
+<!-- Ajouter ce bouton pour le menu mobile -->
+<button class="mobile-menu-toggle" id="menuToggle">
+  <i class="fas fa-bars"></i>
+</button>
 <div class="container">
   <div class="sidebar">
     <div class="sidebar-header">
@@ -1164,6 +1327,26 @@
         rechercherArticles().catch(console.error);
       }, 300);
     });
+    // Ajouter ce script pour gérer le menu mobile
+  document.addEventListener('DOMContentLoaded', () => {
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.querySelector('.sidebar');
+
+    menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('active');
+      menuToggle.innerHTML = sidebar.classList.contains('active') 
+        ? '<i class="fas fa-times"></i>' 
+        : '<i class="fas fa-bars"></i>';
+    });
+
+    // Fermer le menu quand on clique à l'extérieur
+    document.addEventListener('click', (e) => {
+      if (!sidebar.contains(e.target) && e.target !== menuToggle) {
+        sidebar.classList.remove('active');
+        menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+      }
+    });
+  });
 
     // Autres écouteurs
     document.getElementById('addProductBtn')?.addEventListener('click', openModal);
