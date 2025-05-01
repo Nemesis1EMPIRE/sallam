@@ -1194,15 +1194,15 @@
 
 // Nouvelle fonction pour ouvrir la messagerie
   const ouvrirMessagerie = async (vendeurId, articleId) => {
-    //try {
+    try {
       // 1. Vérifier si l'utilisateur est connecté
-     // const { data: { user }, error: authError } = await supabase.auth.getUser();
+      const { data: { user }, error: authError } = await supabase.auth.getUser();
       
-      //if (authError || !user) {
-        //alert("Veuillez vous connecter pour envoyer un message");
-        //window.location.href = "login.html";
-        //return;
-      //}
+      if (authError || !user) {
+        alert("Veuillez vous connecter pour envoyer un message");
+        window.location.href = "login.html";
+        return;
+      }
 
       // 2. Vérifier si une conversation existe déjà
       const { data: existingConversation, error: convError } = await supabase
