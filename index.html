@@ -1192,42 +1192,48 @@
     contactBtn.addEventListener('click', () => ouvrirMessagerie(article.user_id, article.id));
   };
 
-const ouvrirMessagerie = async (vendeurId, articleId) => {
-  try {
-    // Utilisateur non connecté => générer un ID temporaire ou utiliser "anonyme"
-    const utilisateurId = "anonyme_" + Math.random().toString(36).substring(2, 10);
+// Nouvelle fonction pour ouvrir la messagerie
+  const ouvrirMessagerie = async (vendeurId, articleId) => {
+    //try {
+      // 1. Vérifier si l'utilisateur est connecté
+     // const { data: { user }, error: authError } = await supabase.auth.getUser();
+      
+      //if (authError || !user) {
+        //alert("Veuillez vous connecter pour envoyer un message");
+        //window.location.href = "login.html";
+        //return;
+      //}
 
-    // Vérifier si une conversation existe déjà (anonyme-vendeur)
-    const { data: existingConversation, error: convError } = await supabase
-      .from('conversations')
-      .select('id')
-      .or(`and(user1.eq.${utilisateurId},user2.eq.${vendeurId}),and(user1.eq.${vendeurId},user2.eq.${utilisateurId})`)
-      .single();
-
-    let conversationId;
-
-    if (convError || !existingConversation) {
-      // Créer une nouvelle conversation
-      const { data: newConversation, error: createError } = await supabase
+      // 2. Vérifier si une conversation existe déjà
+      const { data: existingConversation, error: convError } = await supabase
         .from('conversations')
-        .insert([{
-          user1: utilisateurId,
-          user2: vendeurId,
-          article_id: articleId,
-          created_at: new Date().toISOString()
-        }])
-        .select()
+        .select('id')
+        .or(and(user1.eq.${user.id},user2.eq.${vendeurId}),and(user1.eq.${vendeurId},user2.eq.${user.id}))
         .single();
 
-      if (createError) throw createError;
-      conversationId = newConversation.id;
-    } else {
-      conversationId = existingConversation.id;
-    }
+      let conversationId;
 
+      if (convError || !existingConversation) {
+        // 3. Créer une nouvelle conversation si elle n'existe pas
+        const { data: newConversation, error: createError } = await supabase
+          .from('conversations')
+          .insert([{
+            user1: user.id,
+            user2: vendeurId,
+            article_id: articleId,
+            created_at: new Date().toISOString()
+          }])
+          .select()
+          .single();
+
+        if (createError) throw createError;
+        conversationId = newConversation.id;
+      } else {
+        conversationId = existingConversation.id;
+      }
 
       // 4. Rediriger vers la page de messagerie avec l'ID de conversation
-      window.location.href = `messages.html?conversation=${conversationId}`;
+      window.location.href = messages.html?conversation=${conversationId};
 
     } catch (error) {
       console.error("Erreur lors de l'ouverture de la messagerie:", error);
