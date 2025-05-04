@@ -1,4 +1,5 @@
- :root {
+ <style>
+    :root {
       --primary-color: #4361ee;
       --secondary-color: #3a0ca3;
       --accent-color: #f72585;
@@ -439,77 +440,8 @@
       background-color: #d0d0d0;
     }
     
-    /* Premium Modal */
-    #premiumOverlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.7);
-      justify-content: center;
-      align-items: center;
-      z-index: 1001;
-    }
-    
-    .premium-modal {
-      background: white;
-      padding: 30px;
-      border-radius: var(--border-radius);
-      max-width: 500px;
-      text-align: center;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    }
-    
-    .premium-icon {
-      font-size: 50px;
-      color: var(--premium-color);
-      margin-bottom: 20px;
-    }
-    
-    .premium-title {
-      font-size: 24px;
-      margin-bottom: 15px;
-      color: var(--dark-color);
-    }
-    
-    .premium-text {
-      margin-bottom: 25px;
-      color: var(--gray-color);
-      line-height: 1.6;
-    }
-    
-    .premium-actions {
-      display: flex;
-      gap: 15px;
-      justify-content: center;
-    }
-    
-    .premium-btn {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 500;
-      transition: var(--transition);
-    }
-    
-    .premium-btn.secondary {
-      background: #eee;
-      color: var(--dark-color);
-    }
-    
-    .premium-btn.primary {
-      background: var(--premium-color);
-      color: white;
-    }
-    
-    .premium-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-      /* Ajoutez ce style supplémentaire */
+   
+    /* Ajoutez ce style supplémentaire */
     .product-image-container {
       position: relative;
       width: 100%;
@@ -624,7 +556,7 @@
       justify-content: center;
       color: #ccc;
     }
-    /* Mobile First Approach - Adaptations spécifiques */
+/* Mobile First Approach - Adaptations spécifiques */
 @media (max-width: 768px) {
   .container {
     flex-direction: column;
@@ -687,31 +619,19 @@
   }
   
   /* Product card optimizations */
-  .product {
-    display: flex;
-    flex-direction: column;
-  }
+  .products {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+   }
+
+   .product-image {
+     height: 120px;
+   }
+
   
   .product-image-container {
-  position: relative;
-  aspect-ratio: 16/9; /* Maintient le ratio */
-  background: #f5f5f5;
-}
-
-.product-image {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.product-image.loaded {
-  opacity: 1;
-}
+    height: 150px;
+  }
   
   /* Navigation menu optimizations */
   .nav-menu ul {
@@ -803,7 +723,7 @@
   }
   
   .product-image-container {
-    height: 160px;
+    height: 260px;
   }
 }
 
@@ -817,3 +737,4 @@
     font-size: 16px; /* Prevent zoom on focus */
   }
 }
+  </style>
