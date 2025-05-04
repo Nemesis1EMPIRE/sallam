@@ -1,4 +1,7 @@
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+
+<script type="module" nonce="random123">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
   
   // Initialize Supabase
   const supabase = createClient(
@@ -119,6 +122,54 @@ import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js
     document.body.style.overflow = 'auto';
   };
 
+  // Fonction pour compresser une image avant upload
+  const compressImage = async (file) => {
+    return new Promise((resolve) => {
+      if (file.size < 500000) { // Ne pas compresser si < 500KB
+        resolve(file);
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (event) => {
+        const img = new Image();
+        img.src = event.target.result;
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const MAX_WIDTH = 1200;
+          const MAX_HEIGHT = 1200;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > MAX_WIDTH) {
+              height *= MAX_WIDTH / width;
+              width = MAX_WIDTH;
+            }
+          } else {
+            if (height > MAX_HEIGHT) {
+              width *= MAX_HEIGHT / height;
+              height = MAX_HEIGHT;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+
+          canvas.toBlob((blob) => {
+            const compressedFile = new File([blob], file.name, {
+              type: 'image/jpeg',
+              lastModified: Date.now()
+            });
+            resolve(compressedFile);
+          }, 'image/jpeg', 0.7); // Qualité à 70%
+        };
+      };
+    });
+  };
 
   // Fonction pour ajouter un article
   const ajouterArticle = async (e) => {
@@ -152,27 +203,26 @@ import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js
       submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Publication...';
       submitBtn.disabled = true;
 
-      // Compression de l'im
+      // Compression de l'image
+      const compressedImage = await compressImage(imageFile);
 
-    // 1. Upload image
-    const { error: uploadError } = await supabase.storage
-      .from('article-images')
-      .upload(filePath, compressedImage, {
-        cacheControl: '3600',
-        upsert: false,
-        contentType: compressedImage.type
-      });
+      // Upload de l'image
+      const fileExt = compressedImage.name.split('.').pop();
+      const filePath = `articles/${user.id}-${Date.now()}.${fileExt}`;
+      
+      const { error: uploadError } = await supabase.storage
+        .from('article-images')
+        .upload(filePath, compressedImage, {
+          cacheControl: '3600',
+          upsert: false,
+          contentType: compressedImage.type
+        });
     
-    if (uploadError) throw uploadError;
-    
-    // 2. Obtenir l'URL publique
-    const { data: publicUrlData } = supabase.storage
-      .from('article-images')
-      .getPublicUrl(filePath);
-    
-    const publicUrl = publicUrlData.publicUrl;
+      if (uploadError) {
+        console.error("Erreur upload:", uploadError);
+        throw uploadError;
+      }
 
-    
       // Récupération de l'URL optimisée
       const { data: { publicUrl } } = supabase.storage
         .from('article-images')
@@ -232,66 +282,91 @@ import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js
       }
     }
   };
-  
- // Fonction pour obtenir l'URL correcte de l'image
-  const getCorrectImageUrl = (url) => {
-    // Si l'URL est déjà une URL complète, la retourner telle quelle
-    if (url.startsWith('http')) {
-      return url;
-    }
-    
-    // Si c'est un chemin Supabase, construire l'URL complète
-    if (url.startsWith('article-images/')) {
-      const { data: { publicUrl } } = supabase.storage
-        .from('article-images')
-        .getPublicUrl(url);
-      return publicUrl;
-    }
-    
-    // Retourner l'URL d'origine si on ne sait pas comment la traiter
-    return url;
-  };
 
-  // Fonction d'affichage d'un article corrigée
+  // Fonction d'affichage d'un article modifiée
   const afficherArticle = (article) => {
     const container = document.getElementById('productList');
     const div = document.createElement('div');
     div.className = 'product';
     
-    // Obtenir l'URL correcte de l'image
-    const imageUrl = getCorrectImageUrl(article.image_url);
+    // Utilisation de l'URL originale pour la compatibilité
+    const imageUrl = article.image_url;
     
     div.innerHTML = `
       <div class="product-image-container">
         <div class="image-placeholder">
-          <i class="fas fa-image"></i>
+          <i class="fas fa-image" style="font-size: 24px;"></i>
         </div>
-       <img class="product-image" data-src="${image_url}" alt="${titre}"
+        <img data-src="${imageUrl}" alt="${article.titre}" class="product-image" 
              loading="lazy" decoding="async"
              onload="this.classList.add('loaded'); this.previousElementSibling.style.display='none'"
-             onerror="this.onerror=null; this.previousElementSibling.style.display='flex'; console.error('Erreur de chargement de l\'image:', this.src)">
+             onerror="this.onerror=null; this.previousElementSibling.style.display='flex'">
       </div>
       <div class="product-info">
         <h3 class="product-title">${article.titre}</h3>
         <p class="product-description">${article.description}</p>
         <span class="product-category">${article.categorie}</span>
         <p class="product-price">${article.prix.toLocaleString()} FCFA</p>
-        <button class="contact-btn">
+        <button class="contact-btn" data-user-id="${article.user_id}" data-article-id="${article.id}">
           <i class="fas fa-envelope"></i> Contacter
         </button>
       </div>
     `;
     container.prepend(div);
+    
+    // Gestion du clic sur le bouton Contacter
+    const contactBtn = div.querySelector('.contact-btn');
+    contactBtn.addEventListener('click', () => ouvrirMessagerie(article.user_id, article.id));
   };
 
-    
-    // Observer l'image si elle utilise le lazy loading
-    const img = div.querySelector('.product-image');
-    if (img.hasAttribute('data-src') && lazyImageObserver) {
-      lazyImageObserver.observe(img);
+// Nouvelle fonction pour ouvrir la messagerie
+  const ouvrirMessagerie = async (vendeurId, articleId) => {
+    try {
+      // 1. Vérifier si l'utilisateur est connecté
+      const { data: { user }, error: authError } = await supabase.auth.getUser();
+      
+      if (authError || !user) {
+        alert("Veuillez vous connecter pour envoyer un message");
+        window.location.href = "login.html";
+        return;
+      }
+
+      // 2. Vérifier si une conversation existe déjà
+      const { data: existingConversation, error: convError } = await supabase
+        .from('conversations')
+        .select('id')
+        .or(and(user1.eq.${user.id},user2.eq.${vendeurId}),and(user1.eq.${vendeurId},user2.eq.${user.id}))
+        .single();
+
+      let conversationId;
+
+      if (convError || !existingConversation) {
+        // 3. Créer une nouvelle conversation si elle n'existe pas
+        const { data: newConversation, error: createError } = await supabase
+          .from('conversations')
+          .insert([{
+            user1: user.id,
+            user2: vendeurId,
+            article_id: articleId,
+            created_at: new Date().toISOString()
+          }])
+          .select()
+          .single();
+
+        if (createError) throw createError;
+        conversationId = newConversation.id;
+      } else {
+        conversationId = existingConversation.id;
+      }
+
+      // 4. Rediriger vers la page de messagerie avec l'ID de conversation
+      window.location.href = messages.html?conversation=${conversationId};
+
+    } catch (error) {
+      console.error("Erreur lors de l'ouverture de la messagerie:", error);
+      alert("Une erreur est survenue lors de l'ouverture de la messagerie");
     }
   };
-
   // Initialisation
   document.addEventListener('DOMContentLoaded', () => {
     // Initialiser le lazy loading
@@ -304,6 +379,7 @@ import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js
         rechercherArticles().catch(console.error);
       }, 300);
     });
+   
 
     // Autres écouteurs
     document.getElementById('addProductBtn')?.addEventListener('click', openModal);
@@ -323,3 +399,4 @@ import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js
     // Chargement initial
     rechercherArticles().catch(console.error);
   });
+</script>
