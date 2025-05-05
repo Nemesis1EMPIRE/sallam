@@ -16,6 +16,746 @@
   <link rel="stylesheet" href="./sass/vender/bootstrap.min.css">
   <link rel="stylesheet" href="./owlcarousel/owl.theme.default.min.css">
   <link rel="stylesheet" href="./owlcarousel/owl.carousel.min.css">
+   <style>
+    :root {
+      --primary-color: #4361ee;
+      --secondary-color: #3a0ca3;
+      --accent-color: #f72585;
+      --premium-color: #ffaa00;
+      --light-color: #f8f9fa;
+      --dark-color: #212529;
+      --gray-color: #6c757d;
+      --success-color: #4cc9f0;
+      --border-radius: 12px;
+      --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f7fa;
+      color: var(--dark-color);
+      line-height: 1.6;
+    }
+    
+    .container {
+      display: flex;
+      min-height: 100vh;
+    }
+    
+    /* Sidebar Styles */
+    .sidebar {
+      width: 280px;
+      background-color: white;
+      padding: 25px 20px;
+      border-right: 1px solid #e0e0e0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      transition: var(--transition);
+    }
+    
+    .sidebar-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    .sidebar-header img {
+      width: 150px;
+      height: auto;
+      margin-bottom: 10px;
+    }
+    
+    .search-bar {
+      position: relative;
+      margin-bottom: 25px;
+    }
+    
+    .search-bar input {
+      width: 100%;
+      padding: 10px 15px 10px 40px;
+      border-radius: var(--border-radius);
+      border: 1px solid #e0e0e0;
+      font-size: 14px;
+      transition: var(--transition);
+    }
+    
+    .search-bar input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.2);
+    }
+    
+    .search-bar i {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gray-color);
+    }
+    
+    .nav-menu {
+      margin-bottom: 30px;
+    }
+    
+    .nav-menu h4 {
+      font-size: 16px;
+      color: var(--gray-color);
+      margin-bottom: 15px;
+      padding-left: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .nav-menu ul {
+      list-style: none;
+    }
+    
+    .nav-menu li {
+      margin-bottom: 5px;
+    }
+    
+    .nav-menu a, .nav-menu li {
+      display: flex;
+      align-items: center;
+      padding: 12px 15px;
+      border-radius: var(--border-radius);
+      color: var(--dark-color);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+    
+    .nav-menu a:hover, .nav-menu li:hover {
+      background-color: #f0f2f5;
+      color: var(--primary-color);
+    }
+    
+    .nav-menu i {
+      margin-right: 10px;
+      width: 20px;
+      text-align: center;
+    }
+    
+    .add-product-btn {
+      width: 100%;
+      padding: 12px;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .add-product-btn:hover {
+      background-color: var(--secondary-color);
+      transform: translateY(-2px);
+    }
+    
+    .add-product-btn i {
+      margin-right: 8px;
+    }
+    
+    /* Main Content Styles */
+    .content {
+      flex: 1;
+      padding: 30px;
+      background-color: #f5f7fa;
+    }
+    
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    
+    .page-title {
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--dark-color);
+    }
+    
+    .filter-options {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .filter-btn {
+      padding: 8px 15px;
+      background-color: white;
+      border: 1px solid #e0e0e0;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .filter-btn:hover {
+      background-color: #f0f2f5;
+    }
+    
+    .filter-btn.active {
+      background-color: var(--primary-color);
+      color: white;
+      border-color: var(--primary-color);
+    }
+    
+    /* Products Grid */
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 20px;
+    }
+    
+    .product {
+      background-color: white;
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      box-shadow: var(--box-shadow);
+      transition: var(--transition);
+      position: relative;
+    }
+    
+    .product:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .premium-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: linear-gradient(45deg, var(--premium-color), #ff9500);
+      color: white;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: bold;
+      z-index: 1;
+    }
+    
+    .product-image {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      background-color: #f5f5f5;
+      transition: opacity 0.3s ease;
+    }
+    
+    .product-image[loading] {
+      opacity: 0;
+    }
+    
+    .product-image:not([loading]) {
+      opacity: 1;
+    }
+    
+    .product-info {
+      padding: 15px;
+    }
+    
+    .product-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .product-description {
+      color: var(--gray-color);
+      font-size: 14px;
+      margin-bottom: 10px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    
+    .product-price {
+      font-weight: 700;
+      color: var(--primary-color);
+      margin-bottom: 15px;
+    }
+    
+    .product-category {
+      display: inline-block;
+      padding: 4px 8px;
+      background-color: #e9ecef;
+      border-radius: 4px;
+      font-size: 12px;
+      color: var(--gray-color);
+      margin-bottom: 15px;
+    }
+    
+    .contact-btn {
+      width: 100%;
+      padding: 8px;
+      background-color: var(--accent-color);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: var(--transition);
+      font-weight: 500;
+    }
+    
+    .contact-btn:hover {
+      background-color: #d91a6d;
+    }
+    
+    /* Modal Styles */
+    #overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    
+    #articleModal {
+      background: #fff;
+      padding: 25px;
+      border-radius: var(--border-radius);
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .modal-title {
+      font-size: 20px;
+      font-weight: 600;
+    }
+    
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: var(--gray-color);
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #e0e0e0;
+      border-radius: var(--border-radius);
+      font-size: 14px;
+      transition: var(--transition);
+    }
+    
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.2);
+    }
+    
+    textarea.form-control {
+      min-height: 100px;
+      resize: vertical;
+    }
+    
+    .file-upload {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      border: 2px dashed #e0e0e0;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: var(--transition);
+      margin-bottom: 20px;
+    }
+    
+    .file-upload:hover {
+      border-color: var(--primary-color);
+    }
+    
+    .file-upload i {
+      font-size: 40px;
+      color: var(--gray-color);
+      margin-bottom: 10px;
+    }
+    
+    .file-upload span {
+      color: var(--gray-color);
+      text-align: center;
+    }
+    
+    .file-upload input {
+      display: none;
+    }
+    
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .submit-btn {
+      flex: 1;
+      padding: 12px;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: var(--transition);
+      font-weight: 500;
+    }
+    
+    .submit-btn:hover {
+      background-color: var(--secondary-color);
+    }
+    
+    .cancel-btn {
+      flex: 1;
+      padding: 12px;
+      background-color: #e0e0e0;
+      color: var(--dark-color);
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: var(--transition);
+      font-weight: 500;
+    }
+    
+    .cancel-btn:hover {
+      background-color: #d0d0d0;
+    }
+    
+   
+    /* Ajoutez ce style supplémentaire */
+    .product-image-container {
+      position: relative;
+      width: 100%;
+      height: 180px;
+      overflow: hidden;
+      background-color: #f5f5f5;
+    }
+    
+    .product-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: opacity 0.3s ease;
+    }
+    
+    .product-image[loading] {
+      opacity: 0;
+    }
+    
+    .product-image.loaded {
+      opacity: 1;
+    }
+    
+    .image-placeholder {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ccc;
+    }
+    /* Responsive Styles */
+    @media (max-width: 992px) {
+      .sidebar {
+        width: 240px;
+        padding: 20px 15px;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+      
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        border-right: none;
+        border-bottom: 1px solid #e0e0e0;
+      }
+      
+      .content {
+        padding: 20px;
+      }
+      
+      .products {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .products {
+        grid-template-columns: 1fr;
+      }
+      
+      #articleModal, .premium-modal {
+        margin: 20px;
+        padding: 20px;
+      }
+      
+      .premium-actions {
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
+    
+    /* Loading State */
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+    }
+    
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      border-left-color: var(--primary-color);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Image Placeholder */
+    .image-placeholder {
+      width: 100%;
+      height: 180px;
+      background-color: #f5f5f5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ccc;
+    }
+/* Mobile First Approach - Adaptations spécifiques */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+  
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    padding: 15px;
+    border-right: none;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  .sidebar-header img {
+    width: 120px;
+  }
+  
+  .content {
+    padding: 15px;
+  }
+  
+  .products {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  
+  .filter-options {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 5px;
+    display: flex;
+  }
+  
+  .filter-btn {
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  
+  /* Modal adaptations */
+  #articleModal, .premium-modal {
+    width: calc(100% - 30px);
+    margin: 15px;
+    padding: 15px;
+  }
+  
+  .modal-actions, .premium-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .submit-btn, .cancel-btn, .premium-btn {
+    width: 100%;
+  }
+  
+  /* Product card optimizations */
+  .products {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+   }
+
+   .product-image {
+     height: 120px;
+   }
+
+  
+  .product-image-container {
+    height: 150px;
+  }
+  
+  /* Navigation menu optimizations */
+  .nav-menu ul {
+    display: flex;
+    overflow-x: auto;
+    gap: 5px;
+    padding-bottom: 10px;
+  }
+  
+  .nav-menu li {
+    flex-shrink: 0;
+    padding: 8px 12px;
+  }
+  
+  /* Search bar optimization */
+  .search-bar {
+    margin-bottom: 15px;
+  }
+  
+  /* Hide some elements on mobile */
+  .sidebar-header p {
+    display: none;
+  }
+}
+
+/* Very small devices (phones, 480px and down) */
+@media (max-width: 480px) {
+  .product-image-container {
+    height: 120px;
+  }
+  
+  .product-info {
+    padding: 10px;
+  }
+  
+  .product-title {
+    font-size: 15px;
+  }
+  
+  .product-description {
+    font-size: 13px;
+    -webkit-line-clamp: 1;
+  }
+  
+  .product-price {
+    font-size: 14px;
+  }
+  
+  .add-product-btn {
+    padding: 10px;
+    font-size: 14px;
+  }
+  
+  .file-upload {
+    padding: 15px;
+  }
+  
+  .file-upload i {
+    font-size: 30px;
+  }
+  
+  .form-control {
+    padding: 10px;
+  }
+}
+
+/* Orientation-specific adjustments */
+@media (max-width: 768px) and (orientation: landscape) {
+  .sidebar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .products {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Tablet adjustments (768px - 992px) */
+@media (min-width: 769px) and (max-width: 992px) {
+  .sidebar {
+    width: 220px;
+    padding: 20px 10px;
+  }
+  
+  .products {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .product-image-container {
+    height: 260px;
+  }
+}
+
+/* Accessibility improvements for mobile */
+@media (max-width: 768px) {
+  button, .filter-btn, .contact-btn, .nav-menu a {
+    min-height: 44px; /* Tappable area minimum */
+  }
+  
+  input, textarea, select {
+    font-size: 16px; /* Prevent zoom on focus */
+  }
+}
+  </style>
  
 </head>
 <body>
@@ -126,6 +866,408 @@
     </div>
   </div>
 </div>
+  
+
+<script type="module" nonce="random123">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+  
+  // Initialize Supabase
+  const supabase = createClient(
+    'https://ufpmrteapbfukhftrpcv.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVmcG1ydGVhcGJmdWtoZnRycGN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU1Njc2OTcsImV4cCI6MjA2MTE0MzY5N30.GdoHerSP1ij8_m9L9562n5FXvHR7V6J-dxHc-70oPUs'
+  )
+
+  // Variables globales
+  let timeoutSearch;
+  let lazyImageObserver;
+
+  // Fonction pour initialiser l'Intersection Observer
+  const initLazyLoading = () => {
+    if ('IntersectionObserver' in window) {
+      lazyImageObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const img = entry.target;
+            img.src = img.dataset.src;
+            img.removeAttribute('data-src');
+            img.loading = 'eager';
+            lazyImageObserver.unobserve(img);
+          }
+        });
+      }, {
+        rootMargin: '200px 0px' // Charge les images 200px avant qu'elles entrent dans le viewport
+      });
+    }
+  };
+
+  // Fonction de recherche optimisée avec debounce
+  const rechercherArticles = async () => {
+    const searchTerm = document.getElementById('searchInput').value.trim();
+    const productList = document.getElementById('productList');
+    
+    // Afficher le loader pendant la recherche
+    productList.innerHTML = `
+      <div class="loading">
+        <div class="spinner"></div>
+      </div>
+    `;
+    
+    try {
+      let query = supabase
+        .from('articles')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (searchTerm) {
+        query = query.or(
+          `titre.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%,categorie.ilike.%${searchTerm}%`
+        );
+      }
+
+      const { data, error } = await query;
+
+      if (error) throw error;
+
+      productList.innerHTML = '';
+
+      if (data.length === 0) {
+        productList.innerHTML = `
+          <div style="grid-column: 1/-1; text-align: center; padding: 40px;">
+            <i class="fas fa-search" style="font-size: 50px; color: #ddd;"></i>
+            <p>${searchTerm ? `Aucun résultat pour "${searchTerm}"` : 'Aucun article disponible'}</p>
+          </div>
+        `;
+        return;
+      }
+
+      data.forEach(afficherArticle);
+
+      // Observer les nouvelles images
+      document.querySelectorAll('.product-image[data-src]').forEach(img => {
+        if (lazyImageObserver) {
+          lazyImageObserver.observe(img);
+        } else {
+          // Fallback si IntersectionObserver n'est pas supporté
+          img.src = img.dataset.src;
+        }
+      });
+
+    } catch (error) {
+      console.error("Erreur de recherche:", error);
+      productList.innerHTML = `
+        <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #dc3545;">
+          <i class="fas fa-exclamation-triangle"></i>
+          <p>Erreur lors de la recherche</p>
+        </div>
+      `;
+    }
+  };
+
+  // Fonction pour ouvrir le modal
+  const openModal = async (e) => {
+    if (e) e.preventDefault();
+    
+    try {
+      const { data: { user }, error: authError } = await supabase.auth.getUser();
+      
+      if (authError || !user) {
+        alert("Veuillez vous connecter pour ajouter un article");
+        window.location.href = "login.html";
+        return;
+      }
+      
+      document.getElementById('overlay').style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    } catch (error) {
+      console.error("Error opening modal:", error);
+    }
+  };
+  
+  // Fonction pour fermer le modal
+  const closeModal = (e) => {
+    if (e) e.preventDefault();
+    document.getElementById('overlay').style.display = 'none';
+    document.body.style.overflow = 'auto';
+  };
+
+  // Fonction pour compresser une image avant upload
+  const compressImage = async (file) => {
+    return new Promise((resolve) => {
+      if (file.size < 500000) { // Ne pas compresser si < 500KB
+        resolve(file);
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (event) => {
+        const img = new Image();
+        img.src = event.target.result;
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const MAX_WIDTH = 1200;
+          const MAX_HEIGHT = 1200;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > MAX_WIDTH) {
+              height *= MAX_WIDTH / width;
+              width = MAX_WIDTH;
+            }
+          } else {
+            if (height > MAX_HEIGHT) {
+              width *= MAX_HEIGHT / height;
+              height = MAX_HEIGHT;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+
+          canvas.toBlob((blob) => {
+            const compressedFile = new File([blob], file.name, {
+              type: 'image/jpeg',
+              lastModified: Date.now()
+            });
+            resolve(compressedFile);
+          }, 'image/jpeg', 0.7); // Qualité à 70%
+        };
+      };
+    });
+  };
+
+  // Fonction pour ajouter un article
+  const ajouterArticle = async (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+
+    try {
+      const { data: { user }, error: authError } = await supabase.auth.getUser();
+      if (authError || !user) {
+        alert("Session expirée. Veuillez vous reconnecter.");
+        window.location.href = "login.html";
+        return;
+      }
+
+      // Validation des champs
+      const titre = document.getElementById('titre').value.trim();
+      const prix = parseFloat(document.getElementById('prix').value);
+      const description = document.getElementById('description').value.trim();
+      const imageFile = document.getElementById('image').files[0];
+      const categorie = document.getElementById('categorie').value;
+
+      if (!titre || isNaN(prix) || !description || !imageFile || !categorie) {
+        alert("Veuillez remplir tous les champs correctement.");
+        return;
+      }
+
+      // Mise à jour UI
+      const submitBtn = document.getElementById('submitArticleBtn');
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Publication...';
+      submitBtn.disabled = true;
+
+      // Compression de l'image
+      const compressedImage = await compressImage(imageFile);
+
+      // Upload de l'image
+      const fileExt = compressedImage.name.split('.').pop();
+      const filePath = `articles/${user.id}-${Date.now()}.${fileExt}`;
+      
+      const { error: uploadError } = await supabase.storage
+        .from('article-images')
+        .upload(filePath, compressedImage, {
+          cacheControl: '3600',
+          upsert: false,
+          contentType: compressedImage.type
+        });
+    
+      if (uploadError) {
+        console.error("Erreur upload:", uploadError);
+        throw uploadError;
+      }
+
+      // Récupération de l'URL optimisée
+      const { data: { publicUrl } } = supabase.storage
+        .from('article-images')
+        .getPublicUrl(filePath, {
+          transform: {
+            width: 800,
+            height: 600,
+            quality: 80,
+            format: 'auto'
+          }
+        });
+
+      // Insertion avec user_id
+      const { data: article, error: insertError } = await supabase
+        .from('articles')
+        .insert([{
+          titre,
+          prix,
+          description,
+          image_url: publicUrl,
+          categorie,
+          user_id: user.id,
+          created_at: new Date().toISOString()
+        }])
+        .select();
+
+      if (insertError) throw insertError;
+
+      // Succès
+      afficherArticle(article[0]);
+      closeModal();
+      
+      // Message succès
+      const successMsg = document.createElement('div');
+      successMsg.innerHTML = `
+        <div style="position: fixed; bottom: 20px; right: 20px; 
+                 background: var(--success-color); color: white; 
+                 padding: 15px; border-radius: var(--border-radius); 
+                 box-shadow: var(--box-shadow); z-index: 1000;">
+          <i class="fas fa-check-circle"></i> Article publié !
+        </div>
+      `;
+      document.body.appendChild(successMsg);
+      setTimeout(() => successMsg.remove(), 3000);
+
+      // Recharger les articles
+      await rechercherArticles();
+
+    } catch (error) {
+      console.error("Erreur:", error);
+      alert(`Erreur: ${error.message}`);
+    } finally {
+      const submitBtn = document.getElementById('submitArticleBtn');
+      if (submitBtn) {
+        submitBtn.innerHTML = '<i class="fas fa-plus"></i> Publier';
+        submitBtn.disabled = false;
+      }
+    }
+  };
+
+  // Fonction d'affichage d'un article modifiée
+  const afficherArticle = (article) => {
+    const container = document.getElementById('productList');
+    const div = document.createElement('div');
+    div.className = 'product';
+    
+    // Utilisation de l'URL originale pour la compatibilité
+    const imageUrl = article.image_url;
+    
+    div.innerHTML = `
+      <div class="product-image-container">
+        <div class="image-placeholder">
+          <i class="fas fa-image" style="font-size: 24px;"></i>
+        </div>
+        <img data-src="${imageUrl}" alt="${article.titre}" class="product-image" 
+             loading="lazy" decoding="async"
+             onload="this.classList.add('loaded'); this.previousElementSibling.style.display='none'"
+             onerror="this.onerror=null; this.previousElementSibling.style.display='flex'">
+      </div>
+      <div class="product-info">
+        <h3 class="product-title">${article.titre}</h3>
+        <p class="product-description">${article.description}</p>
+        <span class="product-category">${article.categorie}</span>
+        <p class="product-price">${article.prix.toLocaleString()} FCFA</p>
+        <button class="contact-btn" data-user-id="${article.user_id}" data-article-id="${article.id}">
+          <i class="fas fa-envelope"></i> Contacter
+        </button>
+      </div>
+    `;
+    container.prepend(div);
+    
+    // Gestion du clic sur le bouton Contacter
+    const contactBtn = div.querySelector('.contact-btn');
+    contactBtn.addEventListener('click', () => ouvrirMessagerie(article.user_id, article.id));
+  };
+
+// Nouvelle fonction pour ouvrir la messagerie
+  const ouvrirMessagerie = async (vendeurId, articleId) => {
+    try {
+      // 1. Vérifier si l'utilisateur est connecté
+      const { data: { user }, error: authError } = await supabase.auth.getUser();
+      
+      if (authError || !user) {
+        alert("Veuillez vous connecter pour envoyer un message");
+        window.location.href = "login.html";
+        return;
+      }
+
+      // 2. Vérifier si une conversation existe déjà
+      const { data: existingConversation, error: convError } = await supabase
+        .from('conversations')
+        .select('id')
+        .or(and(user1.eq.${user.id},user2.eq.${vendeurId}),and(user1.eq.${vendeurId},user2.eq.${user.id}))
+        .single();
+
+      let conversationId;
+
+      if (convError || !existingConversation) {
+        // 3. Créer une nouvelle conversation si elle n'existe pas
+        const { data: newConversation, error: createError } = await supabase
+          .from('conversations')
+          .insert([{
+            user1: user.id,
+            user2: vendeurId,
+            article_id: articleId,
+            created_at: new Date().toISOString()
+          }])
+          .select()
+          .single();
+
+        if (createError) throw createError;
+        conversationId = newConversation.id;
+      } else {
+        conversationId = existingConversation.id;
+      }
+
+      // 4. Rediriger vers la page de messagerie avec l'ID de conversation
+      window.location.href = messages.html?conversation=${conversationId};
+
+    } catch (error) {
+      console.error("Erreur lors de l'ouverture de la messagerie:", error);
+      alert("Une erreur est survenue lors de l'ouverture de la messagerie");
+    }
+  };
+  // Initialisation
+  document.addEventListener('DOMContentLoaded', () => {
+    // Initialiser le lazy loading
+    initLazyLoading();
+
+    // Écouteur recherche avec debounce
+    document.getElementById('searchInput')?.addEventListener('input', (e) => {
+      clearTimeout(timeoutSearch);
+      timeoutSearch = setTimeout(() => {
+        rechercherArticles().catch(console.error);
+      }, 300);
+    });
+   
+
+    // Autres écouteurs
+    document.getElementById('addProductBtn')?.addEventListener('click', openModal);
+    document.getElementById('submitArticleBtn')?.addEventListener('click', ajouterArticle);
+    document.getElementById('closeModalBtn')?.addEventListener('click', closeModal);
+    document.getElementById('cancelModalBtn')?.addEventListener('click', closeModal);
+    
+    document.getElementById('fileUploadBtn')?.addEventListener('click', () => {
+      document.getElementById('image').click();
+    });
+    
+    document.getElementById('image')?.addEventListener('change', function(e) {
+      const fileName = document.getElementById('fileName');
+      fileName.textContent = this.files[0]?.name || '';
+    });
+
+    // Chargement initial
+    rechercherArticles().catch(console.error);
+  });
+</script>
 
 
 </body>
