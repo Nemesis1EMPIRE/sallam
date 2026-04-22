@@ -3,17 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" 
-          content="default-src 'self';
-                   script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline' 'unsafe-eval';
-                   style-src 'self' https://cdnjs.cloudflare.com 'unsafe-inline';
-                   img-src 'self' data: https:;
-                   font-src 'self' https://cdnjs.cloudflare.com;
-                   connect-src 'self' https://*.supabase.co wss://*.supabase.co;
-                   frame-src 'self'">
     <title>SALLAM - Connexion / Inscription</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* [Gardez tout le CSS précédent] */
         :root {
             --primary-color: #4361ee;
             --secondary-color: #3a0ca3;
@@ -54,7 +47,6 @@
             min-height: 600px;
         }
 
-        /* Section image décorative */
         .auth-decoration {
             flex: 1;
             background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
@@ -119,7 +111,6 @@
             color: var(--success-color);
         }
 
-        /* Section formulaire */
         .auth-form-container {
             flex: 1;
             padding: 50px 40px;
@@ -131,11 +122,6 @@
         .auth-header {
             text-align: center;
             margin-bottom: 30px;
-        }
-
-        .auth-logo {
-            width: 150px;
-            margin-bottom: 20px;
         }
 
         .auth-tabs {
@@ -290,10 +276,6 @@
             transform: none;
         }
 
-        .auth-btn:disabled::before {
-            display: none;
-        }
-
         .spinner {
             width: 20px;
             height: 20px;
@@ -306,53 +288,6 @@
 
         @keyframes spin {
             to { transform: rotate(360deg); }
-        }
-
-        .divider {
-            display: flex;
-            align-items: center;
-            margin: 25px 0;
-            color: var(--gray-color);
-        }
-
-        .divider-line {
-            flex: 1;
-            height: 1px;
-            background: #e0e0e0;
-        }
-
-        .divider-text {
-            padding: 0 15px;
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .social-login {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-        }
-
-        .social-btn {
-            flex: 1;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: var(--border-radius);
-            background: white;
-            color: var(--dark-color);
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .social-btn:hover {
-            border-color: var(--primary-color);
-            background: var(--light-color);
         }
 
         .error-message {
@@ -400,11 +335,6 @@
             font-weight: 500;
         }
 
-        .terms a:hover {
-            text-decoration: underline;
-        }
-
-        /* Responsive */
         @media (max-width: 768px) {
             .auth-container {
                 flex-direction: column;
@@ -422,72 +352,29 @@
             .decoration-features {
                 display: none;
             }
-
-            .social-login {
-                flex-direction: column;
-            }
-        }
-
-        @media (max-width: 480px) {
-            body {
-                padding: 10px;
-            }
-
-            .auth-container {
-                border-radius: 20px;
-            }
-
-            .auth-form-container {
-                padding: 25px 20px;
-            }
-
-            .auth-tabs {
-                gap: 10px;
-            }
-
-            .auth-tab {
-                font-size: 16px;
-                padding: 8px 15px;
-            }
         }
     </style>
 </head>
 <body>
     <div class="auth-container">
-        <!-- Section décorative -->
         <div class="auth-decoration">
             <div class="decoration-content">
                 <div class="decoration-logo">SALLAM</div>
                 <p class="decoration-text">Achetez, vendez et louez en toute simplicité</p>
                 <ul class="decoration-features">
-                    <li>
-                        <i class="fas fa-check-circle"></i>
-                        <span>Des milliers d'articles disponibles</span>
-                    </li>
-                    <li>
-                        <i class="fas fa-check-circle"></i>
-                        <span>Paiement sécurisé</span>
-                    </li>
-                    <li>
-                        <i class="fas fa-check-circle"></i>
-                        <span>Messagerie intégrée</span>
-                    </li>
-                    <li>
-                        <i class="fas fa-check-circle"></i>
-                        <span>Vendeurs vérifiés</span>
-                    </li>
+                    <li><i class="fas fa-check-circle"></i><span>Des milliers d'articles</span></li>
+                    <li><i class="fas fa-check-circle"></i><span>Paiement sécurisé</span></li>
+                    <li><i class="fas fa-check-circle"></i><span>Messagerie intégrée</span></li>
+                    <li><i class="fas fa-check-circle"></i><span>Vendeurs vérifiés</span></li>
                 </ul>
             </div>
         </div>
 
-        <!-- Section formulaire -->
         <div class="auth-form-container">
             <div class="auth-header">
-                <h2 style="display: none;">SALLAM</h2>
-                <div style="font-size: 32px; font-weight: 700; color: var(--primary-color); margin-bottom: 10px;">SALLAM</div>
+                <div style="font-size: 32px; font-weight: 700; color: var(--primary-color);">SALLAM</div>
             </div>
 
-            <!-- Onglets Connexion/Inscription -->
             <div class="auth-tabs">
                 <button class="auth-tab active" id="loginTab">Connexion</button>
                 <button class="auth-tab" id="signupTab">Inscription</button>
@@ -533,16 +420,10 @@
                 </div>
                 <div class="form-group">
                     <div class="input-wrapper">
-                        <i class="fas fa-phone"></i>
-                        <input type="tel" id="signupPhone" class="form-control" placeholder="Téléphone (optionnel)">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-wrapper">
                         <i class="fas fa-lock"></i>
                         <input type="password" id="signupPassword" class="form-control" placeholder="Mot de passe" required>
                     </div>
-                    <div class="password-strength" id="passwordStrengthMeter">
+                    <div class="password-strength">
                         <div class="strength-bar" id="strengthBar"></div>
                     </div>
                     <div class="strength-text" id="strengthText"></div>
@@ -561,41 +442,23 @@
                 <div class="success-message" id="signupSuccess"></div>
                 <div class="terms">
                     En vous inscrivant, vous acceptez nos 
-                    <a href="#">Conditions d'utilisation</a> et notre 
-                    <a href="#">Politique de confidentialité</a>
+                    <a href="#">Conditions d'utilisation</a>
                 </div>
             </form>
-
-            <!-- Séparateur -->
-            <div class="divider">
-                <span class="divider-line"></span>
-                <span class="divider-text">OU</span>
-                <span class="divider-line"></span>
-            </div>
-
-            <!-- Connexion sociale -->
-            <div class="social-login">
-                <button class="social-btn" id="googleLogin">
-                    <i class="fab fa-google"></i>
-                    Google
-                </button>
-                <button class="social-btn" id="facebookLogin">
-                    <i class="fab fa-facebook-f"></i>
-                    Facebook
-                </button>
-            </div>
         </div>
     </div>
 
     <script type="module">
         import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
-        // Configuration Supabase
-        const SUPABASE_URL = 'https://zdwcvquucromiyixvfzg.supabase.co'
+        // ============================================
+        // CONFIGURATION SUPABASE (UTILISEZ LA MÊME URL QUE HOME.HTML)
+        // ============================================
+        const SUPABASE_URL = 'https://zdwcvquucromiyixvfzg.supabase.co'  // ← MÊME URL QUE L'AUTRE PAGE
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpkd2N2cXV1Y3JvbWl5aXh2ZnpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2ODc2OTcsImV4cCI6MjA5MjI2MzY5N30.4Gpie4IQPSGapjC-AgkTAFMRrHfLNhxnF8YxNZq_crk'
         
         const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
-        console.log('✅ Supabase initialisé')
+        console.log('✅ Supabase initialisé:', SUPABASE_URL)
 
         // Éléments DOM
         const loginTab = document.getElementById('loginTab')
@@ -629,7 +492,7 @@
             signupSuccess.classList.remove('show')
         }
 
-        // Vérification de la force du mot de passe 
+        // Force du mot de passe
         const signupPassword = document.getElementById('signupPassword')
         const strengthBar = document.getElementById('strengthBar')
         const strengthText = document.getElementById('strengthText')
@@ -646,7 +509,6 @@
 
         function checkPasswordStrength(password) {
             let score = 0
-            
             if (password.length >= 8) score++
             if (password.length >= 12) score++
             if (/[a-z]/.test(password)) score++
@@ -656,24 +518,19 @@
             
             const percent = (score / 6) * 100
             
-            if (score <= 2) {
-                return { percent, color: '#ef4444', text: 'Faible' }
-            } else if (score <= 4) {
-                return { percent, color: '#f59e0b', text: 'Moyen' }
-            } else {
-                return { percent, color: '#10b981', text: 'Fort' }
-            }
+            if (score <= 2) return { percent, color: '#ef4444', text: 'Faible' }
+            else if (score <= 4) return { percent, color: '#f59e0b', text: 'Moyen' }
+            else return { percent, color: '#10b981', text: 'Fort' }
         }
 
         // ============================================
-        // INSCRIPTION
+        // INSCRIPTION (VERSION CORRIGÉE)
         // ============================================
         document.getElementById('signupForm').addEventListener('submit', async (e) => {
             e.preventDefault()
             
             const name = document.getElementById('signupName').value.trim()
             const email = document.getElementById('signupEmail').value.trim()
-            const phone = document.getElementById('signupPhone').value.trim()
             const password = document.getElementById('signupPassword').value
             const confirmPassword = document.getElementById('signupConfirmPassword').value
             
@@ -681,12 +538,13 @@
             const signupBtnText = document.getElementById('signupBtnText')
             const signupSpinner = document.getElementById('signupSpinner')
             
-            // Validation
+            // Reset messages
             signupError.classList.remove('show')
             signupSuccess.classList.remove('show')
             
+            // Validation
             if (!name || !email || !password || !confirmPassword) {
-                showSignupError('Veuillez remplir tous les champs obligatoires')
+                showSignupError('Veuillez remplir tous les champs')
                 return
             }
             
@@ -700,8 +558,8 @@
                 return
             }
             
-            if (password.length < 8) {
-                showSignupError('Le mot de passe doit contenir au moins 8 caractères')
+            if (password.length < 6) {
+                showSignupError('Le mot de passe doit contenir au moins 6 caractères')
                 return
             }
             
@@ -716,6 +574,8 @@
             signupSpinner.style.display = 'inline-block'
             
             try {
+                console.log('📝 Tentative d\'inscription:', { name, email })
+                
                 // 1. Créer l'utilisateur dans Supabase Auth
                 const { data: authData, error: authError } = await supabase.auth.signUp({
                     email,
@@ -723,38 +583,61 @@
                     options: {
                         data: {
                             full_name: name,
-                            phone: phone || null
+                            display_name: name
                         }
                     }
                 })
                 
-                if (authError) throw authError
-                
-                if (!authData.user) {
-                    throw new Error('Erreur lors de la création du compte')
+                if (authError) {
+                    console.error('❌ Erreur auth:', authError)
+                    throw authError
                 }
                 
-                console.log('✅ Compte créé:', authData.user)
+                console.log('✅ Utilisateur créé dans Auth:', authData)
                 
-                // 2. Créer le profil utilisateur dans la table "profiles"
-                const { error: profileError } = await supabase
-                    .from('profiles')
-                    .insert([{
-                        id: authData.user.id,
-                        full_name: name,
-                        email: email,
-                        phone: phone || null,
-                        created_at: new Date().toISOString(),
-                        updated_at: new Date().toISOString()
-                    }])
+                // 2. Attendre un peu que l'utilisateur soit complètement créé
+                await new Promise(resolve => setTimeout(resolve, 1000))
                 
-                if (profileError) {
-                    console.warn('⚠️ Erreur création profil:', profileError)
-                    // Ne pas bloquer l'inscription si le profil échoue
+                // 3. Insérer dans la table users (ou profiles)
+                if (authData.user) {
+                    const { data: userData, error: userError } = await supabase
+                        .from('users')  // Essayez d'abord 'users'
+                        .insert([{
+                            id: authData.user.id,
+                            email: email,
+                            full_name: name,
+                            created_at: new Date().toISOString()
+                        }])
+                        .select()
+                    
+                    if (userError) {
+                        console.warn('⚠️ Erreur insertion users:', userError)
+                        
+                        // Essayer avec la table 'profiles'
+                        const { error: profileError } = await supabase
+                            .from('profiles')
+                            .insert([{
+                                id: authData.user.id,
+                                email: email,
+                                full_name: name,
+                                created_at: new Date().toISOString()
+                            }])
+                        
+                        if (profileError) {
+                            console.warn('⚠️ Erreur insertion profiles:', profileError)
+                            // On continue même si le profil échoue
+                        } else {
+                            console.log('✅ Profil créé dans profiles')
+                        }
+                    } else {
+                        console.log('✅ Utilisateur créé dans users:', userData)
+                    }
                 }
                 
-                // Afficher le message de succès
-                signupSuccess.textContent = '✅ Inscription réussie ! Vérifiez votre email pour confirmer votre compte.'
+                // Succès !
+                signupSuccess.textContent = authData.user?.identities?.length === 0 
+                    ? '✅ Compte créé ! Vous pouvez maintenant vous connecter.'
+                    : '✅ Inscription réussie ! Vérifiez votre email pour confirmer votre compte.'
                 signupSuccess.classList.add('show')
                 
                 // Réinitialiser le formulaire
@@ -762,10 +645,12 @@
                 strengthBar.style.width = '0%'
                 strengthText.textContent = ''
                 
-                // Basculer vers l'onglet connexion après 3 secondes
+                // Basculer vers connexion après 2 secondes
                 setTimeout(() => {
                     loginTab.click()
-                }, 3000)
+                    // Pré-remplir l'email
+                    document.getElementById('loginEmail').value = email
+                }, 2000)
                 
             } catch (error) {
                 console.error('❌ Erreur inscription:', error)
@@ -775,9 +660,11 @@
                 if (error.message.includes('User already registered')) {
                     errorMessage = 'Cette adresse e-mail est déjà utilisée'
                 } else if (error.message.includes('Password')) {
-                    errorMessage = 'Le mot de passe ne respecte pas les critères de sécurité'
+                    errorMessage = 'Le mot de passe doit contenir au moins 6 caractères'
                 } else if (error.message.includes('Email')) {
                     errorMessage = 'Adresse e-mail invalide'
+                } else if (error.message.includes('Database')) {
+                    errorMessage = 'Erreur base de données. L\'utilisateur a été créé mais le profil n\'a pas pu être enregistré.'
                 }
                 
                 showSignupError(errorMessage)
@@ -806,7 +693,6 @@
             const loginBtnText = document.getElementById('loginBtnText')
             const loginSpinner = document.getElementById('loginSpinner')
             
-            // Validation
             loginError.classList.remove('show')
             
             if (!email || !password) {
@@ -814,12 +700,13 @@
                 return
             }
             
-            // UI loading
             loginBtn.disabled = true
             loginBtnText.textContent = 'Connexion en cours...'
             loginSpinner.style.display = 'inline-block'
             
             try {
+                console.log('🔑 Tentative de connexion:', email)
+                
                 const { data, error } = await supabase.auth.signInWithPassword({
                     email,
                     password
@@ -829,14 +716,13 @@
                 
                 console.log('✅ Connecté:', data.user)
                 
-                // Redirection vers la page d'accueil
-                window.location.href = './home.html'
+                // Redirection
+                window.location.href = './index.html'  // ou home.html
                 
             } catch (error) {
                 console.error('❌ Erreur connexion:', error)
                 
                 let errorMessage = 'Erreur de connexion'
-                
                 if (error.message.includes('Invalid login credentials')) {
                     errorMessage = 'Email ou mot de passe incorrect'
                 } else if (error.message.includes('Email not confirmed')) {
@@ -856,9 +742,7 @@
             loginError.classList.add('show')
         }
         
-        // ============================================
-        // MOT DE PASSE OUBLIÉ
-        // ============================================
+        // Mot de passe oublié
         document.getElementById('forgotPasswordLink').addEventListener('click', async (e) => {
             e.preventDefault()
             
@@ -869,88 +753,31 @@
                 return
             }
             
-            if (!isValidEmail(email)) {
-                showLoginError('Adresse e-mail invalide')
-                return
-            }
-            
             try {
-                const { error } = await supabase.auth.resetPasswordForEmail(email, {
-                    redirectTo: window.location.origin + '/reset-password.html'
-                })
-                
+                const { error } = await supabase.auth.resetPasswordForEmail(email)
                 if (error) throw error
                 
                 alert('✅ Un email de réinitialisation a été envoyé à ' + email)
-                
             } catch (error) {
-                console.error('❌ Erreur réinitialisation:', error)
                 showLoginError('Erreur lors de l\'envoi de l\'email')
             }
         })
         
-        // ============================================
-        // CONNEXION SOCIALE
-        // ============================================
-        document.getElementById('googleLogin').addEventListener('click', async () => {
-            try {
-                const { data, error } = await supabase.auth.signInWithOAuth({
-                    provider: 'google',
-                    options: {
-                        redirectTo: window.location.origin + '/home.html'
-                    }
-                })
-                
-                if (error) throw error
-                
-            } catch (error) {
-                console.error('❌ Erreur Google:', error)
-                showLoginError('Erreur lors de la connexion avec Google')
-            }
-        })
-        
-        document.getElementById('facebookLogin').addEventListener('click', async () => {
-            try {
-                const { data, error } = await supabase.auth.signInWithOAuth({
-                    provider: 'facebook',
-                    options: {
-                        redirectTo: window.location.origin + '/home.html'
-                    }
-                })
-                
-                if (error) throw error
-                
-            } catch (error) {
-                console.error('❌ Erreur Facebook:', error)
-                showLoginError('Erreur lors de la connexion avec Facebook')
-            }
-        })
-        
-        // ============================================
-        // UTILITAIRES
-        // ============================================
         function isValidEmail(email) {
             return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
         }
         
-        // Vérifier si l'utilisateur est déjà connecté
+        // Vérifier session existante
         async function checkSession() {
-            try {
-                const { data: { session } } = await supabase.auth.getSession()
-                
-                if (session?.user) {
-                    console.log('👤 Session existante, redirection...')
-                    window.location.href = './home.html'
-                }
-            } catch (error) {
-                console.error('Erreur vérification session:', error)
+            const { data: { session } } = await supabase.auth.getSession()
+            if (session?.user) {
+                console.log('👤 Session existante, redirection...')
+                window.location.href = './index.html'
             }
         }
         
-        // Initialisation
         checkSession()
-        
-        console.log('🚀 Page d\'authentification prête')
+        console.log('🚀 Page prête')
     </script>
 </body>
 </html>
