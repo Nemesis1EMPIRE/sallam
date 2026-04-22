@@ -7,812 +7,614 @@
       content="default-src 'self';
                script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline' 'unsafe-eval';
                style-src 'self' https://cdnjs.cloudflare.com 'unsafe-inline';
-               img-src 'self' data: https://ufpmrteapbfukhftrpcv.supabase.co;
+               img-src 'self' data: https: blob:;
                font-src 'self' https://cdnjs.cloudflare.com;
-               connect-src 'self' https://ufpmrteapbfukhftrpcv.supabase.co;
+               connect-src 'self' https://*.supabase.co wss://*.supabase.co;
                frame-src 'self'">
-  <title>SALLAM</title>
+  <title>SALLAM - Marketplace</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="./sass/vender/bootstrap.min.css">
-  <link rel="stylesheet" href="./owlcarousel/owl.theme.default.min.css">
-  <link rel="stylesheet" href="./owlcarousel/owl.carousel.min.css">
-   <style>
-   /* ============================================
-   SALLAM — Marketplace CSS
-   Design: Maghreb Modern — chaud, net, premium
-   ============================================ */
-
-@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
-
-/* ── Variables ─────────────────────────────── */
-:root {
-  --primary:       #2563eb;
-  --primary-dark:  #1d4ed8;
-  --primary-light: #eff6ff;
-  --accent:        #f43f5e;
-  --accent-dark:   #e11d48;
-  --premium:       #f59e0b;
-
-  --bg:            #f1f5f9;
-  --surface:       #ffffff;
-  --surface-2:     #f8fafc;
-  --border:        #e2e8f0;
-  --border-hover:  #cbd5e1;
-
-  --text-1:        #0f172a;
-  --text-2:        #475569;
-  --text-3:        #94a3b8;
-
-  --radius-sm:     8px;
-  --radius:        14px;
-  --radius-lg:     20px;
-  --radius-xl:     28px;
-
-  --shadow-sm:     0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
-  --shadow:        0 4px 16px rgba(0,0,0,.08), 0 1px 4px rgba(0,0,0,.04);
-  --shadow-lg:     0 16px 40px rgba(0,0,0,.12), 0 4px 12px rgba(0,0,0,.06);
-  --shadow-accent: 0 8px 24px rgba(244,63,94,.25);
-  --shadow-primary:0 8px 24px rgba(37,99,235,.25);
-
-  --transition:    all .22s cubic-bezier(.4,0,.2,1);
-  --font:          'Sora', sans-serif;
-  --font-body:     'DM Sans', sans-serif;
-}
-
-/* ── Reset ─────────────────────────────────── */
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-
-html { scroll-behavior: smooth; }
-
-body {
-  font-family: var(--font-body);
-  background: var(--bg);
-  color: var(--text-1);
-  line-height: 1.6;
-  min-height: 100vh;
-  -webkit-font-smoothing: antialiased;
-}
-
-/* ── Scrollbar ─────────────────────────────── */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: var(--border-hover); border-radius: 99px; }
-::-webkit-scrollbar-thumb:hover { background: var(--text-3); }
-
-/* ── Layout ────────────────────────────────── */
-.container {
-  display: flex;
-  min-height: 100vh;
-}
-
-/* ── Sidebar ───────────────────────────────── */
-.sidebar {
-  width: 270px;
-  flex-shrink: 0;
-  background: var(--surface);
-  border-right: 1px solid var(--border);
-  padding: 28px 20px;
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-.sidebar-header {
-  text-align: center;
-}
-
-.sidebar-header img {
-  width: 130px;
-  height: auto;
-  filter: drop-shadow(0 2px 8px rgba(37,99,235,.15));
-}
-
-.sidebar-header p {
-  font-size: 12px;
-  color: var(--text-3);
-  margin-top: 8px;
-  font-family: var(--font-body);
-  font-weight: 300;
-  letter-spacing: .3px;
-}
-
-/* Search */
-.search-bar {
-  position: relative;
-}
-
-.search-bar input {
-  width: 100%;
-  padding: 11px 16px 11px 42px;
-  border: 1.5px solid var(--border);
-  border-radius: var(--radius);
-  font-size: 13.5px;
-  font-family: var(--font-body);
-  background: var(--surface-2);
-  color: var(--text-1);
-  transition: var(--transition);
-}
-
-.search-bar input::placeholder { color: var(--text-3); }
-
-.search-bar input:focus {
-  outline: none;
-  border-color: var(--primary);
-  background: var(--surface);
-  box-shadow: 0 0 0 3px rgba(37,99,235,.1);
-}
-
-.search-bar i {
-  position: absolute;
-  left: 14px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--text-3);
-  font-size: 13px;
-  pointer-events: none;
-  transition: var(--transition);
-}
-
-.search-bar input:focus ~ i,
-.search-bar:focus-within i { color: var(--primary); }
-
-/* Add button */
-.add-product-btn {
-  width: 100%;
-  padding: 13px 16px;
-  background: var(--primary);
-  color: #fff;
-  border: none;
-  border-radius: var(--radius);
-  font-family: var(--font);
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: var(--transition);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  box-shadow: var(--shadow-primary);
-  letter-spacing: .2px;
-}
-
-.add-product-btn:hover {
-  background: var(--primary-dark);
-  transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(37,99,235,.35);
-}
-
-.add-product-btn:active { transform: translateY(0); }
-
-/* Nav menu */
-.nav-menu h4 {
-  font-size: 10px;
-  font-family: var(--font);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1.2px;
-  color: var(--text-3);
-  padding: 0 10px;
-  margin-bottom: 8px;
-}
-
-.nav-menu ul { list-style: none; display: flex; flex-direction: column; gap: 3px; }
-
-.nav-menu a {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 11px 14px;
-  border-radius: var(--radius-sm);
-  color: var(--text-2);
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 500;
-  transition: var(--transition);
-}
-
-.nav-menu a:hover {
-  background: var(--primary-light);
-  color: var(--primary);
-}
-
-.nav-menu a.active {
-  background: var(--primary-light);
-  color: var(--primary);
-}
-
-.nav-menu i {
-  width: 18px;
-  text-align: center;
-  font-size: 14px;
-}
-
-/* ── Main content ──────────────────────────── */
-.content {
-  flex: 1;
-  padding: 36px 32px;
-  min-width: 0;
-}
-
-/* Page header */
-.page-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 28px;
-}
-
-.page-title {
-  font-family: var(--font);
-  font-size: 26px;
-  font-weight: 700;
-  color: var(--text-1);
-  letter-spacing: -.4px;
-}
-
-.filter-options {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.filter-btn {
-  padding: 8px 16px;
-  background: var(--surface);
-  border: 1.5px solid var(--border);
-  border-radius: 99px;
-  font-size: 13px;
-  font-family: var(--font-body);
-  font-weight: 500;
-  color: var(--text-2);
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.filter-btn:hover {
-  border-color: var(--primary);
-  color: var(--primary);
-}
-
-.filter-btn.active {
-  background: var(--primary);
-  border-color: var(--primary);
-  color: #fff;
-  box-shadow: var(--shadow-primary);
-}
-
-/* ── Products grid ─────────────────────────── */
-.products {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-  gap: 20px;
-}
-
-/* ── Product card ──────────────────────────── */
-.product {
-  background: var(--surface);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  box-shadow: var(--shadow-sm);
-  border: 1px solid var(--border);
-  transition: var(--transition);
-  position: relative;
-  display: flex;
-  flex-direction: column;
-}
-
-.product:hover {
-  transform: translateY(-6px);
-  box-shadow: var(--shadow-lg);
-  border-color: transparent;
-}
-
-.premium-badge {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  background: linear-gradient(135deg, var(--premium), #ff9500);
-  color: #fff;
-  padding: 4px 10px;
-  border-radius: 99px;
-  font-size: 11px;
-  font-weight: 700;
-  font-family: var(--font);
-  letter-spacing: .3px;
-  z-index: 2;
-  box-shadow: 0 4px 12px rgba(245,158,11,.4);
-}
-
-/* Image container */
-.product-image-container {
-  position: relative;
-  width: 100%;
-  height: 190px;
-  overflow: hidden;
-  background: var(--surface-2);
-}
-
-.image-placeholder {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--border-hover);
-  font-size: 32px;
-}
-
-.product-image {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0;
-  transition: opacity .4s ease, transform .4s ease;
-}
-
-.product-image.loaded { opacity: 1; }
-
-.product:hover .product-image { transform: scale(1.04); }
-
-/* Product info */
-.product-info {
-  padding: 16px 18px 18px;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  gap: 6px;
-}
-
-.product-title {
-  font-family: var(--font);
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--text-1);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  letter-spacing: -.2px;
-}
-
-.product-description {
-  color: var(--text-2);
-  font-size: 13px;
-  line-height: 1.5;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  flex: 1;
-}
-
-.product-category {
-  display: inline-flex;
-  align-items: center;
-  padding: 3px 10px;
-  background: var(--primary-light);
-  color: var(--primary);
-  border-radius: 99px;
-  font-size: 11.5px;
-  font-weight: 600;
-  font-family: var(--font);
-  letter-spacing: .2px;
-  width: fit-content;
-}
-
-.product-price {
-  font-family: var(--font);
-  font-size: 17px;
-  font-weight: 700;
-  color: var(--text-1);
-  letter-spacing: -.3px;
-}
-
-.contact-btn {
-  width: 100%;
-  padding: 10px;
-  background: var(--accent);
-  color: #fff;
-  border: none;
-  border-radius: var(--radius-sm);
-  font-family: var(--font);
-  font-size: 13.5px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: var(--transition);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  box-shadow: var(--shadow-accent);
-  margin-top: 4px;
-}
-
-.contact-btn:hover {
-  background: var(--accent-dark);
-  transform: translateY(-1px);
-  box-shadow: 0 10px 28px rgba(244,63,94,.35);
-}
-
-.contact-btn:active { transform: none; }
-
-/* ── Modal ─────────────────────────────────── */
-#overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(15,23,42,.55);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-  padding: 16px;
-  animation: fadeIn .2s ease;
-}
-
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-#articleModal {
-  background: var(--surface);
-  padding: 32px;
-  border-radius: var(--radius-xl);
-  width: 100%;
-  max-width: 480px;
-  box-shadow: var(--shadow-lg);
-  animation: slideUp .25s cubic-bezier(.4,0,.2,1);
-  max-height: 90vh;
-  overflow-y: auto;
-}
-
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
-}
-
-.modal-title {
-  font-family: var(--font);
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--text-1);
-  letter-spacing: -.3px;
-}
-
-.close-btn {
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  background: var(--surface-2);
-  border-radius: 99px;
-  font-size: 18px;
-  color: var(--text-2);
-  cursor: pointer;
-  transition: var(--transition);
-  line-height: 1;
-}
-
-.close-btn:hover { background: var(--border); color: var(--text-1); }
-
-/* Form elements */
-.form-group { margin-bottom: 18px; }
-
-.form-group label {
-  display: block;
-  font-family: var(--font);
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-1);
-  margin-bottom: 7px;
-  letter-spacing: .1px;
-}
-
-.form-control {
-  width: 100%;
-  padding: 12px 14px;
-  border: 1.5px solid var(--border);
-  border-radius: var(--radius-sm);
-  font-size: 14px;
-  font-family: var(--font-body);
-  color: var(--text-1);
-  background: var(--surface-2);
-  transition: var(--transition);
-  appearance: none;
-  -webkit-appearance: none;
-}
-
-.form-control::placeholder { color: var(--text-3); }
-
-.form-control:focus {
-  outline: none;
-  border-color: var(--primary);
-  background: var(--surface);
-  box-shadow: 0 0 0 3px rgba(37,99,235,.1);
-}
-
-textarea.form-control {
-  min-height: 96px;
-  resize: vertical;
-  line-height: 1.6;
-}
-
-select.form-control {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 14px center;
-  padding-right: 36px;
-  cursor: pointer;
-}
-
-/* File upload */
-.file-upload {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  padding: 24px 20px;
-  border: 2px dashed var(--border);
-  border-radius: var(--radius);
-  cursor: pointer;
-  transition: var(--transition);
-  background: var(--surface-2);
-}
-
-.file-upload:hover {
-  border-color: var(--primary);
-  background: var(--primary-light);
-}
-
-.file-upload i {
-  font-size: 32px;
-  color: var(--text-3);
-  transition: var(--transition);
-}
-
-.file-upload:hover i { color: var(--primary); }
-
-.file-upload span {
-  font-size: 13px;
-  color: var(--text-3);
-  text-align: center;
-}
-
-.file-upload:hover span { color: var(--primary); }
-
-#fileName {
-  font-size: 12px;
-  color: var(--text-3);
-  margin-top: 6px;
-}
-
-/* Modal actions */
-.modal-actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 4px;
-}
-
-.submit-btn {
-  flex: 1;
-  padding: 13px;
-  background: var(--primary);
-  color: #fff;
-  border: none;
-  border-radius: var(--radius-sm);
-  font-family: var(--font);
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: var(--transition);
-  box-shadow: var(--shadow-primary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-}
-
-.submit-btn:hover {
-  background: var(--primary-dark);
-  transform: translateY(-1px);
-}
-
-.submit-btn:disabled {
-  opacity: .6;
-  cursor: not-allowed;
-  transform: none;
-}
-
-.cancel-btn {
-  flex: 1;
-  padding: 13px;
-  background: var(--surface-2);
-  color: var(--text-2);
-  border: 1.5px solid var(--border);
-  border-radius: var(--radius-sm);
-  font-family: var(--font);
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: var(--transition);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-}
-
-.cancel-btn:hover {
-  background: var(--border);
-  color: var(--text-1);
-}
-
-/* ── Loading ────────────────────────────────── */
-.loading {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 60px;
-  grid-column: 1 / -1;
-}
-
-.spinner {
-  width: 36px;
-  height: 36px;
-  border: 3px solid var(--border);
-  border-top-color: var(--primary);
-  border-radius: 50%;
-  animation: spin .8s linear infinite;
-}
-
-@keyframes spin { to { transform: rotate(360deg); } }
-
-/* ── Empty state ────────────────────────────── */
-.empty-state {
-  grid-column: 1 / -1;
-  text-align: center;
-  padding: 60px 20px;
-  color: var(--text-3);
-}
-
-.empty-state i { font-size: 48px; margin-bottom: 16px; display: block; }
-
-.empty-state p {
-  font-size: 15px;
-  font-family: var(--font);
-  color: var(--text-2);
-}
-
-/* ── Toast notification ─────────────────────── */
-.toast {
-  position: fixed;
-  bottom: 28px;
-  right: 28px;
-  background: #0f172a;
-  color: #fff;
-  padding: 14px 20px;
-  border-radius: var(--radius);
-  font-family: var(--font);
-  font-size: 14px;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  box-shadow: var(--shadow-lg);
-  z-index: 2000;
-  animation: toastIn .3s cubic-bezier(.4,0,.2,1);
-}
-
-.toast i { color: #4ade80; }
-
-@keyframes toastIn {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* ── Responsive ─────────────────────────────── */
-@media (max-width: 1024px) {
-  .sidebar { width: 240px; padding: 22px 16px; }
-  .content { padding: 28px 24px; }
-}
-
-@media (max-width: 768px) {
-  .container { flex-direction: column; }
-
-  .sidebar {
-    width: 100%;
-    height: auto;
-    position: static;
-    border-right: none;
-    border-bottom: 1px solid var(--border);
-    padding: 20px 16px;
-    gap: 16px;
-  }
-
-  .sidebar-header p { display: none; }
-
-  .nav-menu ul {
-    flex-direction: row;
-    overflow-x: auto;
-    gap: 6px;
-    padding-bottom: 4px;
-  }
-
-  .nav-menu li { flex-shrink: 0; }
-
-  .content { padding: 20px 16px; }
-
-  .page-header { flex-direction: column; align-items: flex-start; gap: 14px; }
-
-  .filter-options { width: 100%; overflow-x: auto; }
-
-  .products { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; }
-
-  .product-image-container { height: 150px; }
-
-  #articleModal { padding: 24px 20px; border-radius: var(--radius-lg); }
-}
-
-@media (max-width: 480px) {
-  .products { grid-template-columns: 1fr 1fr; gap: 12px; }
-
-  .product-image-container { height: 130px; }
-
-  .product-info { padding: 12px 14px 14px; }
-
-  .product-title { font-size: 13.5px; }
-
-  .product-price { font-size: 15px; }
-
-  .contact-btn { font-size: 12.5px; padding: 9px; }
-
-  .modal-actions { flex-direction: column; }
-
-  .toast { bottom: 16px; right: 16px; left: 16px; }
-}
-
-/* ── Accessibility ─────────────────────────── */
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
-}
-
-button, a, input, select, textarea {
-  min-height: 44px;
-}
-
-button:focus-visible, a:focus-visible, input:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
-}
+  <style>
+    /* ============================================
+       SALLAM — Marketplace CSS
+       Design: Maghreb Modern — chaud, net, premium
+       ============================================ */
+
+    @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+
+    /* ── Variables ─────────────────────────────── */
+    :root {
+      --primary:       #2563eb;
+      --primary-dark:  #1d4ed8;
+      --primary-light: #eff6ff;
+      --accent:        #f43f5e;
+      --accent-dark:   #e11d48;
+      --premium:       #f59e0b;
+
+      --bg:            #f1f5f9;
+      --surface:       #ffffff;
+      --surface-2:     #f8fafc;
+      --border:        #e2e8f0;
+      --border-hover:  #cbd5e1;
+
+      --text-1:        #0f172a;
+      --text-2:        #475569;
+      --text-3:        #94a3b8;
+
+      --radius-sm:     8px;
+      --radius:        14px;
+      --radius-lg:     20px;
+      --radius-xl:     28px;
+
+      --shadow-sm:     0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+      --shadow:        0 4px 16px rgba(0,0,0,.08), 0 1px 4px rgba(0,0,0,.04);
+      --shadow-lg:     0 16px 40px rgba(0,0,0,.12), 0 4px 12px rgba(0,0,0,.06);
+      --shadow-accent: 0 8px 24px rgba(244,63,94,.25);
+      --shadow-primary:0 8px 24px rgba(37,99,235,.25);
+
+      --transition:    all .22s cubic-bezier(.4,0,.2,1);
+      --font:          'Sora', sans-serif;
+      --font-body:     'DM Sans', sans-serif;
+    }
+
+    /* ── Reset ─────────────────────────────────── */
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text-1);
+      line-height: 1.6;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Scrollbar ─────────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border-hover); border-radius: 99px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-3); }
+
+    /* ── Layout ────────────────────────────────── */
+    .container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ── Sidebar ───────────────────────────────── */
+    .sidebar {
+      width: 270px;
+      flex-shrink: 0;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 28px 20px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .sidebar-header {
+      text-align: center;
+    }
+
+    .sidebar-header h2 {
+      font-family: var(--font);
+      font-size: 24px;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+
+    .sidebar-header p {
+      font-size: 12px;
+      color: var(--text-3);
+      font-family: var(--font-body);
+      font-weight: 300;
+      letter-spacing: .3px;
+    }
+
+    /* Search */
+    .search-bar {
+      position: relative;
+    }
+
+    .search-bar input {
+      width: 100%;
+      padding: 11px 16px 11px 42px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 13.5px;
+      font-family: var(--font-body);
+      background: var(--surface-2);
+      color: var(--text-1);
+      transition: var(--transition);
+    }
+
+    .search-bar input::placeholder { color: var(--text-3); }
+
+    .search-bar input:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: var(--surface);
+      box-shadow: 0 0 0 3px rgba(37,99,235,.1);
+    }
+
+    .search-bar i {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-3);
+      font-size: 13px;
+      pointer-events: none;
+      transition: var(--transition);
+    }
+
+    /* Add button */
+    .add-product-btn {
+      width: 100%;
+      padding: 13px 16px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius);
+      font-family: var(--font);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: var(--shadow-primary);
+      letter-spacing: .2px;
+    }
+
+    .add-product-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(37,99,235,.35);
+    }
+
+    /* Nav menu */
+    .nav-menu ul { 
+      list-style: none; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 3px; 
+    }
+
+    .nav-menu a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 14px;
+      border-radius: var(--radius-sm);
+      color: var(--text-2);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .nav-menu a:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .nav-menu a.active {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    /* ── Main content ──────────────────────────── */
+    .content {
+      flex: 1;
+      padding: 36px 32px;
+      min-width: 0;
+    }
+
+    /* Page header */
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+
+    .page-title {
+      font-family: var(--font);
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--text-1);
+      letter-spacing: -.4px;
+    }
+
+    /* ── Products grid ─────────────────────────── */
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 20px;
+    }
+
+    /* ── Product card ──────────────────────────── */
+    .product {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+      transition: var(--transition);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .product:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-lg);
+      border-color: transparent;
+    }
+
+    .product-image-container {
+      position: relative;
+      width: 100%;
+      height: 190px;
+      overflow: hidden;
+      background: var(--surface-2);
+    }
+
+    .image-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--border-hover);
+      font-size: 32px;
+    }
+
+    .product-image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity .4s ease, transform .4s ease;
+    }
+
+    .product-image.loaded { opacity: 1; }
+
+    .product:hover .product-image { transform: scale(1.04); }
+
+    .product-info {
+      padding: 16px 18px 18px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      gap: 6px;
+    }
+
+    .product-title {
+      font-family: var(--font);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-1);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .product-description {
+      color: var(--text-2);
+      font-size: 13px;
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      flex: 1;
+    }
+
+    .product-category {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px;
+      background: var(--primary-light);
+      color: var(--primary);
+      border-radius: 99px;
+      font-size: 11.5px;
+      font-weight: 600;
+      width: fit-content;
+    }
+
+    .product-price {
+      font-family: var(--font);
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text-1);
+    }
+
+    .contact-btn {
+      width: 100%;
+      padding: 10px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-family: var(--font);
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      box-shadow: var(--shadow-accent);
+      margin-top: 4px;
+    }
+
+    .contact-btn:hover {
+      background: var(--accent-dark);
+      transform: translateY(-1px);
+    }
+
+    /* ── Modal ─────────────────────────────────── */
+    #overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15,23,42,.55);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      padding: 16px;
+    }
+
+    #articleModal {
+      background: var(--surface);
+      padding: 32px;
+      border-radius: var(--radius-xl);
+      width: 100%;
+      max-width: 480px;
+      box-shadow: var(--shadow-lg);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .modal-title {
+      font-family: var(--font);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-1);
+    }
+
+    .close-btn {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      background: var(--surface-2);
+      border-radius: 99px;
+      font-size: 18px;
+      color: var(--text-2);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .close-btn:hover { background: var(--border); color: var(--text-1); }
+
+    .form-group { margin-bottom: 18px; }
+
+    .form-group label {
+      display: block;
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-1);
+      margin-bottom: 7px;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-family: var(--font-body);
+      color: var(--text-1);
+      background: var(--surface-2);
+      transition: var(--transition);
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: var(--surface);
+      box-shadow: 0 0 0 3px rgba(37,99,235,.1);
+    }
+
+    textarea.form-control {
+      min-height: 96px;
+      resize: vertical;
+    }
+
+    select.form-control { cursor: pointer; }
+
+    .file-upload {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 24px 20px;
+      border: 2px dashed var(--border);
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: var(--transition);
+      background: var(--surface-2);
+    }
+
+    .file-upload:hover {
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .file-upload i {
+      font-size: 32px;
+      color: var(--text-3);
+    }
+
+    .file-upload:hover i { color: var(--primary); }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .submit-btn {
+      flex: 1;
+      padding: 13px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-family: var(--font);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: var(--shadow-primary);
+    }
+
+    .submit-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+
+    .submit-btn:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+    }
+
+    .cancel-btn {
+      flex: 1;
+      padding: 13px;
+      background: var(--surface-2);
+      color: var(--text-2);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-family: var(--font);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .cancel-btn:hover {
+      background: var(--border);
+      color: var(--text-1);
+    }
+
+    /* ── Loading ────────────────────────────────── */
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 60px;
+      grid-column: 1 / -1;
+    }
+
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid var(--border);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Empty state ────────────────────────────── */
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-3);
+    }
+
+    /* ── Toast notification ─────────────────────── */
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      background: #0f172a;
+      color: #fff;
+      padding: 14px 20px;
+      border-radius: var(--radius);
+      font-family: var(--font);
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: var(--shadow-lg);
+      z-index: 2000;
+    }
+
+    .toast i { color: #4ade80; }
+
+    /* ── Responsive ─────────────────────────────── */
+    @media (max-width: 768px) {
+      .container { flex-direction: column; }
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: static;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+      .content { padding: 20px 16px; }
+      .page-header { flex-direction: column; align-items: flex-start; gap: 14px; }
+      .products { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; }
+      .product-image-container { height: 150px; }
+    }
+
+    @media (max-width: 480px) {
+      .products { grid-template-columns: 1fr 1fr; }
+      .product-image-container { height: 130px; }
+      .modal-actions { flex-direction: column; }
+    }
   </style>
- 
 </head>
 <body>
-<!-- Ajouter ce bouton pour le menu mobile -->
-
 <div class="container">
   <div class="sidebar">
     <div class="sidebar-header">
-      <img src="./images/logo.png" alt="Logo Marketplace" loading="lazy">
+      <h2>SALLAM</h2>
       <p>Achetez, vendez et louez en toute simplicité</p>
     </div>
     
     <div class="search-bar">
       <i class="fas fa-search"></i>
-      <input type="text" id="searchInput" placeholder="Rechercher un produit..." onkeyup="rechercherArticles()">
+      <input type="text" id="searchInput" placeholder="Rechercher un produit...">
     </div>
     
     <button class="add-product-btn" id="addProductBtn">
@@ -821,28 +623,15 @@ button:focus-visible, a:focus-visible, input:focus-visible {
     
     <div class="nav-menu">
       <ul>
-        <li><a href="index.html"><i class="fas fa-home"></i> Accueil</a></li>
+        <li><a href="index.html" class="active"><i class="fas fa-home"></i> Accueil</a></li>
         <li><a href="./messagerie.html"><i class="fas fa-comments"></i> Messages</a></li>
       </ul>
-    </div>
-    
-    <div class="nav-menu">
-      <!--<h4>Catégories</h4>
-      <ul>
-        <li><i class="fas fa-car"></i> Véhicules</li>
-        <li><i class="fas fa-home"></i> Immobilier</li>
-        <li><i class="fas fa-laptop"></i> Électronique</li>
-        <li><i class="fas fa-running"></i> Sport</li>
-        <li><i class="fas fa-gift"></i> Gratuit</li>
-      </ul>-->
     </div>
   </div>
 
   <div class="content">
     <div class="page-header">
       <h1 class="page-title">Articles récents</h1>
-      <div class="filter-options">
-      </div>
     </div>
     
     <div class="products" id="productList">
@@ -881,9 +670,9 @@ button:focus-visible, a:focus-visible, input:focus-visible {
       <div class="file-upload" id="fileUploadBtn">
         <i class="fas fa-cloud-upload-alt"></i>
         <span>Cliquez pour télécharger une image</span>
-        <input type="file" id="image" accept="image/*">
+        <input type="file" id="image" accept="image/*" style="display: none;">
       </div>
-      <div id="fileName" style="font-size: 12px; color: var(--gray-color);"></div>
+      <div id="fileName" style="font-size: 12px; color: var(--text-3); margin-top: 6px;"></div>
     </div>
     
     <div class="form-group">
@@ -908,217 +697,166 @@ button:focus-visible, a:focus-visible, input:focus-visible {
     </div>
   </div>
 </div>
-  
 
-<script type="module" nonce="random123">
+<script type="module">
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
   
-  // Initialize Supabase
-  const supabase = createClient(
-    'https://zdwcvquucromiyixvfzg.supabase.co/rest/v1/',
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpkd2N2cXV1Y3JvbWl5aXh2ZnpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2ODc2OTcsImV4cCI6MjA5MjI2MzY5N30.4Gpie4IQPSGapjC-AgkTAFMRrHfLNhxnF8YxNZq_crk'
-  )
+  // ============================================
+  // CONFIGURATION SUPABASE (CORRIGÉE)
+  // ============================================
+  const SUPABASE_URL = 'https://zdwcvquucromiyixvfzg.supabase.co'
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpkd2N2cXV1Y3JvbWl5aXh2ZnpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2ODc2OTcsImV4cCI6MjA5MjI2MzY5N30.4Gpie4IQPSGapjC-AgkTAFMRrHfLNhxnF8YxNZq_crk'
+  
+  // Initialisation correcte de Supabase
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+  
+  console.log('✅ Supabase initialisé avec:', SUPABASE_URL)
 
   // Variables globales
-  let timeoutSearch;
-  let lazyImageObserver;
+  let timeoutSearch
+  let lazyImageObserver
 
-  // Fonction pour initialiser l'Intersection Observer
-  const initLazyLoading = () => {
-    if ('IntersectionObserver' in window) {
-      lazyImageObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const img = entry.target;
-            img.src = img.dataset.src;
-            img.removeAttribute('data-src');
-            img.loading = 'eager';
-            lazyImageObserver.unobserve(img);
-          }
-        });
-      }, {
-        rootMargin: '200px 0px' // Charge les images 200px avant qu'elles entrent dans le viewport
-      });
-    }
-  };
-
-  // Fonction de recherche optimisée avec debounce
-  const rechercherArticles = async () => {
-    const searchTerm = document.getElementById('searchInput').value.trim();
-    const productList = document.getElementById('productList');
-    
-    // Afficher le loader pendant la recherche
-    productList.innerHTML = `
-      <div class="loading">
-        <div class="spinner"></div>
-      </div>
-    `;
-    
-    try {
-      let query = supabase
-        .from('articles')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (searchTerm) {
-        query = query.or(
-          `titre.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%,categorie.ilike.%${searchTerm}%`
-        );
-      }
-
-      const { data, error } = await query;
-
-      if (error) throw error;
-
-      productList.innerHTML = '';
-
-      if (data.length === 0) {
-        productList.innerHTML = `
-          <div style="grid-column: 1/-1; text-align: center; padding: 40px;">
-            <i class="fas fa-search" style="font-size: 50px; color: #ddd;"></i>
-            <p>${searchTerm ? `Aucun résultat pour "${searchTerm}"` : 'Aucun article disponible'}</p>
-          </div>
-        `;
-        return;
-      }
-
-      data.forEach(afficherArticle);
-
-      // Observer les nouvelles images
-      document.querySelectorAll('.product-image[data-src]').forEach(img => {
-        if (lazyImageObserver) {
-          lazyImageObserver.observe(img);
-        } else {
-          // Fallback si IntersectionObserver n'est pas supporté
-          img.src = img.dataset.src;
-        }
-      });
-
-    } catch (error) {
-      console.error("Erreur de recherche:", error);
-      productList.innerHTML = `
-        <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #dc3545;">
-          <i class="fas fa-exclamation-triangle"></i>
-          <p>Erreur lors de la recherche</p>
-        </div>
-      `;
-    }
-  };
-
+  // ============================================
+  // FONCTIONS DE LA MODALE
+  // ============================================
+  
   // Fonction pour ouvrir le modal
   const openModal = async (e) => {
-    if (e) e.preventDefault();
+    if (e) e.preventDefault()
+    
+    console.log('🟢 Tentative d\'ouverture de la modale...')
     
     try {
-      const { data: { user }, error: authError } = await supabase.auth.getUser();
+      // Vérification de l'authentification
+      const { data: { user }, error: authError } = await supabase.auth.getUser()
       
+      console.log('Auth check:', { user: user?.email, authError })
+      
+      // Si non connecté, redirection vers login
       if (authError || !user) {
-        alert("Veuillez vous connecter pour ajouter un article");
-        window.location.href = "login.html";
-        return;
+        console.log('🔴 Utilisateur non connecté, redirection...')
+        alert("Veuillez vous connecter pour ajouter un article")
+        window.location.href = "login.html"
+        return
       }
       
-      document.getElementById('overlay').style.display = 'flex';
-      document.body.style.overflow = 'hidden';
+      // Ouvrir la modale
+      document.getElementById('overlay').style.display = 'flex'
+      document.body.style.overflow = 'hidden'
+      console.log('✅ Modale ouverte')
+      
     } catch (error) {
-      console.error("Error opening modal:", error);
+      console.error('❌ Erreur ouverture modale:', error)
+      alert("Erreur lors de l'ouverture du formulaire")
     }
-  };
+  }
   
   // Fonction pour fermer le modal
   const closeModal = (e) => {
-    if (e) e.preventDefault();
-    document.getElementById('overlay').style.display = 'none';
-    document.body.style.overflow = 'auto';
-  };
+    if (e) e.preventDefault()
+    document.getElementById('overlay').style.display = 'none'
+    document.body.style.overflow = 'auto'
+    
+    // Réinitialiser le formulaire
+    document.getElementById('titre').value = ''
+    document.getElementById('prix').value = ''
+    document.getElementById('description').value = ''
+    document.getElementById('image').value = ''
+    document.getElementById('categorie').value = ''
+    document.getElementById('fileName').textContent = ''
+  }
 
-  // Fonction pour compresser une image avant upload
+  // ============================================
+  // FONCTIONS ARTICLES
+  // ============================================
+
+  // Compression d'image
   const compressImage = async (file) => {
     return new Promise((resolve) => {
-      if (file.size < 500000) { // Ne pas compresser si < 500KB
-        resolve(file);
-        return;
+      if (file.size < 500000) {
+        resolve(file)
+        return
       }
 
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
       reader.onload = (event) => {
-        const img = new Image();
-        img.src = event.target.result;
+        const img = new Image()
+        img.src = event.target.result
         img.onload = () => {
-          const canvas = document.createElement('canvas');
-          const MAX_WIDTH = 1200;
-          const MAX_HEIGHT = 1200;
-          let width = img.width;
-          let height = img.height;
+          const canvas = document.createElement('canvas')
+          const MAX_WIDTH = 1200
+          const MAX_HEIGHT = 1200
+          let width = img.width
+          let height = img.height
 
           if (width > height) {
             if (width > MAX_WIDTH) {
-              height *= MAX_WIDTH / width;
-              width = MAX_WIDTH;
+              height *= MAX_WIDTH / width
+              width = MAX_WIDTH
             }
           } else {
             if (height > MAX_HEIGHT) {
-              width *= MAX_HEIGHT / height;
-              height = MAX_HEIGHT;
+              width *= MAX_HEIGHT / height
+              height = MAX_HEIGHT
             }
           }
 
-          canvas.width = width;
-          canvas.height = height;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, width, height);
+          canvas.width = width
+          canvas.height = height
+          const ctx = canvas.getContext('2d')
+          ctx.drawImage(img, 0, 0, width, height)
 
           canvas.toBlob((blob) => {
             const compressedFile = new File([blob], file.name, {
               type: 'image/jpeg',
               lastModified: Date.now()
-            });
-            resolve(compressedFile);
-          }, 'image/jpeg', 0.7); // Qualité à 70%
-        };
-      };
-    });
-  };
+            })
+            resolve(compressedFile)
+          }, 'image/jpeg', 0.7)
+        }
+      }
+    })
+  }
 
-  // Fonction pour ajouter un article
+  // Ajouter un article
   const ajouterArticle = async (e) => {
     if (e) {
-      e.preventDefault();
-      e.stopPropagation();
+      e.preventDefault()
+      e.stopPropagation()
     }
 
+    console.log('📝 Début ajout article...')
+
     try {
-      const { data: { user }, error: authError } = await supabase.auth.getUser();
+      const { data: { user }, error: authError } = await supabase.auth.getUser()
       if (authError || !user) {
-        alert("Session expirée. Veuillez vous reconnecter.");
-        window.location.href = "login.html";
-        return;
+        alert("Session expirée. Veuillez vous reconnecter.")
+        window.location.href = "login.html"
+        return
       }
 
-      // Validation des champs
-      const titre = document.getElementById('titre').value.trim();
-      const prix = parseFloat(document.getElementById('prix').value);
-      const description = document.getElementById('description').value.trim();
-      const imageFile = document.getElementById('image').files[0];
-      const categorie = document.getElementById('categorie').value;
+      // Récupération et validation des champs
+      const titre = document.getElementById('titre').value.trim()
+      const prix = parseFloat(document.getElementById('prix').value)
+      const description = document.getElementById('description').value.trim()
+      const imageFile = document.getElementById('image').files[0]
+      const categorie = document.getElementById('categorie').value
 
       if (!titre || isNaN(prix) || !description || !imageFile || !categorie) {
-        alert("Veuillez remplir tous les champs correctement.");
-        return;
+        alert("Veuillez remplir tous les champs correctement.")
+        return
       }
 
       // Mise à jour UI
-      const submitBtn = document.getElementById('submitArticleBtn');
-      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Publication...';
-      submitBtn.disabled = true;
+      const submitBtn = document.getElementById('submitArticleBtn')
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Publication...'
+      submitBtn.disabled = true
 
-      // Compression de l'image
-      const compressedImage = await compressImage(imageFile);
-
-      // Upload de l'image
-      const fileExt = compressedImage.name.split('.').pop();
-      const filePath = `articles/${user.id}-${Date.now()}.${fileExt}`;
+      // Compression et upload de l'image
+      const compressedImage = await compressImage(imageFile)
+      const fileExt = compressedImage.name.split('.').pop()
+      const filePath = `articles/${user.id}-${Date.now()}.${fileExt}`
       
       const { error: uploadError } = await supabase.storage
         .from('article-images')
@@ -1126,26 +864,19 @@ button:focus-visible, a:focus-visible, input:focus-visible {
           cacheControl: '3600',
           upsert: false,
           contentType: compressedImage.type
-        });
+        })
     
       if (uploadError) {
-        console.error("Erreur upload:", uploadError);
-        throw uploadError;
+        console.error("Erreur upload:", uploadError)
+        throw uploadError
       }
 
-      // Récupération de l'URL optimisée
+      // Récupération de l'URL publique
       const { data: { publicUrl } } = supabase.storage
         .from('article-images')
-        .getPublicUrl(filePath, {
-          transform: {
-            width: 800,
-            height: 600,
-            quality: 80,
-            format: 'auto'
-          }
-        });
+        .getPublicUrl(filePath)
 
-      // Insertion avec user_id
+      // Insertion dans la base de données
       const { data: article, error: insertError } = await supabase
         .from('articles')
         .insert([{
@@ -1157,58 +888,55 @@ button:focus-visible, a:focus-visible, input:focus-visible {
           user_id: user.id,
           created_at: new Date().toISOString()
         }])
-        .select();
+        .select()
 
-      if (insertError) throw insertError;
+      if (insertError) throw insertError
 
-      // Succès
-      afficherArticle(article[0]);
-      closeModal();
+      console.log('✅ Article ajouté:', article[0])
+
+      // Afficher l'article
+      afficherArticle(article[0])
+      closeModal()
       
-      // Message succès
-      const successMsg = document.createElement('div');
-      successMsg.innerHTML = `
-        <div style="position: fixed; bottom: 20px; right: 20px; 
-                 background: var(--success-color); color: white; 
-                 padding: 15px; border-radius: var(--border-radius); 
-                 box-shadow: var(--box-shadow); z-index: 1000;">
-          <i class="fas fa-check-circle"></i> Article publié !
-        </div>
-      `;
-      document.body.appendChild(successMsg);
-      setTimeout(() => successMsg.remove(), 3000);
-
-      // Recharger les articles
-      await rechercherArticles();
+      // Notification de succès
+      afficherToast('Article publié avec succès !', 'success')
 
     } catch (error) {
-      console.error("Erreur:", error);
-      alert(`Erreur: ${error.message}`);
+      console.error('❌ Erreur ajout article:', error)
+      afficherToast(`Erreur: ${error.message}`, 'error')
     } finally {
-      const submitBtn = document.getElementById('submitArticleBtn');
+      const submitBtn = document.getElementById('submitArticleBtn')
       if (submitBtn) {
-        submitBtn.innerHTML = '<i class="fas fa-plus"></i> Publier';
-        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fas fa-plus"></i> Publier'
+        submitBtn.disabled = false
       }
     }
-  };
+  }
 
-  // Fonction d'affichage d'un article modifiée
+  // Afficher un toast de notification
+  const afficherToast = (message, type = 'success') => {
+    const toast = document.createElement('div')
+    toast.className = 'toast'
+    toast.innerHTML = `
+      <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'}"></i>
+      <span>${message}</span>
+    `
+    document.body.appendChild(toast)
+    setTimeout(() => toast.remove(), 3000)
+  }
+
+  // Afficher un article dans la grille
   const afficherArticle = (article) => {
-    const container = document.getElementById('productList');
-    const div = document.createElement('div');
-    div.className = 'product';
-    
-    // Utilisation de l'URL originale pour la compatibilité
-    const imageUrl = article.image_url;
+    const container = document.getElementById('productList')
+    const div = document.createElement('div')
+    div.className = 'product'
     
     div.innerHTML = `
       <div class="product-image-container">
         <div class="image-placeholder">
-          <i class="fas fa-image" style="font-size: 24px;"></i>
+          <i class="fas fa-image"></i>
         </div>
-        <img data-src="${imageUrl}" alt="${article.titre}" class="product-image" 
-             loading="lazy" decoding="async"
+        <img data-src="${article.image_url}" alt="${article.titre}" class="product-image" 
              onload="this.classList.add('loaded'); this.previousElementSibling.style.display='none'"
              onerror="this.onerror=null; this.previousElementSibling.style.display='flex'">
       </div>
@@ -1221,37 +949,93 @@ button:focus-visible, a:focus-visible, input:focus-visible {
           <i class="fas fa-envelope"></i> Contacter
         </button>
       </div>
-    `;
-    container.prepend(div);
+    `
+    container.prepend(div)
     
-    // Gestion du clic sur le bouton Contacter
-    const contactBtn = div.querySelector('.contact-btn');
-    contactBtn.addEventListener('click', () => ouvrirMessagerie(article.user_id, article.id));
-  };
+    // Observer l'image pour lazy loading
+    const img = div.querySelector('.product-image')
+    if (lazyImageObserver) {
+      lazyImageObserver.observe(img)
+    } else {
+      img.src = img.dataset.src
+    }
+    
+    // Gestionnaire pour le bouton contacter
+    div.querySelector('.contact-btn').addEventListener('click', () => {
+      ouvrirMessagerie(article.user_id, article.id)
+    })
+  }
 
-// Nouvelle fonction pour ouvrir la messagerie
-  const ouvrirMessagerie = async (vendeurId, articleId) => {
+  // Rechercher des articles
+  const rechercherArticles = async () => {
+    const searchTerm = document.getElementById('searchInput').value.trim()
+    const productList = document.getElementById('productList')
+    
+    productList.innerHTML = `<div class="loading"><div class="spinner"></div></div>`
+    
     try {
-      // 1. Vérifier si l'utilisateur est connecté
-      const { data: { user }, error: authError } = await supabase.auth.getUser();
-      
-      if (authError || !user) {
-        alert("Veuillez vous connecter pour envoyer un message");
-        window.location.href = "login.html";
-        return;
+      let query = supabase
+        .from('articles')
+        .select('*')
+        .order('created_at', { ascending: false })
+
+      if (searchTerm) {
+        query = query.or(
+          `titre.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%,categorie.ilike.%${searchTerm}%`
+        )
       }
 
-      // 2. Vérifier si une conversation existe déjà
+      const { data, error } = await query
+
+      if (error) throw error
+
+      productList.innerHTML = ''
+
+      if (data.length === 0) {
+        productList.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-search" style="font-size: 48px; margin-bottom: 16px;"></i>
+            <p>${searchTerm ? `Aucun résultat pour "${searchTerm}"` : 'Aucun article disponible'}</p>
+          </div>
+        `
+        return
+      }
+
+      data.forEach(afficherArticle)
+
+    } catch (error) {
+      console.error("Erreur de recherche:", error)
+      productList.innerHTML = `
+        <div class="empty-state" style="color: #dc3545;">
+          <i class="fas fa-exclamation-triangle"></i>
+          <p>Erreur lors du chargement des articles</p>
+        </div>
+      `
+    }
+  }
+
+  // Ouvrir la messagerie
+  const ouvrirMessagerie = async (vendeurId, articleId) => {
+    try {
+      const { data: { user }, error: authError } = await supabase.auth.getUser()
+      
+      if (authError || !user) {
+        alert("Veuillez vous connecter pour envoyer un message")
+        window.location.href = "login.html"
+        return
+      }
+
+      // Vérifier si une conversation existe déjà (SYNTAXE CORRIGÉE)
       const { data: existingConversation, error: convError } = await supabase
         .from('conversations')
         .select('id')
-        .or(and(user1.eq.${user.id},user2.eq.${vendeurId}),and(user1.eq.${vendeurId},user2.eq.${user.id}))
-        .single();
+        .or(`and(user1.eq.${user.id},user2.eq.${vendeurId}),and(user1.eq.${vendeurId},user2.eq.${user.id})`)
+        .single()
 
-      let conversationId;
+      let conversationId
 
       if (convError || !existingConversation) {
-        // 3. Créer une nouvelle conversation si elle n'existe pas
+        // Créer une nouvelle conversation
         const { data: newConversation, error: createError } = await supabase
           .from('conversations')
           .insert([{
@@ -1261,56 +1045,100 @@ button:focus-visible, a:focus-visible, input:focus-visible {
             created_at: new Date().toISOString()
           }])
           .select()
-          .single();
+          .single()
 
-        if (createError) throw createError;
-        conversationId = newConversation.id;
+        if (createError) throw createError
+        conversationId = newConversation.id
       } else {
-        conversationId = existingConversation.id;
+        conversationId = existingConversation.id
       }
 
-      // 4. Rediriger vers la page de messagerie avec l'ID de conversation
-      window.location.href = messages.html?conversation=${conversationId};
+      window.location.href = `messagerie.html?conversation=${conversationId}`
 
     } catch (error) {
-      console.error("Erreur lors de l'ouverture de la messagerie:", error);
-      alert("Une erreur est survenue lors de l'ouverture de la messagerie");
+      console.error("Erreur messagerie:", error)
+      alert("Une erreur est survenue lors de l'ouverture de la messagerie")
     }
-  };
-  // Initialisation
+  }
+
+  // Initialisation du lazy loading
+  const initLazyLoading = () => {
+    if ('IntersectionObserver' in window) {
+      lazyImageObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const img = entry.target
+            img.src = img.dataset.src
+            img.removeAttribute('data-src')
+            lazyImageObserver.unobserve(img)
+          }
+        })
+      }, {
+        rootMargin: '200px 0px'
+      })
+    }
+  }
+
+  // ============================================
+  // INITIALISATION
+  // ============================================
   document.addEventListener('DOMContentLoaded', () => {
+    console.log('🚀 Application démarrée')
+    
     // Initialiser le lazy loading
-    initLazyLoading();
+    initLazyLoading()
 
     // Écouteur recherche avec debounce
-    document.getElementById('searchInput')?.addEventListener('input', (e) => {
-      clearTimeout(timeoutSearch);
-      timeoutSearch = setTimeout(() => {
-        rechercherArticles().catch(console.error);
-      }, 300);
-    });
-   
+    const searchInput = document.getElementById('searchInput')
+    if (searchInput) {
+      searchInput.addEventListener('input', () => {
+        clearTimeout(timeoutSearch)
+        timeoutSearch = setTimeout(() => {
+          rechercherArticles().catch(console.error)
+        }, 300)
+      })
+    }
 
-    // Autres écouteurs
-    document.getElementById('addProductBtn')?.addEventListener('click', openModal);
-    document.getElementById('submitArticleBtn')?.addEventListener('click', ajouterArticle);
-    document.getElementById('closeModalBtn')?.addEventListener('click', closeModal);
-    document.getElementById('cancelModalBtn')?.addEventListener('click', closeModal);
+    // Écouteurs pour la modale
+    document.getElementById('addProductBtn')?.addEventListener('click', openModal)
+    document.getElementById('closeModalBtn')?.addEventListener('click', closeModal)
+    document.getElementById('cancelModalBtn')?.addEventListener('click', closeModal)
+    document.getElementById('overlay')?.addEventListener('click', (e) => {
+      if (e.target.id === 'overlay') closeModal(e)
+    })
     
-    document.getElementById('fileUploadBtn')?.addEventListener('click', () => {
-      document.getElementById('image').click();
-    });
+    // Écouteur pour le formulaire
+    document.getElementById('submitArticleBtn')?.addEventListener('click', ajouterArticle)
     
-    document.getElementById('image')?.addEventListener('change', function(e) {
-      const fileName = document.getElementById('fileName');
-      fileName.textContent = this.files[0]?.name || '';
-    });
+    // Gestion de l'upload de fichier
+    const fileUploadBtn = document.getElementById('fileUploadBtn')
+    const fileInput = document.getElementById('image')
+    
+    fileUploadBtn?.addEventListener('click', () => {
+      fileInput.click()
+    })
+    
+    fileInput?.addEventListener('change', function(e) {
+      const fileName = document.getElementById('fileName')
+      if (this.files[0]) {
+        fileName.textContent = `Fichier sélectionné: ${this.files[0].name}`
+      } else {
+        fileName.textContent = ''
+      }
+    })
 
-    // Chargement initial
-    rechercherArticles().catch(console.error);
-  });
+    // Fermer la modale avec Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal(e)
+      }
+    })
+
+    // Chargement initial des articles
+    rechercherArticles().catch(console.error)
+    
+    console.log('✅ Initialisation terminée')
+  })
 </script>
-
-
 </body>
 </html>
