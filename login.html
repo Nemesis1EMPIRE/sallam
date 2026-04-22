@@ -6,6 +6,641 @@
     <title>SALLAM - Connexion / Inscription</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3a0ca3;
+            --accent-color: #f72585;
+            --success-color: #06d6a0;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --gray-color: #6c757d;
+            --border-radius: 12px;
+            --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', 'Sora', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 1000px;
+            display: flex;
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+            min-height: 600px;
+        }
+
+        .auth-decoration {
+            flex: 1;
+            background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-decoration::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            top: -50%;
+            left: -50%;
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .decoration-content { position: relative; z-index: 1; }
+        .decoration-logo { font-size: 48px; font-weight: 700; margin-bottom: 20px; letter-spacing: -1px; }
+        .decoration-text { font-size: 18px; opacity: 0.9; margin-bottom: 30px; }
+        .decoration-features { list-style: none; text-align: left; }
+        .decoration-features li { margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .decoration-features i { color: var(--success-color); }
+
+        .auth-form-container {
+            flex: 1;
+            padding: 50px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .auth-header { text-align: center; margin-bottom: 30px; }
+
+        .auth-tabs {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 15px;
+        }
+
+        .auth-tab {
+            background: none;
+            border: none;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--gray-color);
+            cursor: pointer;
+            padding: 10px 20px;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .auth-tab.active { color: var(--primary-color); }
+
+        .auth-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -17px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--primary-color);
+            border-radius: 3px 3px 0 0;
+        }
+
+        .auth-tab:hover { color: var(--primary-color); }
+
+        .auth-form { display: block; }
+        .auth-form.hidden { display: none; }
+
+        .form-group { margin-bottom: 20px; }
+        .input-wrapper { position: relative; }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-color);
+            font-size: 16px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px 15px 14px 45px;
+            border: 2px solid #e0e0e0;
+            border-radius: var(--border-radius);
+            font-size: 15px;
+            transition: var(--transition);
+            background: var(--light-color);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(67, 97, 238, 0.1);
+        }
+
+        .password-strength { margin-top: 8px; height: 4px; background: #e0e0e0; border-radius: 2px; overflow: hidden; }
+        .strength-bar { height: 100%; width: 0; transition: width 0.3s, background 0.3s; }
+        .strength-text { font-size: 12px; margin-top: 4px; color: var(--gray-color); }
+
+        .auth-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .auth-btn:hover::before { width: 300px; height: 300px; }
+
+        .auth-btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(67, 97, 238, 0.3);
+        }
+
+        .auth-btn:disabled { background: var(--gray-color); cursor: not-allowed; transform: none; }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+            display: none;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .error-message {
+            color: var(--accent-color);
+            margin-top: 15px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 10px;
+            background: rgba(247, 37, 133, 0.1);
+            border-radius: var(--border-radius);
+            display: none;
+        }
+
+        .error-message.show { display: block; }
+
+        .success-message {
+            color: var(--success-color);
+            margin-top: 15px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 10px;
+            background: rgba(6, 214, 160, 0.1);
+            border-radius: var(--border-radius);
+            display: none;
+        }
+
+        .success-message.show { display: block; }
+
+        .terms { font-size: 13px; color: var(--gray-color); text-align: center; margin-top: 20px; }
+        .terms a { color: var(--primary-color); text-decoration: none; font-weight: 500; }
+
+        @media (max-width: 768px) {
+            .auth-container { flex-direction: column; max-width: 450px; }
+            .auth-decoration { padding: 30px; }
+            .auth-form-container { padding: 30px 25px; }
+            .decoration-features { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-decoration">
+            <div class="decoration-content">
+                <div class="decoration-logo">SALLAM</div>
+                <p class="decoration-text">Achetez, vendez et louez en toute simplicité</p>
+                <ul class="decoration-features">
+                    <li><i class="fas fa-check-circle"></i><span>Des milliers d'articles</span></li>
+                    <li><i class="fas fa-check-circle"></i><span>Paiement sécurisé</span></li>
+                    <li><i class="fas fa-check-circle"></i><span>Messagerie intégrée</span></li>
+                    <li><i class="fas fa-check-circle"></i><span>Vendeurs vérifiés</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="auth-form-container">
+            <div class="auth-header">
+                <div style="font-size: 32px; font-weight: 700; color: var(--primary-color);">SALLAM</div>
+            </div>
+
+            <div class="auth-tabs">
+                <button class="auth-tab active" id="loginTab">Connexion</button>
+                <button class="auth-tab" id="signupTab">Inscription</button>
+            </div>
+
+            <!-- Formulaire de connexion -->
+            <form id="loginForm" class="auth-form">
+                <div class="form-group">
+                    <div class="input-wrapper">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="loginEmail" class="form-control" placeholder="Adresse e-mail" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="loginPassword" class="form-control" placeholder="Mot de passe" required>
+                    </div>
+                </div>
+                <button type="submit" class="auth-btn" id="loginBtn">
+                    <span id="loginBtnText">Se connecter</span>
+                    <div class="spinner" id="loginSpinner"></div>
+                </button>
+                <div class="error-message" id="loginError"></div>
+                <div class="terms" style="margin-top: 20px;">
+                    <a href="#" id="forgotPasswordLink">Mot de passe oublié ?</a>
+                </div>
+            </form>
+
+            <!-- Formulaire d'inscription -->
+            <form id="signupForm" class="auth-form hidden">
+                <div class="form-group">
+                    <div class="input-wrapper">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="signupName" class="form-control" placeholder="Nom complet" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-wrapper">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="signupEmail" class="form-control" placeholder="Adresse e-mail" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="signupPassword" class="form-control" placeholder="Mot de passe" required>
+                    </div>
+                    <div class="password-strength">
+                        <div class="strength-bar" id="strengthBar"></div>
+                    </div>
+                    <div class="strength-text" id="strengthText"></div>
+                </div>
+                <div class="form-group">
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="signupConfirmPassword" class="form-control" placeholder="Confirmer le mot de passe" required>
+                    </div>
+                </div>
+                <button type="submit" class="auth-btn" id="signupBtn">
+                    <span id="signupBtnText">S'inscrire</span>
+                    <div class="spinner" id="signupSpinner"></div>
+                </button>
+                <div class="error-message" id="signupError"></div>
+                <div class="success-message" id="signupSuccess"></div>
+                <div class="terms">
+                    En vous inscrivant, vous acceptez nos
+                    <a href="#">Conditions d'utilisation</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module">
+        // ✅ FIX 1 — Version @2 fixée pour éviter les breaking changes
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
+
+        const SUPABASE_URL = 'https://zdwcvquucromiyixvfzg.supabase.co'
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpkd2N2cXV1Y3JvbWl5aXh2ZnpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2ODc2OTcsImV4cCI6MjA5MjI2MzY5N30.4Gpie4IQPSGapjC-AgkTAFMRrHfLNhxnF8YxNZq_crk'
+
+        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+        console.log('✅ Supabase v2 initialisé')
+
+        // Éléments DOM
+        const loginTab       = document.getElementById('loginTab')
+        const signupTab      = document.getElementById('signupTab')
+        const loginForm      = document.getElementById('loginForm')
+        const signupForm     = document.getElementById('signupForm')
+        const loginError     = document.getElementById('loginError')
+        const signupError    = document.getElementById('signupError')
+        const signupSuccess  = document.getElementById('signupSuccess')
+
+        // Gestion des onglets
+        loginTab.addEventListener('click', () => {
+            loginTab.classList.add('active')
+            signupTab.classList.remove('active')
+            loginForm.classList.remove('hidden')
+            signupForm.classList.add('hidden')
+            clearMessages()
+        })
+
+        signupTab.addEventListener('click', () => {
+            signupTab.classList.add('active')
+            loginTab.classList.remove('active')
+            signupForm.classList.remove('hidden')
+            loginForm.classList.add('hidden')
+            clearMessages()
+        })
+
+        function clearMessages() {
+            loginError.classList.remove('show')
+            signupError.classList.remove('show')
+            signupSuccess.classList.remove('show')
+        }
+
+        // Force du mot de passe
+        document.getElementById('signupPassword').addEventListener('input', (e) => {
+            const strength = checkPasswordStrength(e.target.value)
+            const bar  = document.getElementById('strengthBar')
+            const text = document.getElementById('strengthText')
+            bar.style.width      = strength.percent + '%'
+            bar.style.background = strength.color
+            text.textContent     = strength.text
+            text.style.color     = strength.color
+        })
+
+        function checkPasswordStrength(password) {
+            let score = 0
+            if (password.length >= 8)           score++
+            if (password.length >= 12)          score++
+            if (/[a-z]/.test(password))         score++
+            if (/[A-Z]/.test(password))         score++
+            if (/[0-9]/.test(password))         score++
+            if (/[^a-zA-Z0-9]/.test(password))  score++
+
+            const percent = (score / 6) * 100
+            if (score <= 2) return { percent, color: '#ef4444', text: 'Faible' }
+            if (score <= 4) return { percent, color: '#f59e0b', text: 'Moyen' }
+            return { percent, color: '#10b981', text: 'Fort' }
+        }
+
+        // ============================================================
+        // INSCRIPTION — VERSION CORRIGÉE
+        // Le profil est créé automatiquement par le trigger SQL.
+        // Ici on fait UNIQUEMENT le signUp Auth, rien de plus.
+        // ============================================================
+        signupForm.addEventListener('submit', async (e) => {
+            e.preventDefault()
+
+            const name            = document.getElementById('signupName').value.trim()
+            const email           = document.getElementById('signupEmail').value.trim()
+            const password        = document.getElementById('signupPassword').value
+            const confirmPassword = document.getElementById('signupConfirmPassword').value
+
+            const signupBtn     = document.getElementById('signupBtn')
+            const signupBtnText = document.getElementById('signupBtnText')
+            const signupSpinner = document.getElementById('signupSpinner')
+
+            signupError.classList.remove('show')
+            signupSuccess.classList.remove('show')
+
+            // Validation
+            if (!name || !email || !password || !confirmPassword) {
+                showSignupError('Veuillez remplir tous les champs')
+                return
+            }
+            if (name.length < 2) {
+                showSignupError('Le nom doit contenir au moins 2 caractères')
+                return
+            }
+            if (!isValidEmail(email)) {
+                showSignupError('Adresse e-mail invalide')
+                return
+            }
+            if (password.length < 6) {
+                showSignupError('Le mot de passe doit contenir au moins 6 caractères')
+                return
+            }
+            if (password !== confirmPassword) {
+                showSignupError('Les mots de passe ne correspondent pas')
+                return
+            }
+
+            signupBtn.disabled         = true
+            signupBtnText.textContent  = 'Inscription en cours...'
+            signupSpinner.style.display = 'inline-block'
+
+            try {
+                console.log('📝 Inscription:', email)
+
+                const { data, error } = await supabase.auth.signUp({
+                    email,
+                    password,
+                    options: {
+                        data: {
+                            full_name:    name,
+                            display_name: name
+                        }
+                    }
+                })
+
+                if (error) throw error
+
+                // ✅ FIX 2 — Détecter un email déjà existant correctement
+                // Supabase retourne un "faux succès" avec identities vide si l'email existe
+                if (data.user?.identities?.length === 0) {
+                    showSignupError('Cette adresse e-mail est déjà utilisée')
+                    return
+                }
+
+                // ✅ FIX 3 — Plus d'insertion manuelle dans profiles :
+                // Le trigger SQL handle_new_user() s'en charge côté serveur.
+                console.log('✅ Utilisateur créé, profil géré par le trigger DB')
+
+                signupSuccess.textContent = '✅ Inscription réussie ! Vérifiez votre email pour confirmer votre compte.'
+                signupSuccess.classList.add('show')
+
+                signupForm.reset()
+                document.getElementById('strengthBar').style.width = '0%'
+                document.getElementById('strengthText').textContent = ''
+
+                setTimeout(() => {
+                    loginTab.click()
+                    document.getElementById('loginEmail').value = email
+                }, 2500)
+
+            } catch (error) {
+                console.error('❌ Erreur inscription:', error)
+
+                // ✅ FIX 4 — Utiliser error.code (stable) plutôt que error.message (fragile)
+                let msg = 'Erreur lors de l\'inscription'
+                if (error.code === 'user_already_exists' || error.message?.includes('User already registered')) {
+                    msg = 'Cette adresse e-mail est déjà utilisée'
+                } else if (error.code === 'weak_password') {
+                    msg = 'Le mot de passe est trop faible'
+                } else if (error.code === 'invalid_email') {
+                    msg = 'Adresse e-mail invalide'
+                } else if (error.message) {
+                    msg = error.message
+                }
+
+                showSignupError(msg)
+            } finally {
+                signupBtn.disabled          = false
+                signupBtnText.textContent   = 'S\'inscrire'
+                signupSpinner.style.display = 'none'
+            }
+        })
+
+        function showSignupError(message) {
+            signupError.textContent = message
+            signupError.classList.add('show')
+        }
+
+        // ============================================================
+        // CONNEXION — VERSION CORRIGÉE
+        // ============================================================
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault()
+
+            const email    = document.getElementById('loginEmail').value.trim()
+            const password = document.getElementById('loginPassword').value
+
+            const loginBtn     = document.getElementById('loginBtn')
+            const loginBtnText = document.getElementById('loginBtnText')
+            const loginSpinner = document.getElementById('loginSpinner')
+
+            loginError.classList.remove('show')
+
+            if (!email || !password) {
+                showLoginError('Veuillez remplir tous les champs')
+                return
+            }
+
+            loginBtn.disabled          = true
+            loginBtnText.textContent   = 'Connexion en cours...'
+            loginSpinner.style.display = 'inline-block'
+
+            try {
+                console.log('🔑 Connexion:', email)
+
+                const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+
+                if (error) throw error
+
+                console.log('✅ Connecté:', data.user.email)
+                window.location.href = './index.html'
+
+            } catch (error) {
+                console.error('❌ Erreur connexion:', error)
+
+                // ✅ FIX 4 — Codes d'erreur stables Supabase v2
+                let msg = 'Erreur de connexion'
+                if (error.code === 'invalid_credentials') {
+                    msg = 'Email ou mot de passe incorrect'
+                } else if (error.code === 'email_not_confirmed') {
+                    msg = 'Veuillez confirmer votre email avant de vous connecter'
+                } else if (error.code === 'too_many_requests') {
+                    msg = 'Trop de tentatives. Réessayez dans quelques minutes.'
+                } else if (error.message) {
+                    msg = error.message
+                }
+
+                showLoginError(msg)
+            } finally {
+                loginBtn.disabled          = false
+                loginBtnText.textContent   = 'Se connecter'
+                loginSpinner.style.display = 'none'
+            }
+        })
+
+        function showLoginError(message) {
+            loginError.textContent = message
+            loginError.classList.add('show')
+        }
+
+        // Mot de passe oublié
+        document.getElementById('forgotPasswordLink').addEventListener('click', async (e) => {
+            e.preventDefault()
+
+            const email = document.getElementById('loginEmail').value.trim()
+            if (!email) {
+                showLoginError('Veuillez entrer votre adresse e-mail')
+                return
+            }
+
+            try {
+                const { error } = await supabase.auth.resetPasswordForEmail(email, {
+                    redirectTo: window.location.origin + '/reset-password.html'
+                })
+                if (error) throw error
+                alert('✅ Un email de réinitialisation a été envoyé à ' + email)
+            } catch (error) {
+                showLoginError('Erreur lors de l\'envoi de l\'email de réinitialisation')
+            }
+        })
+
+        function isValidEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+        }
+
+        // ✅ FIX 5 — getUser() vérifie la session côté serveur (plus fiable que getSession())
+        async function checkSession() {
+            try {
+                const { data: { user }, error } = await supabase.auth.getUser()
+                if (user && !error) {
+                    console.log('👤 Session active, redirection...')
+                    window.location.href = './index.html'
+                }
+            } catch {
+                // Pas de session — on reste sur la page de login
+            }
+        }
+
+        checkSession()
+        console.log('🚀 Page auth prête')
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SALLAM - Connexion / Inscription</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
         /* [Gardez tout le CSS précédent] */
         :root {
             --primary-color: #4361ee;
