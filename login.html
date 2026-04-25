@@ -1,652 +1,702 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SALLAM - Connexion / Inscription</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --primary-color: #4361ee;
-            --secondary-color: #3a0ca3;
-            --accent-color: #f72585;
-            --success-color: #06d6a0;
-            --light-color: #f8f9fa;
-            --dark-color: #212529;
-            --gray-color: #6c757d;
-            --border-radius: 12px;
-            --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SALLAM — Connexion</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <style>
+    /* ═══════════════════════════════════════
+       TOKENS
+    ═══════════════════════════════════════ */
+    :root {
+      --blue:      #2563eb;
+      --blue-dark: #1d4ed8;
+      --blue-pale: #eff6ff;
+      --green:     #10b981;
+      --red:       #ef4444;
+      --amber:     #f59e0b;
+      --ink:       #0f172a;
+      --muted:     #64748b;
+      --border:    #e2e8f0;
+      --bg:        #f8fafc;
+      --white:     #ffffff;
+      --radius:    14px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.04);
+      --shadow-md: 0 4px 24px rgba(0,0,0,.08), 0 2px 8px rgba(0,0,0,.04);
+      --shadow-lg: 0 20px 60px rgba(0,0,0,.12), 0 8px 24px rgba(0,0,0,.06);
+      --ease:      cubic-bezier(.4,0,.2,1);
+    }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+    /* ═══════════════════════════════════════
+       RESET & BASE
+    ═══════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        body {
-            font-family: 'Segoe UI', 'Sora', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
 
-        .auth-container {
-            width: 100%;
-            max-width: 1000px;
-            display: flex;
-            background: white;
-            border-radius: 30px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            overflow: hidden;
-            min-height: 600px;
-        }
+    /* ═══════════════════════════════════════
+       LAYOUT
+    ═══════════════════════════════════════ */
+    .card {
+      width: 100%;
+      max-width: 940px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: var(--white);
+      border-radius: 24px;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      min-height: 580px;
+    }
 
-        .auth-decoration {
-            flex: 1;
-            background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
-            padding: 40px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
+    /* ── Panneau gauche ── */
+    .panel-left {
+      background: linear-gradient(145deg, #1e40af 0%, #2563eb 50%, #3b82f6 100%);
+      padding: 52px 44px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
 
-        .auth-decoration::before {
-            content: '';
-            position: absolute;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            top: -50%;
-            left: -50%;
-            animation: rotate 20s linear infinite;
-        }
+    /* cercles décoratifs */
+    .panel-left::before,
+    .panel-left::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,.06);
+    }
+    .panel-left::before { width: 320px; height: 320px; top: -80px; right: -80px; }
+    .panel-left::after  { width: 220px; height: 220px; bottom: -60px; left: -60px; }
 
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
+    .brand {
+      font-family: 'Sora', sans-serif;
+      font-weight: 800;
+      font-size: 28px;
+      color: var(--white);
+      letter-spacing: -.5px;
+      position: relative;
+      z-index: 1;
+    }
+    .brand span {
+      display: inline-block;
+      width: 8px; height: 8px;
+      background: #93c5fd;
+      border-radius: 50%;
+      margin-left: 3px;
+      vertical-align: middle;
+      margin-bottom: 4px;
+    }
 
-        .decoration-content { position: relative; z-index: 1; }
-        .decoration-logo { font-size: 48px; font-weight: 700; margin-bottom: 20px; letter-spacing: -1px; }
-        .decoration-text { font-size: 18px; opacity: 0.9; margin-bottom: 30px; }
-        .decoration-features { list-style: none; text-align: left; }
-        .decoration-features li { margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
-        .decoration-features i { color: var(--success-color); }
+    .panel-hero { position: relative; z-index: 1; }
+    .panel-hero h2 {
+      font-family: 'Sora', sans-serif;
+      font-weight: 700;
+      font-size: 30px;
+      line-height: 1.25;
+      color: var(--white);
+      margin-bottom: 16px;
+    }
+    .panel-hero p {
+      font-size: 15px;
+      color: rgba(255,255,255,.75);
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
 
-        .auth-form-container {
-            flex: 1;
-            padding: 50px 40px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
+    .feature-list { list-style: none; position: relative; z-index: 1; }
+    .feature-list li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: rgba(255,255,255,.9);
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 14px;
+    }
+    .feat-icon {
+      width: 28px; height: 28px;
+      background: rgba(255,255,255,.15);
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      font-size: 13px;
+    }
 
-        .auth-header { text-align: center; margin-bottom: 30px; }
+    /* ── Panneau droit ── */
+    .panel-right {
+      padding: 52px 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
 
-        .auth-tabs {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-bottom: 30px;
-            border-bottom: 2px solid #e0e0e0;
-            padding-bottom: 15px;
-        }
+    /* ═══════════════════════════════════════
+       ONGLETS
+    ═══════════════════════════════════════ */
+    .tabs {
+      display: flex;
+      background: var(--bg);
+      border-radius: 12px;
+      padding: 4px;
+      margin-bottom: 32px;
+      gap: 4px;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 9px 0;
+      border: none;
+      background: transparent;
+      border-radius: 9px;
+      font-family: 'Sora', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all .2s var(--ease);
+    }
+    .tab-btn.active {
+      background: var(--white);
+      color: var(--ink);
+      box-shadow: var(--shadow-sm);
+    }
 
-        .auth-tab {
-            background: none;
-            border: none;
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--gray-color);
-            cursor: pointer;
-            padding: 10px 20px;
-            transition: var(--transition);
-            position: relative;
-        }
+    /* ═══════════════════════════════════════
+       FORMULAIRES
+    ═══════════════════════════════════════ */
 
-        .auth-tab.active { color: var(--primary-color); }
+    /* Un seul form visible à la fois — règle centrale */
+    .auth-form          { display: none; }
+    .auth-form.is-active { display: block; }
 
-        .auth-tab.active::after {
-            content: '';
-            position: absolute;
-            bottom: -17px;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: var(--primary-color);
-            border-radius: 3px 3px 0 0;
-        }
+    .form-title {
+      font-family: 'Sora', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+    .form-subtitle {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
 
-        .auth-tab:hover { color: var(--primary-color); }
+    .field { margin-bottom: 16px; }
 
-        .auth-form { display: block; }
-        /* !important évite tout écrasement externe */
-        .auth-form.hidden {
-            display: none !important;
-            visibility: hidden !important;
-            pointer-events: none !important;
-        }
+    .field label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
 
-        .form-group { margin-bottom: 20px; }
-        .input-wrapper { position: relative; }
+    .input-wrap { position: relative; }
+    .input-wrap svg {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      pointer-events: none;
+      width: 16px; height: 16px;
+    }
 
-        .input-wrapper i {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--gray-color);
-            font-size: 16px;
-        }
+    .field input {
+      width: 100%;
+      padding: 11px 14px 11px 40px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14.5px;
+      color: var(--ink);
+      background: var(--white);
+      transition: border-color .2s var(--ease), box-shadow .2s var(--ease);
+      outline: none;
+      -webkit-appearance: none;
+    }
+    .field input::placeholder { color: #b0bac8; }
+    .field input:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(37,99,235,.12);
+    }
+    .field input.error-input {
+      border-color: var(--red);
+      box-shadow: 0 0 0 3px rgba(239,68,68,.1);
+    }
 
-        .form-control {
-            width: 100%;
-            padding: 14px 15px 14px 45px;
-            border: 2px solid #e0e0e0;
-            border-radius: var(--border-radius);
-            font-size: 15px;
-            transition: var(--transition);
-            background: var(--light-color);
-        }
+    /* Barre de force */
+    .strength-wrap { margin-top: 8px; }
+    .strength-bar-bg {
+      height: 4px;
+      background: var(--border);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .strength-bar-fill {
+      height: 100%;
+      width: 0;
+      border-radius: 99px;
+      transition: width .3s var(--ease), background .3s;
+    }
+    .strength-label {
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
 
-        .form-control:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            background: white;
-            box-shadow: 0 0 0 4px rgba(67, 97, 238, 0.1);
-        }
+    /* Bouton principal */
+    .btn-primary {
+      width: 100%;
+      padding: 13px;
+      background: var(--blue);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius);
+      font-family: 'Sora', sans-serif;
+      font-size: 14.5px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 20px;
+      transition: background .2s var(--ease), transform .15s var(--ease), box-shadow .2s;
+    }
+    .btn-primary:hover:not(:disabled) {
+      background: var(--blue-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 20px rgba(37,99,235,.28);
+    }
+    .btn-primary:active:not(:disabled) { transform: translateY(0); }
+    .btn-primary:disabled { opacity: .6; cursor: not-allowed; }
 
-        .password-strength { margin-top: 8px; height: 4px; background: #e0e0e0; border-radius: 2px; overflow: hidden; }
-        .strength-bar { height: 100%; width: 0; transition: width 0.3s, background 0.3s; }
-        .strength-text { font-size: 12px; margin-top: 4px; color: var(--gray-color); }
+    /* Spinner */
+    .spinner {
+      display: none;
+      width: 16px; height: 16px;
+      border: 2.5px solid rgba(255,255,255,.4);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
-        .auth-btn {
-            width: 100%;
-            padding: 14px;
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: var(--border-radius);
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            margin-top: 10px;
-            position: relative;
-            overflow: hidden;
-        }
+    /* Messages */
+    .msg {
+      display: none;
+      margin-top: 14px;
+      padding: 11px 14px;
+      border-radius: 10px;
+      font-size: 13.5px;
+      font-weight: 500;
+      line-height: 1.5;
+    }
+    .msg.show    { display: block; }
+    .msg.is-error {
+      background: #fef2f2;
+      color: #b91c1c;
+      border: 1px solid #fecaca;
+    }
+    .msg.is-success {
+      background: #f0fdf4;
+      color: #15803d;
+      border: 1px solid #bbf7d0;
+    }
 
-        .auth-btn::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
+    /* Lien mot de passe oublié */
+    .forgot-link {
+      display: block;
+      text-align: right;
+      font-size: 13px;
+      color: var(--blue);
+      text-decoration: none;
+      margin-top: 10px;
+      font-weight: 500;
+      transition: color .2s;
+    }
+    .forgot-link:hover { color: var(--blue-dark); text-decoration: underline; }
 
-        .auth-btn:hover::before { width: 300px; height: 300px; }
+    /* CGU */
+    .terms {
+      font-size: 12.5px;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 16px;
+      line-height: 1.5;
+    }
+    .terms a { color: var(--blue); text-decoration: none; font-weight: 500; }
 
-        .auth-btn:hover {
-            background: var(--secondary-color);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(67, 97, 238, 0.3);
-        }
-
-        .auth-btn:disabled { background: var(--gray-color); cursor: not-allowed; transform: none; }
-
-        .spinner {
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 0.8s linear infinite;
-            display: none;
-        }
-
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        .error-message {
-            color: var(--accent-color);
-            margin-top: 15px;
-            text-align: center;
-            font-size: 14px;
-            font-weight: 500;
-            padding: 10px;
-            background: rgba(247, 37, 133, 0.1);
-            border-radius: var(--border-radius);
-            display: none;
-        }
-
-        .error-message.show { display: block; }
-
-        .success-message {
-            color: var(--success-color);
-            margin-top: 15px;
-            text-align: center;
-            font-size: 14px;
-            font-weight: 500;
-            padding: 10px;
-            background: rgba(6, 214, 160, 0.1);
-            border-radius: var(--border-radius);
-            display: none;
-        }
-
-        .success-message.show { display: block; }
-
-        .terms { font-size: 13px; color: var(--gray-color); text-align: center; margin-top: 20px; }
-        .terms a { color: var(--primary-color); text-decoration: none; font-weight: 500; }
-
-        @media (max-width: 768px) {
-            .auth-container { flex-direction: column; max-width: 450px; }
-            .auth-decoration { padding: 30px; }
-            .auth-form-container { padding: 30px 25px; }
-            .decoration-features { display: none; }
-        }
-    </style>
+    /* ═══════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════ */
+    @media (max-width: 720px) {
+      .card { grid-template-columns: 1fr; max-width: 440px; }
+      .panel-left { display: none; }
+      .panel-right { padding: 40px 28px; }
+    }
+  </style>
 </head>
 <body>
-    <div class="auth-container">
-        <div class="auth-decoration">
-            <div class="decoration-content">
-                <div class="decoration-logo">SALLAM</div>
-                <p class="decoration-text">Achetez, vendez et louez en toute simplicité</p>
-                <ul class="decoration-features">
-                    <li><i class="fas fa-check-circle"></i><span>Des milliers d'articles</span></li>
-                    <li><i class="fas fa-check-circle"></i><span>Paiement sécurisé</span></li>
-                    <li><i class="fas fa-check-circle"></i><span>Messagerie intégrée</span></li>
-                    <li><i class="fas fa-check-circle"></i><span>Vendeurs vérifiés</span></li>
-                </ul>
-            </div>
-        </div>
 
-        <div class="auth-form-container">
-            <div class="auth-header">
-                <div style="font-size: 32px; font-weight: 700; color: var(--primary-color);">SALLAM</div>
-            </div>
+<div class="card">
 
-            <div class="auth-tabs">
-                <button class="auth-tab active" id="loginTab">Connexion</button>
-                <button class="auth-tab" id="signupTab">Inscription</button>
-            </div>
+  <!-- ── Panneau gauche ── -->
+  <div class="panel-left">
+    <div class="brand">SALLAM<span></span></div>
 
-            <!-- Formulaire de connexion -->
-            <form id="loginForm" class="auth-form">
-                <div class="form-group">
-                    <div class="input-wrapper">
-                        <i class="fas fa-envelope"></i>
-                        <input type="email" id="loginEmail" class="form-control" placeholder="Adresse e-mail" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-wrapper">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="loginPassword" class="form-control" placeholder="Mot de passe" required>
-                    </div>
-                </div>
-                <button type="submit" class="auth-btn" id="loginBtn">
-                    <span id="loginBtnText">Se connecter</span>
-                    <div class="spinner" id="loginSpinner"></div>
-                </button>
-                <div class="error-message" id="loginError"></div>
-                <div class="terms" style="margin-top: 20px;">
-                    <a href="#" id="forgotPasswordLink">Mot de passe oublié ?</a>
-                </div>
-            </form>
-
-            <!-- Formulaire d'inscription -->
-            <form id="signupForm" class="auth-form hidden">
-                <div class="form-group">
-                    <div class="input-wrapper">
-                        <i class="fas fa-user"></i>
-                        <input type="text" id="signupName" class="form-control" placeholder="Nom complet" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-wrapper">
-                        <i class="fas fa-envelope"></i>
-                        <input type="email" id="signupEmail" class="form-control" placeholder="Adresse e-mail" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-wrapper">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="signupPassword" class="form-control" placeholder="Mot de passe" required>
-                    </div>
-                    <div class="password-strength">
-                        <div class="strength-bar" id="strengthBar"></div>
-                    </div>
-                    <div class="strength-text" id="strengthText"></div>
-                </div>
-                <div class="form-group">
-                    <div class="input-wrapper">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="signupConfirmPassword" class="form-control" placeholder="Confirmer le mot de passe" required>
-                    </div>
-                </div>
-                <button type="submit" class="auth-btn" id="signupBtn">
-                    <span id="signupBtnText">S'inscrire</span>
-                    <div class="spinner" id="signupSpinner"></div>
-                </button>
-                <div class="error-message" id="signupError"></div>
-                <div class="success-message" id="signupSuccess"></div>
-                <div class="terms">
-                    En vous inscrivant, vous acceptez nos
-                    <a href="#">Conditions d'utilisation</a>
-                </div>
-            </form>
-        </div>
+    <div class="panel-hero">
+      <h2>La marketplace algérienne de confiance</h2>
+      <p>Achetez, vendez et louez en quelques clics. Des milliers d'annonces près de chez vous.</p>
     </div>
 
-    <script type="module">
-        // ✅ FIX 1 — Version @2 fixée pour éviter les breaking changes
-        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
+    <ul class="feature-list">
+      <li>
+        <div class="feat-icon">✦</div>
+        Des milliers d'articles vérifiés
+      </li>
+      <li>
+        <div class="feat-icon">🔒</div>
+        Paiement 100 % sécurisé
+      </li>
+      <li>
+        <div class="feat-icon">💬</div>
+        Messagerie intégrée
+      </li>
+      <li>
+        <div class="feat-icon">⚡</div>
+        Livraison rapide partout
+      </li>
+    </ul>
+  </div>
 
-        const SUPABASE_URL = 'https://zdwcvquucromiyixvfzg.supabase.co'
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpkd2N2cXV1Y3JvbWl5aXh2ZnpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2ODc2OTcsImV4cCI6MjA5MjI2MzY5N30.4Gpie4IQPSGapjC-AgkTAFMRrHfLNhxnF8YxNZq_crk'
+  <!-- ── Panneau droit ── -->
+  <div class="panel-right">
 
-        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
-        console.log('✅ Supabase v2 initialisé')
+    <!-- Onglets -->
+    <div class="tabs" role="tablist">
+      <button class="tab-btn active" id="tab-login"  role="tab" aria-selected="true">Connexion</button>
+      <button class="tab-btn"        id="tab-signup" role="tab" aria-selected="false">Inscription</button>
+    </div>
 
-        // Éléments DOM
-        const loginTab       = document.getElementById('loginTab')
-        const signupTab      = document.getElementById('signupTab')
-        const loginForm      = document.getElementById('loginForm')
-        const signupForm     = document.getElementById('signupForm')
-        const loginError     = document.getElementById('loginError')
-        const signupError    = document.getElementById('signupError')
-        const signupSuccess  = document.getElementById('signupSuccess')
+    <!-- ─── Formulaire CONNEXION ─── -->
+    <form class="auth-form is-active" id="form-login" novalidate>
+      <p class="form-title">Bon retour 👋</p>
+      <p class="form-subtitle">Connectez-vous à votre compte SALLAM</p>
 
-        // ✅ FIX doublon — forcer l'état initial explicitement en JS
-        loginForm.style.display  = 'block'
-        signupForm.style.display = 'none'
+      <div class="field">
+        <label for="login-email">Adresse e-mail</label>
+        <div class="input-wrap">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/></svg>
+          <input type="email" id="login-email" name="email" placeholder="vous@exemple.com" autocomplete="email" />
+        </div>
+      </div>
 
-        // Gestion des onglets — style.display explicite pour éviter tout conflit CSS
-        loginTab.addEventListener('click', () => {
-            loginTab.classList.add('active')
-            signupTab.classList.remove('active')
-            loginForm.style.display  = 'block'
-            signupForm.style.display = 'none'
-            clearMessages()
-        })
+      <div class="field">
+        <label for="login-password">Mot de passe</label>
+        <div class="input-wrap">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg>
+          <input type="password" id="login-password" name="password" placeholder="••••••••" autocomplete="current-password" />
+        </div>
+      </div>
 
-        signupTab.addEventListener('click', () => {
-            signupTab.classList.add('active')
-            loginTab.classList.remove('active')
-            signupForm.style.display = 'block'
-            loginForm.style.display  = 'none'
-            clearMessages()
-        })
+      <a href="#" class="forgot-link" id="forgot-link">Mot de passe oublié ?</a>
 
-        function clearMessages() {
-            loginError.classList.remove('show')
-            signupError.classList.remove('show')
-            signupSuccess.classList.remove('show')
-        }
+      <button type="submit" class="btn-primary" id="login-btn">
+        <span id="login-btn-text">Se connecter</span>
+        <div class="spinner" id="login-spinner"></div>
+      </button>
 
-        // Force du mot de passe
-        document.getElementById('signupPassword').addEventListener('input', (e) => {
-            const strength = checkPasswordStrength(e.target.value)
-            const bar  = document.getElementById('strengthBar')
-            const text = document.getElementById('strengthText')
-            bar.style.width      = strength.percent + '%'
-            bar.style.background = strength.color
-            text.textContent     = strength.text
-            text.style.color     = strength.color
-        })
+      <div class="msg is-error" id="login-error"></div>
+    </form>
 
-        function checkPasswordStrength(password) {
-            let score = 0
-            if (password.length >= 8)           score++
-            if (password.length >= 12)          score++
-            if (/[a-z]/.test(password))         score++
-            if (/[A-Z]/.test(password))         score++
-            if (/[0-9]/.test(password))         score++
-            if (/[^a-zA-Z0-9]/.test(password))  score++
+    <!-- ─── Formulaire INSCRIPTION ─── -->
+    <form class="auth-form" id="form-signup" novalidate>
+      <p class="form-title">Créer un compte</p>
+      <p class="form-subtitle">Rejoignez des milliers d'utilisateurs sur SALLAM</p>
 
-            const percent = (score / 6) * 100
-            if (score <= 2) return { percent, color: '#ef4444', text: 'Faible' }
-            if (score <= 4) return { percent, color: '#f59e0b', text: 'Moyen' }
-            return { percent, color: '#10b981', text: 'Fort' }
-        }
+      <div class="field">
+        <label for="signup-name">Nom complet</label>
+        <div class="input-wrap">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/></svg>
+          <input type="text" id="signup-name" name="name" placeholder="Votre nom" autocomplete="name" />
+        </div>
+      </div>
 
-        // ============================================================
-        // INSCRIPTION — VERSION CORRIGÉE
-        // Le profil est créé automatiquement par le trigger SQL.
-        // Ici on fait UNIQUEMENT le signUp Auth, rien de plus.
-        // ============================================================
-        signupForm.addEventListener('submit', async (e) => {
-            e.preventDefault()
+      <div class="field">
+        <label for="signup-email">Adresse e-mail</label>
+        <div class="input-wrap">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/></svg>
+          <input type="email" id="signup-email" name="email" placeholder="vous@exemple.com" autocomplete="email" />
+        </div>
+      </div>
 
-            const name            = document.getElementById('signupName').value.trim()
-            const email           = document.getElementById('signupEmail').value.trim()
-            const password        = document.getElementById('signupPassword').value
-            const confirmPassword = document.getElementById('signupConfirmPassword').value
+      <div class="field">
+        <label for="signup-password">Mot de passe</label>
+        <div class="input-wrap">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg>
+          <input type="password" id="signup-password" name="password" placeholder="Min. 6 caractères" autocomplete="new-password" />
+        </div>
+        <div class="strength-wrap">
+          <div class="strength-bar-bg">
+            <div class="strength-bar-fill" id="strength-fill"></div>
+          </div>
+          <div class="strength-label" id="strength-label"></div>
+        </div>
+      </div>
 
-            const signupBtn     = document.getElementById('signupBtn')
-            const signupBtnText = document.getElementById('signupBtnText')
-            const signupSpinner = document.getElementById('signupSpinner')
+      <div class="field">
+        <label for="signup-confirm">Confirmer le mot de passe</label>
+        <div class="input-wrap">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg>
+          <input type="password" id="signup-confirm" name="confirm" placeholder="Répétez le mot de passe" autocomplete="new-password" />
+        </div>
+      </div>
 
-            signupError.classList.remove('show')
-            signupSuccess.classList.remove('show')
+      <button type="submit" class="btn-primary" id="signup-btn">
+        <span id="signup-btn-text">Créer mon compte</span>
+        <div class="spinner" id="signup-spinner"></div>
+      </button>
 
-            // Validation
-            if (!name || !email || !password || !confirmPassword) {
-                showSignupError('Veuillez remplir tous les champs')
-                return
-            }
-            if (name.length < 2) {
-                showSignupError('Le nom doit contenir au moins 2 caractères')
-                return
-            }
-            if (!isValidEmail(email)) {
-                showSignupError('Adresse e-mail invalide')
-                return
-            }
-            if (password.length < 6) {
-                showSignupError('Le mot de passe doit contenir au moins 6 caractères')
-                return
-            }
-            if (password !== confirmPassword) {
-                showSignupError('Les mots de passe ne correspondent pas')
-                return
-            }
+      <div class="msg is-error"   id="signup-error"></div>
+      <div class="msg is-success" id="signup-success"></div>
 
-            signupBtn.disabled         = true
-            signupBtnText.textContent  = 'Inscription en cours...'
-            signupSpinner.style.display = 'inline-block'
+      <p class="terms">En vous inscrivant, vous acceptez nos <a href="#">Conditions d'utilisation</a></p>
+    </form>
 
-            try {
-                console.log('📝 Inscription:', email)
+  </div><!-- /panel-right -->
+</div><!-- /card -->
 
-                const { data, error } = await supabase.auth.signUp({
-                    email,
-                    password,
-                    options: {
-                        data: {
-                            full_name:    name,
-                            display_name: name
-                        }
-                    }
-                })
+<!-- ═══════════════════════════════════════
+     SCRIPT
+═══════════════════════════════════════ -->
+<script type="module">
+  // ── 1. Supabase (version fixée @2) ───────────────────────────────────
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
 
-                if (error) throw error
+  const SUPABASE_URL  = 'https://zdwcvquucromiyixvfzg.supabase.co'
+  const SUPABASE_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpkd2N2cXV1Y3JvbWl5aXh2ZnpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2ODc2OTcsImV4cCI6MjA5MjI2MzY5N30.4Gpie4IQPSGapjC-AgkTAFMRrHfLNhxnF8YxNZq_crk'
+  const sb            = createClient(SUPABASE_URL, SUPABASE_KEY)
 
-                // ✅ FIX 2 — Détecter un email déjà existant correctement
-                // Supabase retourne un "faux succès" avec identities vide si l'email existe
-                if (data.user?.identities?.length === 0) {
-                    showSignupError('Cette adresse e-mail est déjà utilisée')
-                    return
-                }
+  // ── 2. Éléments DOM ──────────────────────────────────────────────────
+  const tabLogin    = document.getElementById('tab-login')
+  const tabSignup   = document.getElementById('tab-signup')
+  const formLogin   = document.getElementById('form-login')
+  const formSignup  = document.getElementById('form-signup')
+  const loginErr    = document.getElementById('login-error')
+  const signupErr   = document.getElementById('signup-error')
+  const signupOk    = document.getElementById('signup-success')
 
-                // ✅ FIX 3 — Plus d'insertion manuelle dans profiles :
-                // Le trigger SQL handle_new_user() s'en charge côté serveur.
-                console.log('✅ Utilisateur créé, profil géré par le trigger DB')
+  // ── 3. Toggle onglets ─────────────────────────────────────────────────
+  //    Règle unique : .is-active = visible, sinon display:none (CSS)
+  function showTab(tab) {
+    const isLogin = tab === 'login'
 
-                signupSuccess.textContent = '✅ Inscription réussie ! Vérifiez votre email pour confirmer votre compte.'
-                signupSuccess.classList.add('show')
+    tabLogin.classList.toggle('active',   isLogin)
+    tabSignup.classList.toggle('active', !isLogin)
+    tabLogin.setAttribute('aria-selected',  String(isLogin))
+    tabSignup.setAttribute('aria-selected', String(!isLogin))
 
-                signupForm.reset()
-                document.getElementById('strengthBar').style.width = '0%'
-                document.getElementById('strengthText').textContent = ''
+    formLogin.classList.toggle('is-active',   isLogin)
+    formSignup.classList.toggle('is-active', !isLogin)
 
-                setTimeout(() => {
-                    loginTab.click()
-                    document.getElementById('loginEmail').value = email
-                }, 2500)
+    // reset messages
+    ;[loginErr, signupErr, signupOk].forEach(el => el.classList.remove('show'))
+  }
 
-            } catch (error) {
-                console.error('❌ Erreur inscription:', error)
+  showTab('login')  // état initial
+  tabLogin.addEventListener('click',  () => showTab('login'))
+  tabSignup.addEventListener('click', () => showTab('signup'))
 
-                // ✅ FIX 4 — Utiliser error.code (stable) plutôt que error.message (fragile)
-                let msg = 'Erreur lors de l\'inscription'
-                if (error.code === 'user_already_exists' || error.message?.includes('User already registered')) {
-                    msg = 'Cette adresse e-mail est déjà utilisée'
-                } else if (error.code === 'weak_password') {
-                    msg = 'Le mot de passe est trop faible'
-                } else if (error.code === 'invalid_email') {
-                    msg = 'Adresse e-mail invalide'
-                } else if (error.message) {
-                    msg = error.message
-                }
+  // ── 4. Force du mot de passe ──────────────────────────────────────────
+  document.getElementById('signup-password').addEventListener('input', e => {
+    const s = passwordStrength(e.target.value)
+    const fill  = document.getElementById('strength-fill')
+    const label = document.getElementById('strength-label')
+    fill.style.width      = s.pct + '%'
+    fill.style.background = s.color
+    label.textContent     = s.text
+    label.style.color     = s.color
+  })
 
-                showSignupError(msg)
-            } finally {
-                signupBtn.disabled          = false
-                signupBtnText.textContent   = 'S\'inscrire'
-                signupSpinner.style.display = 'none'
-            }
-        })
+  function passwordStrength(p) {
+    let n = 0
+    if (p.length >= 8)           n++
+    if (p.length >= 12)          n++
+    if (/[a-z]/.test(p))         n++
+    if (/[A-Z]/.test(p))         n++
+    if (/[0-9]/.test(p))         n++
+    if (/[^a-zA-Z0-9]/.test(p))  n++
+    const pct = Math.round(n / 6 * 100)
+    if (n <= 2) return { pct, color: '#ef4444', text: 'Faible' }
+    if (n <= 4) return { pct, color: '#f59e0b', text: 'Moyen' }
+    return { pct, color: '#10b981', text: 'Fort' }
+  }
 
-        function showSignupError(message) {
-            signupError.textContent = message
-            signupError.classList.add('show')
-        }
+  // ── 5. Helpers UI ────────────────────────────────────────────────────
+  function setLoading(btn, textEl, spinner, on, label) {
+    btn.disabled        = on
+    textEl.textContent  = label
+    spinner.style.display = on ? 'inline-block' : 'none'
+  }
 
-        // ============================================================
-        // CONNEXION — VERSION CORRIGÉE
-        // ============================================================
-        loginForm.addEventListener('submit', async (e) => {
-            e.preventDefault()
+  function showMsg(el, text) {
+    el.textContent = text
+    el.classList.add('show')
+  }
 
-            const email    = document.getElementById('loginEmail').value.trim()
-            const password = document.getElementById('loginPassword').value
+  function hideMsg(el) {
+    el.classList.remove('show')
+  }
 
-            const loginBtn     = document.getElementById('loginBtn')
-            const loginBtnText = document.getElementById('loginBtnText')
-            const loginSpinner = document.getElementById('loginSpinner')
+  function errMsg(err) {
+    // Couvre error.code (Supabase v2) ET error.message (fallback)
+    const c = (err.code ?? '').toLowerCase()
+    const m = (err.message ?? '').toLowerCase()
 
-            loginError.classList.remove('show')
+    if (c === 'invalid_credentials'  || m.includes('invalid login'))       return 'Email ou mot de passe incorrect'
+    if (c === 'email_not_confirmed'  || m.includes('email not confirmed'))  return 'Confirmez votre email avant de vous connecter'
+    if (c === 'user_already_exists'  || m.includes('already registered'))   return 'Cette adresse e-mail est déjà utilisée'
+    if (c === 'weak_password'        || m.includes('weak password'))        return 'Mot de passe trop faible'
+    if (c === 'too_many_requests'    || err.status === 429)                 return 'Trop de tentatives — réessayez dans quelques minutes'
+    if (c === 'user_not_found')                                             return 'Aucun compte trouvé avec cet email'
 
-            if (!email || !password) {
-                showLoginError('Veuillez remplir tous les champs')
-                return
-            }
+    // Message brut Supabase pour le débogage
+    return err.message || `Erreur inattendue (code : ${err.code ?? err.status ?? '?'})`
+  }
 
-            loginBtn.disabled          = true
-            loginBtnText.textContent   = 'Connexion en cours...'
-            loginSpinner.style.display = 'inline-block'
+  // ── 6. CONNEXION ─────────────────────────────────────────────────────
+  formLogin.addEventListener('submit', async e => {
+    e.preventDefault()
+    hideMsg(loginErr)
 
-            try {
-                console.log('🔑 Connexion:', email)
+    const email    = document.getElementById('login-email').value.trim()
+    const password = document.getElementById('login-password').value
+    const btn      = document.getElementById('login-btn')
+    const btnTxt   = document.getElementById('login-btn-text')
+    const spin     = document.getElementById('login-spinner')
 
-                const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+    if (!email || !password) {
+      return showMsg(loginErr, 'Veuillez remplir tous les champs')
+    }
 
-                if (error) throw error
+    setLoading(btn, btnTxt, spin, true, 'Connexion…')
 
-                console.log('✅ Connecté:', data.user.email)
-                window.location.href = './index.html'
+    try {
+      const { error } = await sb.auth.signInWithPassword({ email, password })
+      if (error) throw error
+      window.location.href = './index.html'
+    } catch (err) {
+      console.error('[login]', err)
+      showMsg(loginErr, errMsg(err))
+    } finally {
+      setLoading(btn, btnTxt, spin, false, 'Se connecter')
+    }
+  })
 
-            } catch (error) {
-                console.error('❌ Erreur connexion — code:', error.code, '| status:', error.status, '| message:', error.message)
+  // ── 7. INSCRIPTION ───────────────────────────────────────────────────
+  //    Le profil dans `profiles` est créé automatiquement
+  //    par le trigger SQL handle_new_user() côté serveur.
+  formSignup.addEventListener('submit', async e => {
+    e.preventDefault()
+    hideMsg(signupErr)
+    hideMsg(signupOk)
 
-                // Supabase v2 : le code peut être dans error.code OU dans error.message selon l'erreur
-                const code = error.code ?? ''
-                const msg  = error.message ?? ''
+    const name     = document.getElementById('signup-name').value.trim()
+    const email    = document.getElementById('signup-email').value.trim()
+    const password = document.getElementById('signup-password').value
+    const confirm  = document.getElementById('signup-confirm').value
+    const btn      = document.getElementById('signup-btn')
+    const btnTxt   = document.getElementById('signup-btn-text')
+    const spin     = document.getElementById('signup-spinner')
 
-                let displayMsg
+    // Validation côté client
+    if (name.length < 2)
+      return showMsg(signupErr, 'Le nom doit contenir au moins 2 caractères')
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+      return showMsg(signupErr, 'Adresse e-mail invalide')
+    if (password.length < 6)
+      return showMsg(signupErr, 'Le mot de passe doit contenir au moins 6 caractères')
+    if (password !== confirm)
+      return showMsg(signupErr, 'Les mots de passe ne correspondent pas')
 
-                if (code === 'invalid_credentials' || msg.includes('Invalid login credentials')) {
-                    displayMsg = 'Email ou mot de passe incorrect'
-                } else if (code === 'email_not_confirmed' || msg.includes('Email not confirmed')) {
-                    displayMsg = 'Veuillez confirmer votre email avant de vous connecter'
-                } else if (code === 'too_many_requests' || error.status === 429) {
-                    displayMsg = 'Trop de tentatives. Réessayez dans quelques minutes.'
-                } else if (code === 'user_not_found') {
-                    displayMsg = 'Aucun compte trouvé avec cet email'
-                } else {
-                    // Afficher le vrai message brut pour le débogage
-                    displayMsg = msg || `Erreur inconnue (code: ${code || error.status || '?'})`
-                }
+    setLoading(btn, btnTxt, spin, true, 'Création du compte…')
 
-                showLoginError(displayMsg)
-            } finally {
-                loginBtn.disabled          = false
-                loginBtnText.textContent   = 'Se connecter'
-                loginSpinner.style.display = 'none'
-            }
-        })
+    try {
+      const { data, error } = await sb.auth.signUp({
+        email,
+        password,
+        options: { data: { full_name: name } }
+      })
 
-        function showLoginError(message) {
-            loginError.textContent = message
-            loginError.classList.add('show')
-        }
+      if (error) throw error
 
-        // Mot de passe oublié
-        document.getElementById('forgotPasswordLink').addEventListener('click', async (e) => {
-            e.preventDefault()
+      // identities vide = email déjà existant (Supabase retourne un faux succès)
+      if (data.user?.identities?.length === 0) {
+        return showMsg(signupErr, 'Cette adresse e-mail est déjà utilisée')
+      }
 
-            const email = document.getElementById('loginEmail').value.trim()
-            if (!email) {
-                showLoginError('Veuillez entrer votre adresse e-mail')
-                return
-            }
+      // Succès — le trigger SQL crée le profil dans `profiles`
+      showMsg(signupOk, '✅ Compte créé ! Vérifiez votre email pour confirmer votre inscription.')
+      formSignup.reset()
+      document.getElementById('strength-fill').style.width = '0'
+      document.getElementById('strength-label').textContent = ''
 
-            try {
-                const { error } = await supabase.auth.resetPasswordForEmail(email, {
-                    redirectTo: window.location.origin + '/reset-password.html'
-                })
-                if (error) throw error
-                alert('✅ Un email de réinitialisation a été envoyé à ' + email)
-            } catch (error) {
-                showLoginError('Erreur lors de l\'envoi de l\'email de réinitialisation')
-            }
-        })
+      setTimeout(() => {
+        showTab('login')
+        document.getElementById('login-email').value = email
+      }, 3000)
 
-        function isValidEmail(email) {
-            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-        }
+    } catch (err) {
+      console.error('[signup]', err)
+      showMsg(signupErr, errMsg(err))
+    } finally {
+      setLoading(btn, btnTxt, spin, false, 'Créer mon compte')
+    }
+  })
 
-        // ✅ FIX 5 — getUser() vérifie la session côté serveur (plus fiable que getSession())
-        async function checkSession() {
-            try {
-                const { data: { user }, error } = await supabase.auth.getUser()
-                if (user && !error) {
-                    console.log('👤 Session active, redirection...')
-                    window.location.href = './index.html'
-                }
-            } catch {
-                // Pas de session — on reste sur la page de login
-            }
-        }
+  // ── 8. MOT DE PASSE OUBLIÉ ───────────────────────────────────────────
+  document.getElementById('forgot-link').addEventListener('click', async e => {
+    e.preventDefault()
+    const email = document.getElementById('login-email').value.trim()
+    if (!email) return showMsg(loginErr, 'Entrez d\'abord votre adresse e-mail')
 
-        checkSession()
-        console.log('🚀 Page auth prête')
-    </script>
+    try {
+      const { error } = await sb.auth.resetPasswordForEmail(email, {
+        redirectTo: window.location.origin + '/reset-password.html'
+      })
+      if (error) throw error
+      hideMsg(loginErr)
+      alert('✅ Un email de réinitialisation a été envoyé à ' + email)
+    } catch (err) {
+      showMsg(loginErr, 'Impossible d\'envoyer l\'email : ' + (err.message ?? ''))
+    }
+  })
+
+  // ── 9. SESSION EXISTANTE ─────────────────────────────────────────────
+  //    getUser() vérifie côté serveur (plus fiable que getSession)
+  try {
+    const { data: { user } } = await sb.auth.getUser()
+    if (user) window.location.href = './index.html'
+  } catch {
+    // Pas de session — on reste sur la page
+  }
+</script>
 </body>
 </html>
